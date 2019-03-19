@@ -6,5 +6,5 @@ public class Configutation {
   private int DisplayTimeoutValue;
   private String RessourcesPath;
 
-  public ... load()
+  public void load(){}
 }
