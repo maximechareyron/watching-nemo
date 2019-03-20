@@ -2,7 +2,7 @@
 #define CLIENT_LISTENER_H
 
 //init
-void create_client_listener();
+void *create_client_listener(void *p);
 
 //Commands
 void hello();
@@ -15,6 +15,6 @@ void del_fish();
 void start_fish();
 
 //Communication
-void send();
+//void send();
 
 #endif
