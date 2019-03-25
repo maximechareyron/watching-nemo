@@ -1,7 +1,6 @@
 package mainWindow;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -15,10 +14,9 @@ public class ClientController {
     private ArrayList<Fish> fishArrayList = new ArrayList<Fish>();
 
 
-    public ClientController() throws IOException {
-        loadProperties();
-        connect();
 
+    public ClientController() throws Exception {
+        loadProperties();
     }
 
 
