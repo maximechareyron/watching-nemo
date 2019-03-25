@@ -16,8 +16,8 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
 
-        cc = new ClientController();
-        cc.connect();
+        // cc = new ClientController();
+        //cc.connect();
     }
 
 
