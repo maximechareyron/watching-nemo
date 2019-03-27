@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class ClientController {
-    public static final String CONFIG_FILE = "./path/to/config.cfg";
+    public static final String CONFIG_FILE = "./display.cfg";
 
     private Properties config = new Properties();
     private SocketHandler s;
@@ -16,6 +16,7 @@ public class ClientController {
 
 
     public ClientController() throws Exception {
+        s = new SocketHandler();
         loadProperties();
     }
 
@@ -29,13 +30,21 @@ public class ClientController {
 
     public boolean connect(){
         try {
-            s.startConnection(config.get("controller-address").toString(), (int) config.get("controller-port"));
+            s.startConnection(getControllerAddress(), getControllerPort());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
 
         return true;
+    }
+
+    public String getControllerAddress(){
+        return config.get("controller-address").toString();
+    }
+
+    public int getControllerPort(){
+        return (int) config.get("controller-port");
     }
 
 
