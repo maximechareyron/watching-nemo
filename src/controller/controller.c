@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <string.h>
 
+#include "queue.h"
 #include "controller.h"
 #include "aquarium.h"
 #include "view.h"
@@ -13,14 +14,12 @@ int main(int argc, char* argv[]) {
   return 0;
 }*/
 
-
-//Controller
+//Controller 
 void init_controller(struct controller *controller) {
   char *log;
-  controller->views = malloc(sizeof(struct view) * NUMBER_MAX_VIEW);
-    
-  int log_size = load_log(&log);
-  parse_log(log, log_size, &controller->aquarium, &controller->nb_view, controller->views);
+
+  int log_size = load_log(&log, "aquarium");
+  parse_log(log, log_size, &controller->aquarium);
 
   controller_print(controller);
 
@@ -28,21 +27,18 @@ void init_controller(struct controller *controller) {
 }
 
 void finalize_controller(struct controller *controller) {
-  for (int v = 0; v < controller->nb_view; v++) {
-    view_free(controller->views[v]);
-  }
-  free(controller->aquarium);
-  free(controller->views);
+  aquarium_finalize(controller->aquarium);
 }
 
-int load_log(char **log) {
+int load_log(char **log, char *aquarium_name) {
   int size = 0;
   char cwd[PATH_MAX];
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
     perror("getcwd() error");
     exit(EXIT_FAILURE);
   }
-  strncat(cwd, "/aquarium", sizeof(cwd)-1);
+  strncat(cwd, "/", sizeof(cwd)-1);
+  strncat(cwd, aquarium_name, sizeof(cwd)-1);
   printf("Aquarium path : %s\n", cwd);
   FILE *f = fopen(cwd, "r");
   if (f == NULL) { 
@@ -71,7 +67,7 @@ char* parse_int(char* p, int *result, char *end) {
 }
 
 //parse
-void parse_log(char *log, int size, struct aquarium **a, int *nb_view, struct view **views) {
+void parse_log(char *log, int size, struct aquarium **a) {
   char *p = log;
   char *end = log+size;
   int a_width = 0;
@@ -90,9 +86,8 @@ void parse_log(char *log, int size, struct aquarium **a, int *nb_view, struct vi
   p++;
   aquarium_init(a, a_width, a_height);
 
-  *nb_view = 0;
-  
-  while (p != end && *nb_view < NUMBER_MAX_VIEW) {
+  int count_view = 0;
+  while (p != end && count_view < NUMBER_MAX_VIEW) {
     p++;
     int v_id = 0;
     p = parse_int(p, &v_id, end);
@@ -135,18 +130,13 @@ void parse_log(char *log, int size, struct aquarium **a, int *nb_view, struct vi
     }
 
     printf("%d, %d, %d, %d, %d\n", v_id, v_x, v_y, v_width, v_height); 
-    view_init(views + *nb_view, v_id, v_x, v_y, v_width, v_height);
+    view_add(v_id, v_x, v_y, v_width, v_height);
     p++;
-    (*nb_view)++;
   }
 }
 
 
 void controller_print(struct controller *controller) {
   aquarium_print(controller->aquarium);
-  printf("Nombre de vue : %d\n", controller->nb_view);
-  for (int v = 0; v < controller->nb_view; v++) {
-    printf("\t");
-    view_print(controller->views[v]);
-  }
+  views_print();
 }

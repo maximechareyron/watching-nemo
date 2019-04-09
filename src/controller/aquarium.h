@@ -9,6 +9,7 @@ struct aquarium {
 };
 
 void aquarium_init(struct aquarium **aquarium, int width, int height);
+void aquarium_finalize(struct aquarium *aquarium);
 void aquarium_print(struct aquarium *aquarium);
 
 #endif

@@ -3,19 +3,16 @@
 
 #define NUMBER_MAX_VIEW 64
 
-struct coordinates;
-struct size;
+struct view;
 
-struct view {
-  int id;
-  char* name;
-  struct coordinates *start;
-  struct size *size;
-};
+void views_init();
+void views_print();
+void views_finalize();
 
-
-void view_init(struct view **view, int id, int x, int y, int width, int height);
+void view_add(int id, int x, int y, int width, int height);
 void view_print(struct view *view);
-void view_free(struct view *view);
+void view_remove(struct view *view);
 
+void print_view_added();
+void print_view_deleted(int id);
 #endif

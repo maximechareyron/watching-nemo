@@ -1,7 +1,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 struct aquarium;
-struct view;
 
 struct coordinates {
   int x;
@@ -15,8 +14,6 @@ struct size {
 
 struct controller {
   struct aquarium *aquarium;
-  struct view **views;
-  int nb_view;
   char *log;
 };
 
@@ -25,8 +22,8 @@ void init_controller();
 void finalize_controller();
 void controller_print(struct controller *controller);
 
-int load_log(char **log);
-void parse_log(char *log, int size, struct aquarium **a, int *nb_view, struct view **views);
+int load_log(char **log, char *aquarium_name);
+void parse_log(char *log, int size, struct aquarium **a);
 char *parse_int(char *p, int *result, char *end);
 	       
 #endif
