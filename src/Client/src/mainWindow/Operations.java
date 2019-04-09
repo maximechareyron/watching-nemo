@@ -1,8 +1,11 @@
+package mainWindow;
+
 public class Operations {
 
   public void status() {
     
   }
+
   public void addFish(String fishName, String coordinate, String size, String mobility) {
 
   }

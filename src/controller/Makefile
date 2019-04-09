@@ -1,3 +1,4 @@
+BUILD_DIR=.
 EXEC=controller
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)

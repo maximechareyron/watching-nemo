@@ -1,6 +1,8 @@
-public class Command {
+package mainWindow;
 
-  public Operations operation;
+public abstract class Command {
 
-  public void execute();
+  public Operations op;
+
+  public abstract void execute();
 }

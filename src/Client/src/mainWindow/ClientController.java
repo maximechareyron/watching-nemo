@@ -14,7 +14,6 @@ public class ClientController {
     private ArrayList<Fish> fishArrayList = new ArrayList<Fish>();
 
 
-
     public ClientController() throws Exception {
         s = new SocketHandler();
         loadProperties();
@@ -35,7 +34,6 @@ public class ClientController {
             e.printStackTrace();
             return false;
         }
-
         return true;
     }
 

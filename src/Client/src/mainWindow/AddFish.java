@@ -1,3 +1,5 @@
+package mainWindow;
+
 public class AddFish extends Command{
 
   private String fishName;
@@ -6,6 +8,6 @@ public class AddFish extends Command{
   private String mobility;
 
   public void execute(){
-    operation.addFish(fishName, size, coordinate, mobility);
+    op.addFish(fishName, size, coordinate, mobility);
   }
 }

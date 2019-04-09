@@ -1,4 +1,7 @@
+package mainWindow;
+
 import java.io.*;
+
 
 public class Prompt {
 
