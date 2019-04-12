@@ -18,19 +18,17 @@ int main(int argc, char* argv[]) {
 void init_controller(struct controller *controller) {
   char *log;
 
-  int log_size = load_log(&log, "aquarium");
-  parse_log(log, log_size, &controller->aquarium);
-
-  controller_print(controller);
-
-  //free(controller->log);
+  controller->aquarium = malloc(sizeof(struct aquarium));
+  load_aquarium(&log, "aquarium", controller->aquarium);
+  controller_print(controller);  
+  save_aquarium(controller->aquarium, "aquarium2");
 }
 
 void finalize_controller(struct controller *controller) {
   aquarium_finalize(controller->aquarium);
 }
 
-int load_log(char **log, char *aquarium_name) {
+void load_aquarium(char **log, char *aquarium_name, struct aquarium *aquarium) {
   int size = 0;
   char cwd[PATH_MAX];
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
@@ -53,8 +51,29 @@ int load_log(char **log, char *aquarium_name) {
     perror("Error reading log");
     exit(EXIT_FAILURE);
   }
-  return size;
+  parse_log(*log, size, aquarium);
 }
+
+//Save the aquarium in a log file
+void save_aquarium(struct aquarium *aquarium, char *aquarium_name) {
+  char cwd[PATH_MAX];
+  if (getcwd(cwd, sizeof(cwd)) == NULL) {
+    perror("getcwd() error");
+    exit(EXIT_FAILURE);
+  }
+  strncat(cwd, "/", sizeof(cwd)-1);
+  strncat(cwd, aquarium_name, sizeof(cwd)-1);
+  printf("Aquarium path : %s\n", cwd);
+  FILE *f = fopen(cwd, "w");
+  if (f != NULL) {
+    fputs("", f);
+  }
+  fprintf(f, "%dx%d\n", aquarium->size->width, aquarium->size->height);
+  views_save(f);
+  aquarium_finalize(aquarium);
+  fclose(f);
+}
+
 
 //parse a number and give the next char of *p after this number
 char* parse_int(char* p, int *result, char *end) {
@@ -67,7 +86,7 @@ char* parse_int(char* p, int *result, char *end) {
 }
 
 //parse
-void parse_log(char *log, int size, struct aquarium **a) {
+void parse_log(char *log, int size, struct aquarium *a) {
   char *p = log;
   char *end = log+size;
   int a_width = 0;

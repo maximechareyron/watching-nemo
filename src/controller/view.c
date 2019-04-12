@@ -54,6 +54,11 @@ void view_print(struct view *view) {
   }
 }
 
+void view_save(FILE *f, struct view *view) {
+  if (view != NULL) {
+    fprintf(f, "N%d %dx%d+%d+%d\n", view->id, view->start->x, view->start->y, view->size->width, view->size->height);
+  }
+}
 
 void views_print() {
   if (!TAILQ_EMPTY(views)) {
@@ -61,6 +66,15 @@ void views_print() {
       view_print(v);
     }
     view_print(TAILQ_LAST(views, view_queue));
+  }
+}
+
+void views_save(FILE *f) {
+  if (!TAILQ_EMPTY(views)) {
+    for (struct view* v = TAILQ_FIRST(views); v != TAILQ_LAST(views, view_queue); v = TAILQ_NEXT(v, queue_entries)) {
+      view_save(f, v);
+    }
+    view_save(f, TAILQ_LAST(views, view_queue));
   }
 }
 

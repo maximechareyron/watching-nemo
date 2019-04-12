@@ -14,3 +14,6 @@ $(EXEC): $(OBJ)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/$@ $<
+
+clean:
+	rm *.o

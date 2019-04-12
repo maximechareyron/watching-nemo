@@ -5,11 +5,11 @@
 #include "aquarium.h"
 #include "view.h"
 
-void aquarium_init(struct aquarium **aquarium, int width, int height) {
-  *aquarium = malloc(sizeof(struct aquarium));
-  (*aquarium)->size = malloc(sizeof(struct size));
-  (*aquarium)->size->width = width;
-  (*aquarium)->size->height = height;
+
+void aquarium_init(struct aquarium *aquarium, int width, int height) {
+  aquarium->size = malloc(sizeof(struct size));
+  aquarium->size->width = width;
+  aquarium->size->height = height;
 
   
   views_init();
