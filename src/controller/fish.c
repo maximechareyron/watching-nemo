@@ -4,24 +4,8 @@
 #include "controller.h"
 #include "fish.h"
 #include "queue.h"
-
-enum fish_state {
-		 STARTED,
-		 NOT_STARTED
-};
-
-struct fish
-{
-  int id;
-  char* name;
-  struct coordinates coordinates;
-  struct size size;
-  void *(*mobility_function)(void*);
-  void *param;
-  enum fish_state state;
-  
-  TAILQ_ENTRY(fish) queue_entries;
-};
+#include "mobility.h"
+#include "utils.h"
 
 
 TAILQ_HEAD(fish_queue, fish);
@@ -32,7 +16,7 @@ void fishs_init() {
   TAILQ_INIT(fishs);
 }
 
-void fish_add(int id, char* name, int x, int y, int w, int h, void *(*mobility_function)(void*)) {
+void fish_add(int id, char* name, int x, int y, int w, int h, void *(*mobility_function)(struct fish*, time_ms dt)) {
   struct fish *fish = malloc(sizeof(struct fish));
   fish->coordinates.x = x;
   fish->coordinates.y = y;

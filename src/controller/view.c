@@ -4,12 +4,13 @@
 #include "controller.h"
 #include "queue.h" 
 #include "view.h"
+#include "utils.h"
 
 struct view {
   int id;
   char* name;
-  struct coordinates *start;
-  struct size *size;
+  struct coordinates start;
+  struct size size;
 
   TAILQ_ENTRY(view) queue_entries;
 };
@@ -28,12 +29,10 @@ void views_init() {
 
 void view_add(int id, int x, int y, int width, int height) {
   struct view *view = malloc(sizeof(struct view));
-  view->size = malloc(sizeof(struct size));
-  view->start = malloc(sizeof(struct coordinates));
-  view->size->width = width;
-  view->size->height = height;
-  view->start->x = x;
-  view->start->y = y;
+  view->size.width = width;
+  view->size.height = height;
+  view->start.x = x;
+  view->start.y = y;
   view->id = id;
 
   TAILQ_INSERT_TAIL(views, view, queue_entries);
@@ -43,20 +42,18 @@ void view_add(int id, int x, int y, int width, int height) {
 void view_remove(struct view *view) {
   TAILQ_REMOVE(views, view, queue_entries);
   nb_view--;
-  free(view->size);
-  free(view->start);
   free(view);
 }
 
 void view_print(struct view *view) {
   if (view != NULL) {
-    printf("N%d %dx%d+%d+%d\n", view->id, view->start->x, view->start->y, view->size->width, view->size->height);
+    printf("N%d %dx%d+%d+%d\n", view->id, view->start.x, view->start.y, view->size.width, view->size.height);
   }
 }
 
 void view_save(FILE *f, struct view *view) {
   if (view != NULL) {
-    fprintf(f, "N%d %dx%d+%d+%d\n", view->id, view->start->x, view->start->y, view->size->width, view->size->height);
+    fprintf(f, "N%d %dx%d+%d+%d\n", view->id, view->start.x, view->start.y, view->size.width, view->size.height);
   }
 }
 

@@ -8,11 +8,7 @@
 #include "controller.h"
 #include "aquarium.h"
 #include "view.h"
-/*
-int main(int argc, char* argv[]) {
-  
-  return 0;
-}*/
+#include "utils.h"
 
 //Controller 
 void init_controller(struct controller *controller) {
@@ -68,7 +64,7 @@ void save_aquarium(struct aquarium *aquarium, char *aquarium_name) {
   if (f != NULL) {
     fputs("", f);
   }
-  fprintf(f, "%dx%d\n", aquarium->size->width, aquarium->size->height);
+  fprintf(f, "%dx%d\n", aquarium->size.width, aquarium->size.height);
   views_save(f);
   aquarium_finalize(aquarium);
   fclose(f);

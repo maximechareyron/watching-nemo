@@ -2,16 +2,6 @@
 #define CONTROLLER_H
 struct aquarium;
 
-struct coordinates {
-  int x;
-  int y;
-};
-
-struct size {
-  int width;
-  int height;
-};
-
 struct controller {
   struct aquarium *aquarium;
   char *log;
