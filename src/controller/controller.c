@@ -11,58 +11,69 @@
 #include "utils.h"
 
 
-void init_controller(struct controller *controller) {
-  char *log;
-
-  load_aquarium("aquarium");
-  controller_print(controller);  
-  save_aquarium("aquarium2");
+void init_controller()
+{
+  //  load_aquarium("aquarium");
+  //controller_print();  
+  //save_aquarium("aquarium2");
 }
 
 
-void finalize_controller(struct controller *controller) {
+void finalize_controller()
+{
   aquarium_finalize();
 }
 
-void load_aquarium(char *aquarium_name)
+
+int load_aquarium(char *aquarium_name)
 {
   int size = 0;
   char cwd[PATH_MAX];
   char *log;
+  
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
     perror("getcwd() error");
-    exit(EXIT_FAILURE);
+    return 0;
   }
+  
   strncat(cwd, "/", sizeof(cwd)-1);
   strncat(cwd, aquarium_name, sizeof(cwd)-1);
-  printf("Aquarium path : %s\n", cwd);
+  //printf("Aquarium path : %s\n", cwd);
   FILE *f = fopen(cwd, "r");
   if (f == NULL) { 
-    perror("Error loading log");
-    exit(EXIT_FAILURE); 
+    fputs("Error loading log\n", stderr);
+    return 0; 
   }
+  
   fseek(f, 0, SEEK_END);
   size = ftell(f);
   fseek(f, 0, SEEK_SET);
   log = malloc(size + 1);
+
   if (size != fread(log, sizeof(char), size, f)) { 
-    perror("Error reading log");
-    exit(EXIT_FAILURE);
+    fputs("Error reading log\n", stderr);
+    return 0;
   }
   parse_log(log, size);
+
+  return 1;
 }
 
 
-//Save the aquarium in a log file
-void save_aquarium(char *aquarium_name) {
+// Save the aquarium in a log file
+int save_aquarium(char *aquarium_name)
+{
   char cwd[PATH_MAX];
+
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
     perror("getcwd() error");
-    exit(EXIT_FAILURE);
+    return 0;
   }
+
   strncat(cwd, "/", sizeof(cwd)-1);
   strncat(cwd, aquarium_name, sizeof(cwd)-1);
-  printf("Aquarium path : %s\n", cwd);
+  //printf("Aquarium path : %s\n", cwd);
+
   FILE *f = fopen(cwd, "w");
   if (f != NULL) {
     fputs("", f);
@@ -74,11 +85,14 @@ void save_aquarium(char *aquarium_name) {
   views_save(f);
   aquarium_finalize();
   fclose(f);
+  
+  return 1;
 }
 
 
-//parse a number and give the next char of *p after this number
-char* parse_int(char* p, int *result, char *end) {
+// Parse a number and give the next char of *p after this number
+char* parse_int(char* p, int *result, char *end)
+{
   *result = 0;
   while (p!= end && *p >= '0' && *p <= '9') {
     *result = *result * 10 + (*p-'0');
@@ -87,8 +101,9 @@ char* parse_int(char* p, int *result, char *end) {
   return p;
 }
 
-//parse
-void parse_log(char *log, int size) {
+
+void parse_log(char *log, int size)
+{
   char *p = log;
   char *end = log+size;
   int a_width = 0;
@@ -150,14 +165,18 @@ void parse_log(char *log, int size) {
       exit(EXIT_FAILURE);
     }
 
-    printf("%d, %d, %d, %d, %d\n", v_id, v_x, v_y, v_width, v_height); 
-    view_add(v_id, v_x, v_y, v_width, v_height);
+    //printf("%d, %d, %d, %d, %d\n", v_id, v_x, v_y, v_width, v_height); 
+
+    char name[256];
+    snprintf(name, 255, "N%d", v_id);
+    view_add(name, v_x, v_y, v_width, v_height);
     p++;
   }
 }
 
 
-void controller_print(struct controller *controller) {
+void controller_print()
+{
   aquarium_print();
   views_print();
 }

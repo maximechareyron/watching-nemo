@@ -8,18 +8,18 @@
 #include "prompt_listener.h"
 
 
+
 int main()
 {
   struct controller_config c;
-  //parse_config_file("controller.cfg", &c);
+  parse_config_file("controller.cfg", &c);
 
-  struct controller controller;
-  init_controller(&controller);
+  init_controller(NULL);
   
   //pthread_t t;
   //pthread_create(&t, NULL, create_client_listener, (void*)(intptr_t)c.port);
   
-  //create_prompt_listener();
+  create_prompt_listener();
 
   return EXIT_SUCCESS;
 }
