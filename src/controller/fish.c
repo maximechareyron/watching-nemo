@@ -14,8 +14,8 @@ struct fish
 {
   int id;
   char* name;
-  struct coordinates *coordinates;
-  struct size *size;
+  struct coordinates coordinates;
+  struct size size;
   void *(*mobility_function)(void*);
   void *param;
   enum fish_state state;
@@ -34,11 +34,10 @@ void fishs_init() {
 
 void fish_add(int id, char* name, int x, int y, int w, int h, void *(*mobility_function)(void*)) {
   struct fish *fish = malloc(sizeof(struct fish));
-  fish->coordinates = malloc(sizeof(struct coordinates));
-  fish->coordinates->x = x;
-  fish->coordinates->y = y;
-  fish->size->width = w;
-  fish->size->height = h;
+  fish->coordinates.x = x;
+  fish->coordinates.y = y;
+  fish->size.width = w;
+  fish->size.height = h;
   fish->id = id;
   fish->name = name;
   fish->mobility_function = mobility_function;
@@ -49,7 +48,6 @@ void fish_add(int id, char* name, int x, int y, int w, int h, void *(*mobility_f
 
 void fish_remove(struct fish *fish) {
   TAILQ_REMOVE(fishs, fish, queue_entries);
-  free(fish->coordinates);
   free(fish);
 }
 
@@ -75,6 +73,6 @@ struct fish *fish_find(int id) {
 
 void fish_print(struct fish *fish) {
   if (fish != NULL) {
-    printf("%dx%d\n", fish->coordinates->x, fish->coordinates->y);
+    printf("%s at %dx%d, %dx%d, %s\n", fish->name, fish->coordinates.x, fish->coordinates.y, fish->size.width, fish->size.height, "Mobility");
   }
 }
