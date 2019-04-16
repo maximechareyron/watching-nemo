@@ -1,7 +1,7 @@
 #ifndef FISH_H
 #define FISH_H
 
-#include "utils.h"
+#include "tools.h"
 #include "mobility.h"
 #include "queue.h"
 

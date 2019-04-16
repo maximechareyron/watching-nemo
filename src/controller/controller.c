@@ -14,7 +14,7 @@
 void init_controller(struct controller *controller) {
   char *log;
 
-  load_aquarium(&log, "aquarium");
+  load_aquarium("aquarium");
   controller_print(controller);  
   save_aquarium("aquarium2");
 }
