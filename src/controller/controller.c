@@ -10,23 +10,25 @@
 #include "view.h"
 #include "utils.h"
 
-//Controller 
+
 void init_controller(struct controller *controller) {
   char *log;
 
-  controller->aquarium = malloc(sizeof(struct aquarium));
-  load_aquarium(&log, "aquarium", controller->aquarium);
+  load_aquarium(&log, "aquarium");
   controller_print(controller);  
-  save_aquarium(controller->aquarium, "aquarium2");
+  save_aquarium("aquarium2");
 }
+
 
 void finalize_controller(struct controller *controller) {
-  aquarium_finalize(controller->aquarium);
+  aquarium_finalize();
 }
 
-void load_aquarium(char **log, char *aquarium_name, struct aquarium *aquarium) {
+void load_aquarium(char *aquarium_name)
+{
   int size = 0;
   char cwd[PATH_MAX];
+  char *log;
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
     perror("getcwd() error");
     exit(EXIT_FAILURE);
@@ -42,16 +44,17 @@ void load_aquarium(char **log, char *aquarium_name, struct aquarium *aquarium) {
   fseek(f, 0, SEEK_END);
   size = ftell(f);
   fseek(f, 0, SEEK_SET);
-  *log = (char *)malloc(size+1);
-  if (size != fread(*log, sizeof(char), size, f)) { 
+  log = malloc(size + 1);
+  if (size != fread(log, sizeof(char), size, f)) { 
     perror("Error reading log");
     exit(EXIT_FAILURE);
   }
-  parse_log(*log, size, aquarium);
+  parse_log(log, size);
 }
 
+
 //Save the aquarium in a log file
-void save_aquarium(struct aquarium *aquarium, char *aquarium_name) {
+void save_aquarium(char *aquarium_name) {
   char cwd[PATH_MAX];
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
     perror("getcwd() error");
@@ -64,9 +67,12 @@ void save_aquarium(struct aquarium *aquarium, char *aquarium_name) {
   if (f != NULL) {
     fputs("", f);
   }
-  fprintf(f, "%dx%d\n", aquarium->size.width, aquarium->size.height);
+
+  const struct size size = aquarium_get_size();
+  
+  fprintf(f, "%dx%d\n", size.width, size.height);
   views_save(f);
-  aquarium_finalize(aquarium);
+  aquarium_finalize();
   fclose(f);
 }
 
@@ -82,7 +88,7 @@ char* parse_int(char* p, int *result, char *end) {
 }
 
 //parse
-void parse_log(char *log, int size, struct aquarium *a) {
+void parse_log(char *log, int size) {
   char *p = log;
   char *end = log+size;
   int a_width = 0;
@@ -99,7 +105,7 @@ void parse_log(char *log, int size, struct aquarium *a) {
     exit(EXIT_FAILURE);
   }
   p++;
-  aquarium_init(a, a_width, a_height);
+  aquarium_init(a_width, a_height);
 
   int count_view = 0;
   while (p != end && count_view < NUMBER_MAX_VIEW) {
@@ -152,6 +158,6 @@ void parse_log(char *log, int size, struct aquarium *a) {
 
 
 void controller_print(struct controller *controller) {
-  aquarium_print(controller->aquarium);
+  aquarium_print();
   views_print();
 }
