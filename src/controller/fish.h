@@ -18,7 +18,7 @@ struct fish
   char* name;
   struct coordinates coordinates;
   struct size size;
-  void *(*mobility_function)(struct fish*, time_ms dt);
+  void *(*mobility_function)(struct fish*, time_ms);
   void *param;
   enum fish_state state;
   
@@ -26,6 +26,9 @@ struct fish
 };
 
 struct fish *fish_find(int id);
+void fish_update(struct fish *fish);
+void fishs_update();
+
 
 
 #endif // FISH_H

@@ -16,6 +16,20 @@ void fishs_init() {
   TAILQ_INIT(fishs);
 }
 
+void fishs_update() {
+    if (!TAILQ_EMPTY(fishs)) {
+      struct fish* f;
+      for (f = TAILQ_FIRST(fishs); f != TAILQ_LAST(fishs, fish_queue); f = TAILQ_NEXT(f, queue_entries)) {
+	fish_update(f);
+      }
+      fish_update(f);
+    }   
+}
+
+void fish_update(struct fish *fish) {
+  call_mobility_function(fish);
+}
+
 void fish_add(int id, char* name, int x, int y, int w, int h, void *(*mobility_function)(struct fish*, time_ms dt)) {
   struct fish *fish = malloc(sizeof(struct fish));
   fish->coordinates.x = x;
@@ -52,9 +66,7 @@ struct fish *fish_find(int id) {
   }
   return NULL;
 }
-
 				    
-
 void fish_print(struct fish *fish) {
   if (fish != NULL) {
     printf("%s at %dx%d, %dx%d, %s\n", fish->name, fish->coordinates.x, fish->coordinates.y, fish->size.width, fish->size.height, "Mobility");
