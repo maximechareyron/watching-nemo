@@ -1,5 +1,5 @@
 export CC=gcc
-export CFLAGS=-Wall -Wextra -std=c99 -g -O0
+export CFLAGS=-Wall -Wextra -std=gnu99 -g -O0
 PWD=$(shell pwd)
 export BUILD_DIR=$(PWD)/build
 

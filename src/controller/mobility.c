@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+
 #include "mobility.h"
 #include "controller.h"
 #include "fish.h"
 #include "aquarium.h"
+
 
 struct size aquarium_size;
 
