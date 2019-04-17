@@ -43,6 +43,27 @@ void clear_connections()
 }
 
 
+void add_new_client(int socket)
+{
+  struct client *client = malloc(sizeof(struct client));
+  client->socket = socket;
+  client->name[0] = '\0';
+  LIST_INSERT_HEAD(clients, client, queue_entries);
+}
+
+
+void parse_client_message(char *message)
+{
+  if (strncmp(message, "hello", 5) == 0) {
+    if (strncmp(message, "hello as in ", 12) == 0) {
+
+    } else if (strcmp(message, "hello") == 0) {
+      
+    }
+  }
+}
+
+
 //init
 void *create_client_listener(void *p)
 {  
@@ -93,22 +114,21 @@ void *create_client_listener(void *p)
       sockets[socket_nb++] = client_sock;
       printf("Connection established with client %s\n", inet_ntoa(client_sin.sin_addr));
 
-      struct client *client = malloc(sizeof(struct client));
-      client->socket = client_sock;
-      client->name[0] = '\0';
+      add_new_client(client_sock);
     }
 
     
     char buffer[MAX_BUFFER_SIZE];
     ssize_t nb_bytes;
     for (int i = 0 ; i < socket_nb ; i++) {
-      if ((nb_bytes = recv(sockets[i], buffer, 256, 0)) == -1) {
+      if ((nb_bytes = recv(sockets[i], buffer, MAX_BUFFER_SIZE, 0)) == -1) {
 	if (errno != EAGAIN) {
 	  perror("recv");
 	}
       } else {
 	buffer[nb_bytes] = '\0';
 	printf("Received from %d: %s", sockets[i], buffer);
+	parse_client_message(buffer);
       }
     }
   }
