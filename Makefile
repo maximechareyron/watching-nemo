@@ -15,4 +15,7 @@ build_dir:
 	mkdir -p $(BUILD_DIR)
 
 
+clean:
+	@make clean -C src/controller
+
 

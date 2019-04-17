@@ -1,4 +1,3 @@
-BUILD_DIR=.
 EXEC=controller
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
@@ -16,4 +15,5 @@ $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/$@ $<
 
 clean:
-	rm *.o
+	rm -f *.o $(EXEC)
+	rm -f $(BUILD_DIR)/*.o $(BUILD_DIR)/$(EXEC)
