@@ -5,7 +5,7 @@
 #include "fish.h"
 #include "queue.h"
 #include "mobility.h"
-#include "utils.h"
+#include "tools.h"
 
 
 TAILQ_HEAD(fish_queue, fish);
