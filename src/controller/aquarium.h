@@ -10,6 +10,8 @@ struct aquarium {
 };
 
 void aquarium_init(int width, int height);
+int aquarium_load(char *aquarium_name);
+int aquarium_save(char *aquarium_name);
 void aquarium_finalize();
 void aquarium_print();
 struct size aquarium_get_size();

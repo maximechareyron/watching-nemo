@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "controller.h"
 #include "fish.h"
 #include "queue.h"
 #include "mobility.h"

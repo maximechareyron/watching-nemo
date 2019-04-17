@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "controller.h"
+#include "aquarium.h"
 #include "prompt_listener.h"
 #include "view.h"
 
@@ -27,14 +27,15 @@ void handle_overflow(char *buffer)
 void parse_command(char *line)
 {
   if (strncmp(line, "load ", 5) == 0) {
-    if (load_aquarium(line + 5)) {
+    if (aquarium_load(line + 5)) {
       printf("    -> aquarium loaded (%d display view)!\n", view_get_number());
     }
   } else if (strcmp(line, "show aquarium") == 0) {
-    controller_print();
+    aquarium_print();
+    views_print();
   } else if (strncmp(line, "save ", 5) == 0) {
     const int nb_views = view_get_number();
-    if (save_aquarium(line + 5)) {
+    if (aquarium_save(line + 5)) {
       printf("    -> aquarium saved (%d display view)!\n", nb_views);
     }
   } else if (strncmp(line, "add view ", 9) == 0) {
@@ -51,6 +52,7 @@ void parse_command(char *line)
     view_remove_by_name(line + 9);
     printf("    -> view %s deleted.\n", line + 9);
   } else if (strcmp(line, "exit") == 0) {
+    aquarium_finalize();
     // TODO: Free memory
     exit(0);
   } else {

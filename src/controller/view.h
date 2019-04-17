@@ -1,9 +1,12 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+
 #define NUMBER_MAX_VIEW 64
 
+
 struct view;
+
 
 void views_init();
 void views_print();
@@ -19,4 +22,9 @@ int view_get_number();
 
 void print_view_added();
 void print_view_deleted(int id);
+
+int view_set_available(char *name);
+char *view_find_available();
+
+
 #endif

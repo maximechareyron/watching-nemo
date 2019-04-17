@@ -2,16 +2,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "controller.h"
 #include "queue.h" 
-#include "view.h"
 #include "tools.h"
+#include "view.h"
+
 
 struct view {
   int id;
   char name[256];
   struct coordinates start;
   struct size size;
+  int is_available;
 
   TAILQ_ENTRY(view) queue_entries;
 };
@@ -20,7 +21,7 @@ struct view {
 
 TAILQ_HEAD(view_queue, view);
 
-struct view_queue* views;
+struct view_queue* views = NULL;
 int nb_view = 0;
 
 
@@ -39,6 +40,7 @@ void view_add(char *name, int x, int y, int width, int height)
   view->start.x = x;
   view->start.y = y;
   view->id = nb_view++;
+  view->is_available = 1;
   strcpy(view->name, name);
 
   TAILQ_INSERT_TAIL(views, view, queue_entries);
@@ -104,6 +106,10 @@ void views_save(FILE *f)
 
 void views_finalize()
 {
+  if (views == NULL) {
+    return;
+  }
+  
   while (!TAILQ_EMPTY(views)) {
     struct view * view = TAILQ_FIRST(views);
     view_remove(view);
@@ -126,4 +132,36 @@ void print_view_added()
 void print_view_deleted(int id)
 {
   printf("\t-> view N%d deleted\n", id);
+}
+
+
+int view_set_available(char *name)
+{
+  struct view *view = NULL;
+  TAILQ_FOREACH(view, views, queue_entries) {
+    if (strcmp(view->name, name) == 0) {
+      if (view->is_available) {
+	view->is_available = 0;
+	return 1;
+      } else {
+	break;
+      }
+    }
+  }
+  
+  return 0;
+}
+
+
+char *view_find_available()
+{
+  struct view *view = NULL;
+  TAILQ_FOREACH(view, views, queue_entries) {
+    if (view->is_available) {
+      view->is_available = 0;
+      return view->name;
+    }
+  }
+  
+  return NULL;  
 }

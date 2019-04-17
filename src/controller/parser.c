@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "aquarium.h"
 #include "parser.h"
+#include "view.h"
 
 
 #define MAX_PARAM_LENGTH 32
@@ -37,6 +39,46 @@ int parse_config_file(const char *filename, struct controller_config *config)
 	config->fish_update_interval = atoi(value);
       }
     }
+  }
+
+  free(line);
+  fclose(fp);
+
+  return 1;
+}
+
+
+int parse_aquarium_file(const char *filename)
+{
+  FILE *fp = fopen(filename, "r");
+  if (fp == NULL) { 
+    perror("fopen");
+    return 0; 
+  }
+
+  char *line;
+  size_t len = 0;
+  if (getline(&line, &len, fp) == -1) {
+    return 0;
+  }
+
+  int width, height;
+  if (sscanf(line, "%dx%d", &width, &height) != 2) {
+    perror("sscanf");
+    return 0;
+  }
+
+  aquarium_init(width, height);
+  
+  while (getline(&line, &len, fp) != -1) {
+    char name[MAX_PARAM_LENGTH];
+    int x, y, width, height;
+    if (sscanf(line, "%s %dx%d+%d+%d", name, &x, &y, &width, &height) != 5) {
+      perror("sscanf");
+      continue;
+    }
+
+    view_add(name, x, y, width, height);
   }
 
   free(line);
