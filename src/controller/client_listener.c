@@ -10,14 +10,27 @@
 #include <unistd.h>
 
 #include "client_listener.h"
-
+#include "queue.h"
 
 #define MAX_BUFFER_SIZE 256
 
 
+struct client
+{
+  int socket;
+  char name[256];
+
+  LIST_ENTRY(client) queue_entries;
+};
+
+LIST_HEAD(client_queue, client);
+
+struct client_queue *clients;
+
 int sock;
 int sockets[10];
 int socket_nb = 0;
+
 
 
 __attribute__ ((destructor))
@@ -32,7 +45,7 @@ void clear_connections()
 
 //init
 void *create_client_listener(void *p)
-{
+{  
   const int port = (intptr_t)p;
   int opt = 1;
   struct sockaddr_in sin;
@@ -63,6 +76,9 @@ void *create_client_listener(void *p)
     exit(EXIT_FAILURE);
   }
 
+  clients = malloc(sizeof(struct client_queue));
+  LIST_INIT(clients);
+  
   while (1) {
     struct sockaddr_in client_sin;
     socklen_t len = sizeof(client_sin);
@@ -76,6 +92,10 @@ void *create_client_listener(void *p)
       fcntl(client_sock, F_SETFL, O_NONBLOCK);
       sockets[socket_nb++] = client_sock;
       printf("Connection established with client %s\n", inet_ntoa(client_sin.sin_addr));
+
+      struct client *client = malloc(sizeof(struct client));
+      client->socket = client_sock;
+      client->name[0] = '\0';
     }
 
     
