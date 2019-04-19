@@ -100,6 +100,11 @@ void parse_client_message(char *message, struct client *client)
   } else if (strcmp(message, "getFishesContinuously") == 0) {
     send(client->socket, "Not yet implemented", 19, 0);
   } else if (strncmp(message, "addFish ", 8) == 0) {
+    char name[MAX_BUFFER_SIZE], moving_algorithm[MAX_BUFFER_SIZE];
+    int x, y, width, height;
+    if (sscanf(message + 8, "%s at %dx%d+%d+%d, %s", name, &x, &y, &width, &height, moving_algorithm) == 6) {
+      send(client->socket, "OK", 2, 0);  
+    }
     send(client->socket, "Not yet implemented", 19, 0);  
   } else if (strncmp(message, "delFish ", 8) == 0) {
     send(client->socket, "Not yet implemented", 19, 0);  
