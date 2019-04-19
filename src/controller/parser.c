@@ -56,7 +56,7 @@ int parse_aquarium_file(const char *filename)
     return 0; 
   }
 
-  char *line;
+  char *line = NULL;
   size_t len = 0;
   if (getline(&line, &len, fp) == -1) {
     return 0;
