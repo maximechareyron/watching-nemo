@@ -1,9 +1,11 @@
 package mainWindow;
 
 public class Operations {
-
+  c = new ClientController();
   public void status() {
-    
+    if (c.connect()) {
+
+    }
   }
 
   public void addFish(String fishName, String coordinate, String size, String mobility) {
