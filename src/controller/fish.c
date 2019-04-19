@@ -22,10 +22,9 @@ void fishs_finalize() {
   if (fishs == NULL) {
     return;
   }
-  
   while (!TAILQ_EMPTY(fishs)) {
     struct fish * fish = TAILQ_FIRST(fishs);
-    fish_remove(fish);
+    fish_remove(fish->name);
   }
   free(fishs);
   fishs = NULL;
