@@ -14,7 +14,6 @@ enum fish_state {
 
 struct fish
 {
-  int id;
   char* name;
   struct coordinates coordinates;
   struct size size;
@@ -25,10 +24,17 @@ struct fish
   TAILQ_ENTRY(fish) queue_entries;
 };
 
-struct fish *fish_find(int id);
+int fish_add(char* name, int x, int y, int w, int h, void *(*mobility_function)(struct fish*, time_ms dt));
+struct fish *fish_find(char *name);
 void fish_update(struct fish *fish);
-void fishs_update();
+int fish_start(char *name);
+int fish_remove(char *name);
 
+
+void fishs_init();
+void fishs_finalize();
+void fishs_print();
+void fishs_update();
 
 
 #endif // FISH_H

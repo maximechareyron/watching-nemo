@@ -8,7 +8,7 @@
 #include "parser.h"
 #include "tools.h"
 #include "view.h"
-
+#include "fish.h"
 
 struct aquarium aquarium;
 
@@ -19,6 +19,7 @@ void aquarium_init(int width, int height)
   aquarium.size.height = height;
   
   views_init();
+  fishs_init();
 }
 
 
@@ -72,6 +73,7 @@ int aquarium_save(char *aquarium_name)
 void aquarium_finalize()
 {
   views_finalize();
+  fishs_finalize();
 }
 
 
