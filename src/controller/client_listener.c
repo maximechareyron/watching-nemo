@@ -14,10 +14,10 @@
 #include "client_listener.h"
 #include "queue.h"
 #include "view.h"
-
+#include "fish.h"
 
 #define MAX_BUFFER_SIZE 256
-#define TIME_BEFORE_DISCONNECTION 10 // s
+#define TIME_BEFORE_DISCONNECTION 50 // s
 
 
 struct client
@@ -94,6 +94,7 @@ void parse_client_message(char *message, struct client *client)
     send(client->socket, response, response_length, 0);
     client->time_of_last_action = time(NULL);
   } else if (strcmp(message, "getFishes") == 0) {
+    fishs_print();
     send(client->socket, "Not yet implemented", 19, 0);
   } else if (strcmp(message, "ls") == 0) {
     send(client->socket, "Not yet implemented", 19, 0);
@@ -102,14 +103,31 @@ void parse_client_message(char *message, struct client *client)
   } else if (strncmp(message, "addFish ", 8) == 0) {
     char name[MAX_BUFFER_SIZE], moving_algorithm[MAX_BUFFER_SIZE];
     int x, y, width, height;
-    if (sscanf(message + 8, "%s at %dx%d+%d+%d, %s", name, &x, &y, &width, &height, moving_algorithm) == 6) {
-      send(client->socket, "OK", 2, 0);  
+    if (sscanf(message + 8, "%s at %dx%d,%dx%d, %s", name, &x, &y, &width, &height, moving_algorithm) == 6) {
+      if (fish_add(name, x, y, width, height, NULL)) {
+	send(client->socket, "OK", 2, 0);
+      } else {
+	send(client->socket, "NOK", 3, 0);
+      }	
     }
-    send(client->socket, "Not yet implemented", 19, 0);  
   } else if (strncmp(message, "delFish ", 8) == 0) {
-    send(client->socket, "Not yet implemented", 19, 0);  
+    char name[MAX_BUFFER_SIZE];
+    if (sscanf(message + 8, "%s", name) == 1) {
+      if (fish_remove(name)) {
+	send(client->socket, "OK", 2, 0);
+      } else {
+	send(client->socket, "NOK", 3, 0);
+      }	
+    }
   } else if (strncmp(message, "startFish ", 10) == 0) {
-    send(client->socket, "Not yet implemented", 19, 0);  
+    char name[MAX_BUFFER_SIZE];
+    if (sscanf(message + 10, "%s", name) == 1) {
+      if (fish_start(name)) {
+	send(client->socket, "OK", 2, 0);
+      } else {
+	send(client->socket, "NOK", 3, 0);
+      }	
+    }
   }
 }
 
