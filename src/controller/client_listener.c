@@ -104,7 +104,7 @@ void parse_client_message(char *message, struct client *client)
     char name[MAX_BUFFER_SIZE], moving_algorithm[MAX_BUFFER_SIZE];
     int x, y, width, height;
     if (sscanf(message + 8, "%s at %dx%d,%dx%d, %s", name, &x, &y, &width, &height, moving_algorithm) == 6) {
-      if (fish_add(name, x, y, width, height, NULL)) {
+      if (fish_add(name, x, y, width, height, moving_algorithm)) {
 	send(client->socket, "OK", 2, 0);
       } else {
 	send(client->socket, "NOK", 3, 0);

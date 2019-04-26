@@ -5,6 +5,8 @@
 #include "mobility.h"
 #include "queue.h"
 
+#define MAX_BUFFER_SIZE 256
+
 enum fish_state {
 		 STARTED,
 		 NOT_STARTED
@@ -14,17 +16,17 @@ enum fish_state {
 
 struct fish
 {
-  char* name;
+  char name[MAX_BUFFER_SIZE];
   struct coordinates coordinates;
   struct size size;
-  void *(*mobility_function)(struct fish*, time_ms);
+  void *(*mobility_function)(struct fish*);
   void *param;
   enum fish_state state;
   
   TAILQ_ENTRY(fish) queue_entries;
 };
 
-int fish_add(char* name, int x, int y, int w, int h, void *(*mobility_function)(struct fish*, time_ms dt));
+int fish_add(char* name, int x, int y, int w, int h, char *mobility);
 struct fish *fish_find(char *name);
 void fish_update(struct fish *fish);
 int fish_start(char *name);
@@ -35,6 +37,10 @@ void fishs_init();
 void fishs_finalize();
 void fishs_print();
 void fishs_update();
+void fishs_lock();
+void fishs_unlock();
 
+//update fishs pthread
+void *updater(void *param);
 
 #endif // FISH_H
