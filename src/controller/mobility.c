@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "tools.h"
 #include "mobility.h"
@@ -20,6 +21,12 @@
 #define msleep(ms) usleep ((ms)*1000)
 #endif
 
+
+static void *mobility_functions[NO_MOBILITY] = {random_path};
+
+static void *mobility_params[NO_MOBILITY] = {random_param_init};
+static char *mobility_names[NO_MOBILITY] = {"RandomWayPoint"};
+
 #define MOBILITY_RUNNING 0
 #define MOBILITY_STOPPED 1
 
@@ -28,6 +35,16 @@ pthread_t update_thread;
 static int mobility_status = MOBILITY_STOPPED;
 
 struct size aquarium_size;
+
+int mobility_from_name(char *name) {
+  for (enum mobility_function f = 0; f != NO_MOBILITY; f++) {
+    if (strcmp(name, mobility_names[f]) == 0) {
+      return f;
+    }
+  }
+  return NO_MOBILITY;
+}
+
 
 void *updater(void *param) {
   printf("Mobiliy started\n");
@@ -63,6 +80,9 @@ void random_point(struct coordinates *c) {
   c->y = rand() % aquarium_size.height;
 }
 
+void *no_mobility(struct fish* fish) {
+  return NULL;
+}
 
 void *random_path(struct fish* fish) {
   struct random_path_param *p = fish->param;
@@ -82,10 +102,34 @@ void *random_path(struct fish* fish) {
   return NULL;
 }
 
-void random_param_init(struct random_path_param *p) {
+void random_param_init(struct fish *fish) {
+  struct random_path_param *p = malloc(sizeof(struct random_path_param));
   p->time_to_arrival = 0;
+  fish->param = p;
 }
+
+void *no_mobility_param_init(struct fish *fish) {
+  return NULL;
+}
+
 void call_mobility_function(struct fish *fish) {
   printf("mobility call\n");
-  fish->mobility_function(fish);
+  if (fish->state == STARTED) {
+    fish->mobility_function(fish);
+  }
+}
+
+
+void setup_mobility(struct fish* fish, char *mobility) {
+  printf("Mobility : %s\n", mobility);
+  int f = mobility_from_name(mobility);
+  printf("%d\n", f);
+  if (f == NO_MOBILITY) {
+    fish->mobility_function = &no_mobility;
+    no_mobility_param_init(fish);
+    return;
+  }
+  fish->mobility_function = mobility_functions[f];
+  void *(*param_init)(struct fish*) = mobility_params[f];
+  param_init(fish);
 }

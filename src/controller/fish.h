@@ -12,8 +12,6 @@ enum fish_state {
 		 NOT_STARTED
 };
 
-
-
 struct fish
 {
   char name[MAX_BUFFER_SIZE];

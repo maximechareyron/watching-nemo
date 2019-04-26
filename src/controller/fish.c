@@ -26,7 +26,6 @@ void fishs_init() {
 }
 
 void fishs_finalize() {
-
   if (fishs == NULL) {
     return;
   }
@@ -59,6 +58,7 @@ void fish_update(struct fish *fish) {
 int fish_add(char* name, int x, int y, int w, int h, char *mobility) {
   pthread_mutex_lock(&mutex_fishs);
   if (fish_find(name) != NULL)
+    pthread_mutex_unlock(&mutex_fishs);
     return 0;
   struct fish *fish = malloc(sizeof(struct fish));
   fish->coordinates.x = x;
@@ -66,11 +66,9 @@ int fish_add(char* name, int x, int y, int w, int h, char *mobility) {
   fish->size.width = w;
   fish->size.height = h;
   strcpy(fish->name, name);
-  //TODO check mobility and set the right one
-  fish->mobility_function = &random_path;
-  struct random_path_param *p = malloc(sizeof(struct random_path_param));
-  random_param_init(p);
-  fish->param = p;
+
+  setup_mobility(fish, mobility);
+
   fish->state = NOT_STARTED;
 
   TAILQ_INSERT_TAIL(fishs, fish, queue_entries);
