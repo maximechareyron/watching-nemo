@@ -95,7 +95,7 @@ void parse_client_message(char *message, struct client *client)
       return;
     } else if (strncmp(message, "ping ", 5) == 0) {
       char response[MAX_BUFFER_SIZE];
-      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1, "pong %s\n", message + 6);
+      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1, "pong %s\n", message + 5);
       send(client->socket, response, response_length, 0);
       client->time_of_last_action = time(NULL);
     } else if (strcmp(message, "getFishes") == 0) {
