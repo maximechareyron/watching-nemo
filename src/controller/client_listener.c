@@ -80,58 +80,58 @@ void parse_client_message(char *message, struct client *client)
     }
 
     if (client->name[0] == '\0') {
-      send(client->socket, "no greeting", 11, 0);
+      send(client->socket, "no greeting\n", 12, 0);
     } else {
       char response[MAX_BUFFER_SIZE];
-      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1, "greeting %s", client->name);
+      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1, "greeting %s\n", client->name);
       send(client->socket, response, response_length, 0);
     }
   } else if (strcmp(message, "log out") == 0) {
       remove_client(client);
-      send(client->socket, "bye", 3, 0);
+      send(client->socket, "bye\n", 4, 0);
   } else {
     if (client->name[0] == '\0') {
-      send(client->socket, "You must choose a view before!", 30, 0);
+      send(client->socket, "You must choose a view before!\n", 31, 0);
       return;
     } else if (strncmp(message, "ping ", 5) == 0) {
       char response[MAX_BUFFER_SIZE];
-      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1, "pong %s", message + 5);
+      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1, "pong %s\n", message + 6);
       send(client->socket, response, response_length, 0);
       client->time_of_last_action = time(NULL);
     } else if (strcmp(message, "getFishes") == 0) {
       struct view *client_view = view_find(client->name);
       fishs_print(); //TODO replace with fishs send
-      send(client->socket, "Not yet implemented", 19, 0);
+      send(client->socket, "Not yet implemented\n", 20, 0);
     } else if (strcmp(message, "ls") == 0) {
-      send(client->socket, "Not yet implemented", 19, 0);
+      send(client->socket, "Not yet implemented\n", 20, 0);
     } else if (strcmp(message, "getFishesContinuously") == 0) {
-      send(client->socket, "Not yet implemented", 19, 0);
+      send(client->socket, "Not yet implemented\n", 20, 0);
     } else if (strncmp(message, "addFish ", 8) == 0) {
       char name[MAX_BUFFER_SIZE], moving_algorithm[MAX_BUFFER_SIZE];
       int x, y, width, height;
       if (sscanf(message + 8, "%s at %dx%d,%dx%d, %s", name, &x, &y, &width, &height, moving_algorithm) == 6) {
 	if (fish_add(name, x, y, width, height, moving_algorithm)) {
-	  send(client->socket, "OK", 2, 0);
+	  send(client->socket, "OK\n", 3, 0);
 	} else {
-	  send(client->socket, "NOK", 3, 0);
+	  send(client->socket, "NOK\n", 4, 0);
 	}	
       }
     } else if (strncmp(message, "delFish ", 8) == 0) {
       char name[MAX_BUFFER_SIZE];
       if (sscanf(message + 8, "%s", name) == 1) {
 	if (fish_remove(name)) {
-	  send(client->socket, "OK", 2, 0);
+	  send(client->socket, "OK\n", 3, 0);
 	} else {
-	  send(client->socket, "NOK", 3, 0);
+	  send(client->socket, "NOK\n", 4, 0);
 	}	
       }
     } else if (strncmp(message, "startFish ", 10) == 0) {
       char name[MAX_BUFFER_SIZE];
       if (sscanf(message + 10, "%s", name) == 1) {
 	if (fish_start(name)) {
-	  send(client->socket, "OK", 2, 0);
+	  send(client->socket, "OK\n", 3, 0);
 	} else {
-	  send(client->socket, "NOK", 3, 0);
+	  send(client->socket, "NOK\n", 4, 0);
 	}	
       }
     }

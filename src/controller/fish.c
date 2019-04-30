@@ -8,6 +8,7 @@
 #include "queue.h"
 #include "mobility.h"
 #include "tools.h"
+#include "string.h"
 
 TAILQ_HEAD(fish_queue, fish);
 
@@ -127,6 +128,7 @@ int fish_is_visible(struct view *view, struct fish* fish) {
 }
 
 
+
 void fish_print(struct fish *fish) {
   if (fish != NULL) {
     char * s = "Mobility\n";
@@ -146,7 +148,29 @@ void fishs_print() {
   pthread_mutex_unlock(&mutex_fishs);
 }
 
-//void fishs_send();
+void fish_send(struct view *view, char *response, struct fish *fish) {
+  if (!fish_is_visible(view, fish)) {
+    return;
+  }  
+  strcat(response, "[");
+  char s[MAX_BUFFER_SIZE];
+  sprintf(s, "%s at %dx%d, %dx%d, %s\n", fish->name, fish->coordinates.x - view->start.x, fish->coordinates.y - view->start.y, fish->size.width, fish->size.height, fish->mobility_name);
+  strcat(response, s);
+  strcat(response, "] ");
+}
+
+void fishs_send(struct view *client_view, char *response) {
+    strcat(response, "list ");
+    pthread_mutex_lock(&mutex_fishs);
+    if (!TAILQ_EMPTY(fishs)) {
+      struct fish* f;
+      for (f = TAILQ_FIRST(fishs); f != TAILQ_LAST(fishs, fish_queue); f = TAILQ_NEXT(f, queue_entries)) {
+	fish_send(client_view, response, f);
+      }
+      fish_send(client_view, response, f);
+    }
+  pthread_mutex_unlock(&mutex_fishs);
+}
 
 void fishs_lock() {
   pthread_mutex_lock(&mutex_fishs);
