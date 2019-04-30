@@ -20,6 +20,7 @@ void aquarium_init(int width, int height)
   
   views_init();
   fishs_init();
+  mobility_init(&aquarium);
 }
 
 
@@ -72,8 +73,9 @@ int aquarium_save(char *aquarium_name)
 
 void aquarium_finalize()
 {
-  views_finalize();
+  mobility_finalize();
   fishs_finalize();
+  views_finalize();
 }
 
 
