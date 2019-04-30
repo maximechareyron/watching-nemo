@@ -94,7 +94,8 @@ void parse_client_message(char *message, struct client *client)
     send(client->socket, response, response_length, 0);
     client->time_of_last_action = time(NULL);
   } else if (strcmp(message, "getFishes") == 0) {
-    fishs_print();
+    struct view *client_view = view_find(client->name);
+    fishs_print(); //TODO replace with fishs send
     send(client->socket, "Not yet implemented", 19, 0);
   } else if (strcmp(message, "ls") == 0) {
     send(client->socket, "Not yet implemented", 19, 0);

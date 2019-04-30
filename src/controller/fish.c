@@ -4,6 +4,7 @@
 #include <pthread.h>
 
 #include "fish.h"
+#include "view.h"
 #include "queue.h"
 #include "mobility.h"
 #include "tools.h"
@@ -57,9 +58,10 @@ void fish_update(struct fish *fish) {
 
 int fish_add(char* name, int x, int y, int w, int h, char *mobility) {
   pthread_mutex_lock(&mutex_fishs);
-  if (fish_find(name) != NULL)
+  if (fish_find(name) != NULL) {
     pthread_mutex_unlock(&mutex_fishs);
     return 0;
+  }
   struct fish *fish = malloc(sizeof(struct fish));
   fish->coordinates.x = x;
   fish->coordinates.y = y;
@@ -119,7 +121,12 @@ struct fish *fish_find(char *name) {
   pthread_mutex_unlock(&mutex_fishs);
   return NULL;
 }
-				    
+
+int fish_is_visible(struct view *view, struct fish* fish) {
+  return (fish->coordinates.x >= view->start.x && fish->coordinates.y >= view->start.y && fish->coordinates.x < view->start.x + view->size.width && fish->coordinates.x < view->start.y + view->size.height);
+}
+
+
 void fish_print(struct fish *fish) {
   if (fish != NULL) {
     char * s = "Mobility\n";
@@ -139,7 +146,7 @@ void fishs_print() {
   pthread_mutex_unlock(&mutex_fishs);
 }
 
-
+//void fishs_send();
 
 void fishs_lock() {
   pthread_mutex_lock(&mutex_fishs);

@@ -7,16 +7,6 @@
 #include "view.h"
 
 
-struct view {
-  int id;
-  char name[256];
-  struct coordinates start;
-  struct size size;
-  int is_available;
-
-  TAILQ_ENTRY(view) queue_entries;
-};
-
 
 
 TAILQ_HEAD(view_queue, view);
@@ -24,6 +14,9 @@ TAILQ_HEAD(view_queue, view);
 struct view_queue* views = NULL;
 int nb_view = 0;
 
+static pthread_mutex_t mutex_views;
+
+static pthread_mutexattr_t recursive;
 
 void views_init()
 {
@@ -164,4 +157,23 @@ char *view_find_available()
   }
   
   return NULL;  
+}
+
+struct view *view_find(char *name) {
+  pthread_mutex_lock(&mutex_views);
+  struct view *v;
+  if (!TAILQ_EMPTY(views)) {
+    for (v = TAILQ_FIRST(views); v != TAILQ_LAST(views, view_queue); v = TAILQ_NEXT(v, queue_entries)) {
+      if (strcmp(v->name,name) == 0) {
+	pthread_mutex_unlock(&mutex_views);
+	return v;
+      }
+    }
+    if (strcmp(v->name,name) == 0) {
+      pthread_mutex_unlock(&mutex_views);
+      return v;
+    }
+  }
+  pthread_mutex_unlock(&mutex_views);
+  return NULL;
 }
