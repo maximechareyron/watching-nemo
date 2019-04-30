@@ -7,8 +7,6 @@
 #include "view.h"
 
 
-
-
 TAILQ_HEAD(view_queue, view);
 
 struct view_queue* views = NULL;
@@ -128,17 +126,16 @@ void print_view_deleted(int id)
 }
 
 
-int view_set_available(char *name)
+int view_set_available(char *name, const int available)
 {
   struct view *view = NULL;
   TAILQ_FOREACH(view, views, queue_entries) {
     if (strcmp(view->name, name) == 0) {
-      if (view->is_available) {
-	view->is_available = 0;
+      if (view->is_available != available) {
+	view->is_available = available;
 	return 1;
-      } else {
-	break;
       }
+      break;
     }
   }
   

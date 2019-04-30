@@ -33,7 +33,7 @@ struct view *view_find(char *name);
 void print_view_added();
 void print_view_deleted(int id);
 
-int view_set_available(char *name);
+int view_set_available(char *name, const int available);
 char *view_find_available();
 
 
