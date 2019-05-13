@@ -26,7 +26,11 @@ public class ClientController {
 
     public ClientController(String id) throws Exception {
         s = new SocketHandler();
-        loadProperties();
+        try {
+            loadProperties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.print(log(id));
     }
 
@@ -75,7 +79,7 @@ public class ClientController {
         System.out.print("Not connected to the controller");
         return null;
       }
-      System.out.print("Connected");
+      System.out.print("Connected as ");
       return rec[1];
     }
 
@@ -98,7 +102,7 @@ public class ClientController {
         System.out.print("Not connected to the controller");
         return null;
       }
-      System.out.print("Connected");
+      System.out.print("Connected as ");
       return rec[1];
     }
 
