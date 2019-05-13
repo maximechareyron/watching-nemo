@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class ClientController {
-    public static final String CONFIG_FILE = "./display.cfg";
+    public static final String CONFIG_FILE = "display.cfg";
 
     private Properties config = new Properties();
     private SocketHandler s;
@@ -14,9 +14,13 @@ public class ClientController {
     private ArrayList<Fish> fishArrayList = new ArrayList<Fish>();
 
 
-    public ClientController() throws Exception {
+    public ClientController(){
         s = new SocketHandler();
-        loadProperties();
+        try {
+            loadProperties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.print(log());
     }
 
@@ -49,7 +53,7 @@ public class ClientController {
     }
 
     public int getControllerPort(){
-        return (int) config.get("controller-port");
+        return Integer.valueOf(config.get("controller-port").toString());
     }
 
     public String log() {
