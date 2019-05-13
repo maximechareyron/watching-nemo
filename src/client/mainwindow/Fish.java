@@ -1,4 +1,4 @@
-package mainWindow;
+package mainwindow;
 
 public class Fish {
     private String name;

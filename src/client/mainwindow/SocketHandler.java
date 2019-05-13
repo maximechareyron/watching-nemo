@@ -1,4 +1,4 @@
-package mainWindow;
+package mainwindow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,8 +20,11 @@ public class SocketHandler {
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         }
 
-        public String sendMessage(String msg) throws IOException {
+        public void sendMessage(String msg) throws IOException {
             out.println(msg);
+        }
+
+        public String receiveMessage() throws IOException {
             String resp = in.readLine();
             return resp;
         }
@@ -37,6 +40,6 @@ public class SocketHandler {
 
         public void startPing(){
             tim = new Timer();
-            tim.schedule(new PingTask(), 1000, 5000);
+            tim.schedule(new PingTask(this), 1000, 5000);
         }
 }
