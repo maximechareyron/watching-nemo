@@ -1,4 +1,4 @@
-package mainWindow;
+package mainwindow;
 
 public class Status extends Command{
 

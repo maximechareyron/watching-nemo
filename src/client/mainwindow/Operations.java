@@ -1,4 +1,4 @@
-package mainWindow;
+package mainwindow;
 
 public class Operations {
 
@@ -9,9 +9,11 @@ public class Operations {
   public void addFish(String fishName, String coordinate, String size, String mobility) {
 
   }
+
   public void delFish(String fishName) {
 
   }
+
   public void startFish(String fishName) {
 
   }
