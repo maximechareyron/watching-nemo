@@ -56,10 +56,19 @@ public class ClientController {
       if (connect() == false) {
         return null;
       }
-      s.sendMessage("hello");
-      String rec[] = s.receiveMessage().split("[]+");
-      if (rec[0] == "no") {
-        System.out.print("No connected to the controller");
+        try {
+            s.sendMessage("hello");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String rec[] = new String[0];
+        try {
+            rec = s.receiveMessage().split("[]+");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (rec[0] == "no") {
+        System.out.print("Not connected to the controller");
         return null;
       }
       System.out.print("Connected");
@@ -70,10 +79,19 @@ public class ClientController {
       if (connect() == false) {
         return null;
       }
-      s.sendMessage("hello in as " + id);
-      String rec[] = s.receiveMessage().split("[]+");
-      if (rec[0] == "no") {
-        System.out.print("No connected to the controller");
+        try {
+            s.sendMessage("hello in as " + id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String rec[] = new String[0];
+        try {
+            rec = s.receiveMessage().split("[]+");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (rec[0] == "no") {
+        System.out.print("Not connected to the controller");
         return null;
       }
       System.out.print("Connected");
