@@ -1,7 +1,7 @@
 package mainWindow;
 
 public class Operations {
-  c = new ClientController();
+  ClientController c = new ClientController();
   public void status() {
     if (c.connect()) {
 
