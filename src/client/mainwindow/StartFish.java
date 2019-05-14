@@ -6,6 +6,7 @@ public class StartFish extends Command{
 
   public StartFish(String fn) {
     fishName = fn;
+    op = new Operations();
   }
 
   public void execute(){

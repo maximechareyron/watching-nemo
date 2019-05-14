@@ -12,6 +12,7 @@ public class AddFish extends Command{
     coordinate = cd;
     size = s;
     mobility = m;
+    op = new Operations();
   }
 
   public void execute(){
