@@ -62,6 +62,8 @@ public class ClientController implements Initializable {
             e.printStackTrace();
             return false;
         }
+        ping_status.setFill(Color.GREENYELLOW);
+        s.startPing(ping_status);
         return true;
     }
 
@@ -117,8 +119,8 @@ public class ClientController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ping_status.setFill(Color.DARKGRAY);
         System.out.println(log());
-        ping_status.setFill(Color.RED);
         console.setText("$ ");
     }
 }
