@@ -1,13 +1,21 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 
 #include "aquarium.h"
+#include "client_listener.h"
+#include "parser.h"
 #include "prompt_listener.h"
 #include "view.h"
 
 
 #define MAX_INPUT_SIZE 256
+
+int terminate_program;
+pthread_t client_listener_thread;
+int sock;
 
 
 void handle_overflow(char *buffer)
@@ -31,8 +39,7 @@ void parse_command(char *line)
       printf("    -> aquarium loaded (%d display view)!\n", view_get_number());
     }
   } else if (strcmp(line, "show aquarium") == 0) {
-    aquarium_print();
-    views_print();
+    aquarium_show();
   } else if (strncmp(line, "save ", 5) == 0) {
     const int nb_views = view_get_number();
     if (aquarium_save(line + 5)) {
@@ -52,9 +59,10 @@ void parse_command(char *line)
     view_remove_by_name(line + 9);
     printf("    -> view %s deleted.\n", line + 9);
   } else if (strcmp(line, "exit") == 0) {
+    terminate_program = 1;
+    shutdown(sock, SHUT_RDWR);
+    pthread_join(client_listener_thread, NULL);
     aquarium_finalize();
-    // TODO: Free memory
-    exit(0);
   } else {
     printf("Unknown command.\n");
   }
@@ -63,10 +71,17 @@ void parse_command(char *line)
 
 void create_prompt_listener()
 {
+  terminate_program = 0;
+  struct controller_config c;
+  parse_config_file("controller.cfg", &c);
+
+  pthread_create(&client_listener_thread, NULL, create_client_listener, (void*)(intptr_t)c.port);
+  
+  
   char line[MAX_INPUT_SIZE];
 
   printf("$ ");
-  while (fgets(line, MAX_INPUT_SIZE, stdin) != NULL) {
+  while (!terminate_program && fgets(line, MAX_INPUT_SIZE, stdin) != NULL) {
     handle_overflow(line);
     parse_command(line);
     printf("$ ");

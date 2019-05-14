@@ -1,34 +1,39 @@
-#include <pthread.h>
-#include <signal.h>
-#include <stdint.h>
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "client_listener.h"
-#include "parser.h"
+#include "log.h"
 #include "prompt_listener.h"
 
 
-pthread_t t;
-
-// Avoid memory leak due to the client thread
-// Maybe find a more beautiful way to do this
-__attribute__((destructor))
-void kill_thread()
+int main(int argc, char *argv[])
 {
-  pthread_kill(t, SIGKILL);
-  pthread_join(t, NULL);
-}
+  if (argc == 2 || (argc > 1 && strcmp(argv[1], "-l") != 0) || argc > 3) {
+    fprintf(stderr, "Usage: %s [-l verbosity_level]\n", argv[0]);
+    return EXIT_FAILURE;
+  }
 
+  int log = 0;
+  int level;
+  if (argc == 3 && strcmp(argv[1], "-l") == 0) {
+    level = strtol(argv[2], (char **)NULL, 10);
+    if (errno == EINVAL || errno == ERANGE || level < 0 || level > 2) { 
+      fputs("Verbosity level must be an integer between 0 and 2\n", stderr);
+      return EXIT_FAILURE;
+    }
+    log = 1;
+  }
 
-int main()
-{
-  struct controller_config c;
-  parse_config_file("controller.cfg", &c);
-
-  // TODO: Handle memory leaks related to the thread
-  pthread_create(&t, NULL, create_client_listener, (void*)(intptr_t)c.port);
+  if (log && level > 0) {
+    log_init("controller.log", level);
+  }
   
   create_prompt_listener();
+
+  if (log) {
+    log_finalize();
+  }
   
   return EXIT_SUCCESS;
 }

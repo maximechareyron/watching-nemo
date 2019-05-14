@@ -62,19 +62,25 @@ int parse_aquarium_file(const char *filename)
     return 0;
   }
 
-  int width, height;
-  if (sscanf(line, "%dx%d", &width, &height) != 2) {
+  int aquarium_width, aquarium_height;
+  if (sscanf(line, "%dx%d", &aquarium_width, &aquarium_height) != 2) {
     perror("sscanf");
     return 0;
   }
 
-  aquarium_init(width, height);
-  
+  aquarium_init(aquarium_width, aquarium_height);
+
   while (getline(&line, &len, fp) != -1) {
     char name[MAX_PARAM_LENGTH];
     int x, y, width, height;
     if (sscanf(line, "%s %dx%d+%d+%d", name, &x, &y, &width, &height) != 5) {
       perror("sscanf");
+      continue;
+    }
+
+    if (x < 0 || x + width > aquarium_width
+	|| y < 0 || y + height > aquarium_height) {
+      fprintf(stderr, "View %s not loaded because values are not valid.\n", name);
       continue;
     }
 
