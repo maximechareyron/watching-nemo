@@ -23,6 +23,8 @@ public class ClientController implements Initializable {
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
+    private Prompt p;
+
     @FXML public Circle ping_status;
 
     @FXML private TextArea console;
@@ -35,6 +37,7 @@ public class ClientController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        p = new Prompt();
     }
 
     public ClientController(String id) {
@@ -85,7 +88,7 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
         if (rec[0].equals("no")) {
-        System.out.println("Not connected to the controller");
+        System.out.println("Not connected to the controller\n");
         return null;
       }
       System.out.print("Connected as ");
@@ -108,7 +111,7 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
         if (rec[0].equals("no")) {
-        System.out.println("Not connected to the controller");
+        System.out.println("Not connected to the controller\n");
         return null;
       }
       System.out.print("Connected as ");
