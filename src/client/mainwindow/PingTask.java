@@ -31,7 +31,7 @@ public class PingTask extends TimerTask {
             ping_status.setFill(Color.GREENYELLOW);
         } catch (Exception e) {
             ping_status.setFill(Color.RED);
-            e.printStackTrace();
+            System.err.println("No response from server.");
         }
     }
 }

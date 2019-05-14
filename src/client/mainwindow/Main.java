@@ -22,17 +22,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(630);
         primaryStage.setMinWidth(800);
         primaryStage.show();
-
-        //startController();
     }
-
-    /*
-    private void startController(){
-        cc = new ClientController();
-    }
-    */
-
-
 
 
     public static void main(String[] args) {

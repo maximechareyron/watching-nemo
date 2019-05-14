@@ -1,5 +1,7 @@
 package mainwindow;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -13,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import static java.lang.Thread.sleep;
-
 public class ClientController implements Initializable {
     static final String CONFIG_FILE = "display.cfg";
 
@@ -26,9 +26,9 @@ public class ClientController implements Initializable {
     private Prompt p;
 
     @FXML public Circle ping_status;
-
     @FXML private TextArea console;
 
+    StringProperty prompt_text = new SimpleStringProperty();
 
     public ClientController() {
         s = new SocketHandler();
@@ -37,7 +37,7 @@ public class ClientController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        p = new Prompt();
+        // p = new Prompt();
     }
 
     public ClientController(String id) {
@@ -47,7 +47,6 @@ public class ClientController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //System.out.print(log(id));
     }
 
 
@@ -62,11 +61,10 @@ public class ClientController implements Initializable {
         try {
             s.startConnection(getControllerAddress(), getControllerPort());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Cannot create connection to server " + getControllerAddress() + ":" + getControllerPort() + ".");
             return false;
         }
         ping_status.setFill(Color.GREENYELLOW);
-        s.startPing(ping_status);
         return true;
     }
 
@@ -74,15 +72,11 @@ public class ClientController implements Initializable {
 
     private int getControllerPort(){ return Integer.valueOf(config.get("controller-port").toString()); }
 
-    private String log() {
+    private void log() {
       if (!connect()) {
-        return null;
+        return;
       }
-        try {
-            s.sendMessage("hello");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        s.sendMessage("hello");
         String[] rec = new String[0];
         try {
             rec = s.receiveMessage().split(" ");
@@ -91,12 +85,12 @@ public class ClientController implements Initializable {
         }
         if (rec[0].equals("no")) {
         System.out.println("Not connected to the controller\n");
-        return null;
+        return;
       }
-      System.out.print("Connected as ");
-      return rec[1];
+      System.out.print("Connected as " + rec[1]);
     }
 
+    /*
     public String log(String id) {
       if (!connect()) {
         return null;
@@ -119,11 +113,14 @@ public class ClientController implements Initializable {
       System.out.print("Connected as ");
       return rec[1];
     }
+     */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ping_status.setFill(Color.DARKGRAY);
-        System.out.println(log());
+        log();
+        s.startPing(ping_status);
         console.setText("$ ");
+        console.textProperty().bind(prompt_text);
     }
 }
