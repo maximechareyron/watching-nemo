@@ -6,34 +6,45 @@ public class Operations {
 
   public void status(SocketHandler s) {
     s.sendMessage("getFishes");
-    String[] rec = new String[0];
+    String rec = new String();
     try {
-        rec = s.receiveMessage().split(" \\[");
+      do {
+        rec = s.receiveMessage();
+      } while (rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
     }
-    if (!rec[0].equals("list")) {
-      System.out.print(rec[0]);
+    String[] recSplit = rec.split(" \\[");
+    if (!recSplit[0].equals("list")) {
+      System.out.print(recSplit[0]);
       System.out.println("No connected\n");
     }
     else {
-      System.out.println("OK : Connecté au contrôleur, " + (rec.length - 1) + " poissons trouvés\n");
-      for (String fish : rec) {
+      System.out.println("OK : Connecté au contrôleur, " + (recSplit.length - 1) + " poissons trouvés\n");
+      //TODO call drawfish by Amelli
+      for (String fish : recSplit) {
         if (!fish.equals("list")) {
-          System.out.println(fish.substring(fish.length() - 1) + "\n");
+          System.out.println(fish.substring(0, fish.length() - 1) + "\n");
         }
       }
     }
   }
 
   public void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s) {
-    s.sendMessage("addFish " + fishName + "at " + coordinate + ", " + size + ", " + mobility);
+    s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
+    System.out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
     String rec = new String();
     try {
+      do {
         rec = s.receiveMessage();
+        if (rec.startsWith("list")) {
+          //TODO call drawfish by Amelli
+        }
+      } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
     }
+    System.out.println(rec);
     if (rec.equals("OK")) {
       System.out.println("OK\n");
     }
@@ -46,7 +57,12 @@ public class Operations {
     s.sendMessage("delFish " + fishName);
     String rec = new String();
     try {
+      do {
         rec = s.receiveMessage();
+        if (rec.startsWith("list")) {
+          //TODO call drawfish by Amelli
+        }
+      } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -62,7 +78,12 @@ public class Operations {
     s.sendMessage("startFish " + fishName);
     String rec = new String();
     try {
+      do {
         rec = s.receiveMessage();
+        if (rec.startsWith("list")) {
+          //TODO call drawfish by Amelli
+        }
+      } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
     }

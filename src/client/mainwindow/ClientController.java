@@ -166,6 +166,7 @@ public class ClientController implements Initializable {
         ping_status.setFill(Color.DARKGRAY);
         if(log())
             s.startPing(ping_status);
+            s.sendMessage("ls");
         console.textProperty().bindBidirectional(prompt_text);
         prompt_text.setValue("$ ");
 

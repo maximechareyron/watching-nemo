@@ -47,7 +47,10 @@ public class Prompt extends Thread {
         System.out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]\n");
         return null;
       }
-      c = new AddFish(lineParsed[1], lineParsed[3].substring(lineParsed[3].length() - 1), lineParsed[4].substring(lineParsed[4].length() - 1), lineParsed[5]);
+      for (String s : lineParsed) {
+        System.out.println(s);
+      }
+      c = new AddFish(lineParsed[1], lineParsed[3].substring(0, lineParsed[3].length() - 1), lineParsed[4].substring(0, lineParsed[4].length() - 1), lineParsed[5]);
       return c;
     }
     else {
@@ -59,7 +62,7 @@ public class Prompt extends Thread {
     System.out.print("$ ");
     String cmd;
     while((cmd = in.readLine()) != null) {
-      System.out.println(cmd);
+      //System.out.println(cmd);
       //exécuter la commande ici
       theCommands = parse(cmd);
       if (theCommands == null) {
