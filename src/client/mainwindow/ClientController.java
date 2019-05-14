@@ -96,6 +96,45 @@ public class ClientController implements Initializable {
     }
 
     /*
+    private boolean log() {
+      if (!connect()) {
+        return true;
+      }
+        s.sendMessage("hello");
+        String[] rec = new String[0];
+        try {
+            rec = s.receiveMessage().split(" ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (rec[0].equals("no")) {
+        System.out.println("Not connected to the controller\n");
+        return false;
+      }
+      System.out.println("Connected as " + rec[1]);
+      return true;
+    }
+
+    /*
+    public String log(String id) {
+      if (!connect()) {
+        return null;
+      }
+        try {
+            s.sendMessage("hello in as " + id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] rec = new String[0];
+        try {
+            rec = s.receiveMessage().split(" ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (rec[0].equals("no")) {
+        System.out.println("Not connected to the controller\n");
+        return null;
+      }
     public String log(String id) {
       if (!connect()) {
         return null;

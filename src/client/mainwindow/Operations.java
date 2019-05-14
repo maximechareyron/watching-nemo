@@ -8,17 +8,18 @@ public class Operations {
     s.sendMessage("getFishes");
     String[] rec = new String[0];
     try {
-        rec = s.receiveMessage().split(" [");
+        rec = s.receiveMessage().split(" \\[");
     } catch (IOException e) {
         e.printStackTrace();
     }
-    if (rec[0] != "list") {
+    if (!rec[0].equals("list")) {
+      System.out.print(rec[0]);
       System.out.println("No connected\n");
     }
     else {
       System.out.println("OK : Connecté au contrôleur, " + (rec.length - 1) + " poissons trouvés\n");
       for (String fish : rec) {
-        if (fish != "list") {
+        if (!fish.equals("list")) {
           System.out.println(fish.substring(fish.length() - 1) + "\n");
         }
       }
@@ -33,7 +34,7 @@ public class Operations {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    if (rec == "OK") {
+    if (rec.equals("OK")) {
       System.out.println("OK\n");
     }
     else {
@@ -49,7 +50,7 @@ public class Operations {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    if (rec == "OK") {
+    if (rec.equals("OK")) {
       System.out.println("OK\n");
     }
     else {
@@ -65,7 +66,7 @@ public class Operations {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    if (rec == "OK") {
+    if (rec.equals("OK")) {
       System.out.println("OK\n");
     }
     else {

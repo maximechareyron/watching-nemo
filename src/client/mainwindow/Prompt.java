@@ -64,10 +64,11 @@ public class Prompt extends Thread {
       theCommands = parse(cmd);
       if (theCommands == null) {
         System.out.print("Wrong command\n");
-        return null;
       }
-      theCommands.execute(s);
-      System.out.print("$ ");
+      else {
+        theCommands.execute(s);
+        System.out.print("$ ");
+      }
     }
     return cmd;
   }

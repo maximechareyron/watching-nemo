@@ -39,7 +39,7 @@ struct client
   pthread_t thread;
   int connected;
   char *ip;
-  
+
   LIST_ENTRY(client) queue_entries;
 };
 
@@ -59,9 +59,9 @@ void add_new_client(int socket, char *ip)
   client->has_continuous_updates = 0;
   client->connected = 1;
   client->ip = ip;
-  
+
   LIST_INSERT_HEAD(clients, client, queue_entries);
-  
+
   pthread_create(&client->thread, NULL, client_thread, client);
 }
 
@@ -115,7 +115,7 @@ void handle_hello(char *message, struct client *client)
   } else if (strcmp(message, "hello") == 0) {
     const char *name = view_find_available();
     if (name != NULL) {
-      strcpy(client->name, name);	
+      strcpy(client->name, name);
     }
   }
 
@@ -141,7 +141,7 @@ void handle_add_fish(char *message, struct client *client)
   if (sscanf(message + 8, "%s at %dx%d,%dx%d, %s", name, &x, &y,
 	     &width, &height, moving_algorithm) == 6) {
     struct view *view = view_find(client->name);
-    
+
     if (fish_add(name, view->start.x + view->size.width * x / 100,
 		 view->start.y + view->size.height * y / 100,
 		 view->size.width * width / 100,
@@ -152,7 +152,7 @@ void handle_add_fish(char *message, struct client *client)
     } else {
       send(client->socket, "NOK\n", 4, 0);
       log_write(2, "Sent message \"NOK\" to client %d (%s)", client->socket, client->ip);
-    }	
+    }
   }
 }
 
@@ -161,7 +161,7 @@ void parse_client_message(char *message, struct client *client)
 {
   if (strcmp(message, "log out") == 0) {
     send(client->socket, "bye\n", 4, 0);
-    log_write(2, "Sent message \"bye\" to client %d (%s)", client->socket, client->ip); 
+    log_write(2, "Sent message \"bye\" to client %d (%s)", client->socket, client->ip);
     disconnect_client(client);
     pthread_exit(NULL);
   } else if (strncmp(message, "ping ", 5) == 0) {
@@ -169,22 +169,16 @@ void parse_client_message(char *message, struct client *client)
     const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1,
 					 "pong %s\n", message + 5);
     send(client->socket, response, response_length, 0);
-    log_write(2, "Sent message \"%s\" to client %d (%s)", response, client->socket, client->ip); 
+    log_write(2, "Sent message \"%s\" to client %d (%s)", response, client->socket, client->ip);
     client->time_of_last_action = time(NULL);
-  } else { 
+  } else {
     if (!aquarium_is_loaded()) {
       send(client->socket, "Please wait until the controller has initialized the aquarium\n", 62, 0);
       log_write(2, "Sent message \"Please wait until the controller has initialized the aquarium\" to client %d (%s)",
 		client->socket, client->ip);
       return;
     }
-    
-    if (client->name[0] == '\0') {
-      send(client->socket, "You must choose a view before!\n", 31, 0);
-      log_write(2, "Sent message \"You must choose a view before!\" to client %d (%s)",
-		client->socket, client->ip);
-      return;
-    }
+
 
     if (strncmp(message, "hello", 5) == 0) {
       handle_hello(message, client);
@@ -202,23 +196,29 @@ void parse_client_message(char *message, struct client *client)
       if (sscanf(message + 8, "%s", name) == 1) {
 	if (fish_remove(name)) {
 	  send(client->socket, "OK\n", 3, 0);
-	  log_write(2, "Sent message \"OK\" to client %d (%s)", client->socket, client->ip); 
+	  log_write(2, "Sent message \"OK\" to client %d (%s)", client->socket, client->ip);
 	} else {
 	  send(client->socket, "NOK\n", 4, 0);
-	  log_write(2, "Sent message \"NOK\" to client %d (%s)", client->socket, client->ip); 
-	}	
+	  log_write(2, "Sent message \"NOK\" to client %d (%s)", client->socket, client->ip);
+	}
       }
     } else if (strncmp(message, "startFish ", 10) == 0) {
       char name[MAX_BUFFER_SIZE];
       if (sscanf(message + 10, "%s", name) == 1) {
 	if (fish_start(name)) {
 	  send(client->socket, "OK\n", 3, 0);
-log_write(2, "Sent message \"OK\" to client %d (%s)", client->socket, client->ip); 
+log_write(2, "Sent message \"OK\" to client %d (%s)", client->socket, client->ip);
 	} else {
 	  send(client->socket, "NOK\n", 4, 0);
-log_write(2, "Sent message \"NOK\" to client %d (%s)", client->socket, client->ip);     
-	}	
+log_write(2, "Sent message \"NOK\" to client %d (%s)", client->socket, client->ip);
+	}
       }
+    }
+    if (client->name[0] == '\0') {
+      send(client->socket, "You must choose a view before!\n", 31, 0);
+      log_write(2, "Sent message \"You must choose a view before!\" to client %d (%s)",
+      client->socket, client->ip);
+      return;
     }
   }
 }
@@ -249,7 +249,7 @@ void *client_thread(void *a)
       if (nb_bytes == 0) {
 	disconnect_client(client);
 	break;
-      } else {	  
+      } else {
 	buffer[nb_bytes - 1] = '\0';
 	log_write(2, "Received message \"%s\" from client %d (%s)", buffer, client->socket, client->ip);
 	parse_client_message(buffer, client);
@@ -270,21 +270,21 @@ void *create_client_listener(void *p)
   const int port = c.port;
   int opt = 1;
   struct sockaddr_in sin;
-  sin.sin_addr.s_addr = htonl(INADDR_ANY);   
+  sin.sin_addr.s_addr = htonl(INADDR_ANY);
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
-  
+
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     perror("socket");
     exit(EXIT_FAILURE);
   }
 
-  if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
-		 &opt, sizeof(opt))) { 
-    perror("setsockopt"); 
-    exit(EXIT_FAILURE); 
+  if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+		 &opt, sizeof(opt))) {
+    perror("setsockopt");
+    exit(EXIT_FAILURE);
   }
-  
+
   if (bind(sock, (struct sockaddr *)&sin, sizeof(sin)) == -1) {
     perror("bind");
     exit(EXIT_FAILURE);
@@ -296,8 +296,8 @@ void *create_client_listener(void *p)
   }
 
   log_write(1, "Opened listening socket on port %d", port);
-  
-  clients = malloc(sizeof(struct client_queue)); 
+
+  clients = malloc(sizeof(struct client_queue));
   LIST_INIT(clients);
 
   while (!terminate_program) {
