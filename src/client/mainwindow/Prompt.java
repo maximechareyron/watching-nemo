@@ -14,7 +14,7 @@ public class Prompt {
 
   public Command parse(String line){
     Command c;
-    String[] lineParsed = line.split("[]+");
+    String[] lineParsed = line.split(" ");
     if (line.contains("status")) {
       c = new Status();
       return c;
