@@ -3,52 +3,42 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="mainwindow.ClientController">
-   <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-         AnchorPane.topAnchor="0.0">
-      <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.162-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainwindow.ClientController">
+   <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane fx:id="aquarium" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: blue;"/>
+      <TextArea fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="100" minWidth="-Infinity" prefHeight="100.0">
          <VBox.margin>
-            <Insets/>
-         </VBox.margin>
-         <Image url="@../ocean.jpeg"/>
-      </ImageView>
-      <TextArea fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="100" minWidth="-Infinity"
-                prefHeight="100.0">
-         <VBox.margin>
-            <Insets left="5.0" right="5.0" top="5.0"/>
+            <Insets left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextArea>
       <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0">
          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
          <Button mnemonicParsing="false" text="Connect">
             <HBox.margin>
-               <Insets right="10.0"/>
+               <Insets right="10.0" />
             </HBox.margin>
          </Button>
          <Button mnemonicParsing="false" text="List">
             <HBox.margin>
-               <Insets left="10.0" right="10.0"/>
+               <Insets left="10.0" right="10.0" />
             </HBox.margin>
          </Button>
          <Button mnemonicParsing="false" text="Add">
             <HBox.margin>
-               <Insets left="10.0"/>
+               <Insets left="10.0" />
             </HBox.margin>
          </Button>
-         <Circle fx:id="ping_status" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE"
-                 strokeWidth="0.0">
+         <Circle fx:id="ping_status" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
             <HBox.margin>
-               <Insets left="570.0"/>
+               <Insets left="570.0" />
             </HBox.margin>
          </Circle>
       </HBox>

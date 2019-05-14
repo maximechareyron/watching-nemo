@@ -16,6 +16,13 @@ extern int terminate_program;
 extern int sock;
 
 
+struct controller_config
+{
+  int port;
+  int display_timeout_value;
+  int fish_update_interval;
+};
+
 struct coordinates
 {
   int x;

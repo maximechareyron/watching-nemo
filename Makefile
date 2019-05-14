@@ -27,4 +27,4 @@ exec_client:
 
 clean:
 	@make clean -C src/controller
-	rm -dR build/*
+	rm -rf build/*

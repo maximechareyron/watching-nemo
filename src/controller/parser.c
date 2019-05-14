@@ -5,6 +5,7 @@
 
 #include "aquarium.h"
 #include "parser.h"
+#include "tools.h"
 #include "view.h"
 
 

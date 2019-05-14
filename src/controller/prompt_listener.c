@@ -72,10 +72,8 @@ void parse_command(char *line)
 void create_prompt_listener()
 {
   terminate_program = 0;
-  struct controller_config c;
-  parse_config_file("controller.cfg", &c);
 
-  pthread_create(&client_listener_thread, NULL, create_client_listener, (void*)(intptr_t)c.port);
+  pthread_create(&client_listener_thread, NULL, create_client_listener, NULL);
   
   
   char line[MAX_INPUT_SIZE];
@@ -84,7 +82,9 @@ void create_prompt_listener()
   while (!terminate_program && fgets(line, MAX_INPUT_SIZE, stdin) != NULL) {
     handle_overflow(line);
     parse_command(line);
-    printf("$ ");
+    if (!terminate_program) {
+      printf("$ ");
+    }
   }
 }
 

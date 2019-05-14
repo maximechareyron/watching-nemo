@@ -1,0 +1,8 @@
+EXEC=controller
+
+
+all: $(EXEC)
+
+
+$(EXEC): main.c
+	gcc main.c

@@ -16,17 +16,17 @@
 #include "client_listener.h"
 #include "fish.h"
 #include "log.h"
+#include "parser.h"
 #include "queue.h"
 #include "view.h"
 
 
 #define MAX_BUFFER_SIZE 256
-#define TIME_BEFORE_DISCONNECTION 60 // s
-#define TIME_BEFORE_NEXT_FISH_UPDATE 100 // ms
 
 
 int terminate_program;
 int sock;
+struct controller_config c;
 
 
 struct client
@@ -108,13 +108,6 @@ void get_fishes(struct client *client)
 
 void handle_hello(char *message, struct client *client)
 {
-  if (!aquarium_is_loaded()) {
-    send(client->socket, "Please wait until the controller has initialized the aquarium\n", 62, 0);
-    log_write(2, "Sent message \"Please wait until the controller has initialized the aquarium\" to client %d (%s)",
-	      client->socket, client->ip);
-    return;
-  }
-  
   if (strncmp(message, "hello as in ", 12) == 0) {
     if (view_set_available(message + 12, 0)) {
       strcpy(client->name, message + 12);
@@ -166,26 +159,35 @@ void handle_add_fish(char *message, struct client *client)
 
 void parse_client_message(char *message, struct client *client)
 {
-  if (strncmp(message, "hello", 5) == 0) {
-    handle_hello(message, client);
-  } else if (strcmp(message, "log out") == 0) {
+  if (strcmp(message, "log out") == 0) {
     send(client->socket, "bye\n", 4, 0);
     log_write(2, "Sent message \"bye\" to client %d (%s)", client->socket, client->ip); 
     disconnect_client(client);
     pthread_exit(NULL);
-  } else {
+  } else if (strncmp(message, "ping ", 5) == 0) {
+    char response[MAX_BUFFER_SIZE];
+    const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1,
+					 "pong %s\n", message + 5);
+    send(client->socket, response, response_length, 0);
+    log_write(2, "Sent message \"%s\" to client %d (%s)", response, client->socket, client->ip); 
+    client->time_of_last_action = time(NULL);
+  } else { 
+    if (!aquarium_is_loaded()) {
+      send(client->socket, "Please wait until the controller has initialized the aquarium\n", 62, 0);
+      log_write(2, "Sent message \"Please wait until the controller has initialized the aquarium\" to client %d (%s)",
+		client->socket, client->ip);
+      return;
+    }
+    
     if (client->name[0] == '\0') {
       send(client->socket, "You must choose a view before!\n", 31, 0);
       log_write(2, "Sent message \"You must choose a view before!\" to client %d (%s)",
 		client->socket, client->ip);
       return;
-    } else if (strncmp(message, "ping ", 5) == 0) {
-      char response[MAX_BUFFER_SIZE];
-      const int response_length = snprintf(response, MAX_BUFFER_SIZE - 1,
-					   "pong %s\n", message + 5);
-      send(client->socket, response, response_length, 0);
-      log_write(2, "Sent message \"%s\" to client %d (%s)", response, client->socket, client->ip); 
-      client->time_of_last_action = time(NULL);
+    }
+
+    if (strncmp(message, "hello", 5) == 0) {
+      handle_hello(message, client);
     } else if (strcmp(message, "getFishes") == 0) {
       get_fishes(client);
     } else if (strcmp(message, "getFishesContinuously") == 0
@@ -231,7 +233,7 @@ void *client_thread(void *a)
   while (!terminate_program) {
     if (client->has_continuous_updates) {
       get_fishes(client);
-      msleep(TIME_BEFORE_NEXT_FISH_UPDATE);
+      msleep(c.fish_update_interval);
     }
 
     if ((nb_bytes = recv(client->socket, buffer, MAX_BUFFER_SIZE, 0)) == -1) {
@@ -239,7 +241,7 @@ void *client_thread(void *a)
 	perror("recv");
       }
 
-      if (time(NULL) - client->time_of_last_action > TIME_BEFORE_DISCONNECTION) {
+      if (time(NULL) - client->time_of_last_action > c.display_timeout_value) {
 	disconnect_client(client);
 	break;
       }
@@ -261,8 +263,11 @@ void *client_thread(void *a)
 
 
 void *create_client_listener(void *p)
-{ 
-  const int port = (intptr_t)p;
+{
+  (void)p;
+  parse_config_file("controller.cfg", &c);
+
+  const int port = c.port;
   int opt = 1;
   struct sockaddr_in sin;
   sin.sin_addr.s_addr = htonl(INADDR_ANY);   
@@ -300,7 +305,9 @@ void *create_client_listener(void *p)
     socklen_t len = sizeof(client_sin);
     const int client_sock = accept(sock, (struct sockaddr *)&client_sin, &len);
     if (client_sock == -1) {
-      perror("accept"); 
+      if (!terminate_program) {
+	perror("accept");
+      }
     } else {
       fcntl(client_sock, F_SETFL, O_NONBLOCK);
       char *ip = inet_ntoa(client_sin.sin_addr);
