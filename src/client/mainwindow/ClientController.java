@@ -87,7 +87,7 @@ public class ClientController implements Initializable {
         System.out.println("Not connected to the controller\n");
         return;
       }
-      System.out.print("Connected as " + rec[1]);
+      System.out.println("Connected as " + rec[1]);
     }
 
     /*
@@ -120,7 +120,7 @@ public class ClientController implements Initializable {
         ping_status.setFill(Color.DARKGRAY);
         log();
         s.startPing(ping_status);
-        console.setText("$ ");
         console.textProperty().bind(prompt_text);
+        prompt_text.setValue("$ ");
     }
 }

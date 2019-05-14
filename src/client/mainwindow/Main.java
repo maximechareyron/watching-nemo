@@ -19,7 +19,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("aquarium.fxml"));
         primaryStage.setTitle("Watching Nemo");
         primaryStage.setScene(new Scene(root));
-        primaryStage.setMinHeight(630);
+        primaryStage.setMinHeight(625);
         primaryStage.setMinWidth(800);
         primaryStage.show();
     }

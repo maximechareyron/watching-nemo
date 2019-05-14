@@ -19,7 +19,7 @@ public class PingTask extends TimerTask {
 
     @Override
     public void run() {
-        System.out.println("Ping @" + new Date());
+        System.out.println(new Date() + "-- ping 12345");
         try {
             s.sendMessage("ping 12345");
         } catch (Exception e) {
@@ -27,8 +27,12 @@ public class PingTask extends TimerTask {
             ping_status.setFill(Color.RED);
         }
         try {
-            System.out.println(s.receiveMessage());
-            ping_status.setFill(Color.GREENYELLOW);
+            String resp = s.receiveMessage();
+            System.out.println(new Date() + " " + resp);
+            if(resp.equals("pong 12345"))
+                ping_status.setFill(Color.GREENYELLOW);
+            else
+                ping_status.setFill(Color.ORANGE);
         } catch (Exception e) {
             ping_status.setFill(Color.RED);
             System.err.println("No response from server.");

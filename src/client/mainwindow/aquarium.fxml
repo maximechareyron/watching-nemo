@@ -45,10 +45,10 @@
                <Insets left="10.0"/>
             </HBox.margin>
          </Button>
-         <Circle fx:id="ping_status" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE"
+         <Circle fx:id="ping_status" fill="WHITE" radius="5.0" stroke="BLACK" strokeType="INSIDE"
                  strokeWidth="0.0">
             <HBox.margin>
-               <Insets left="570.0"/>
+               <Insets left="575.0"/>
             </HBox.margin>
          </Circle>
       </HBox>
