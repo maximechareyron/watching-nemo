@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-
+<?import mainwindow.ConsoleView?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="mainwindow.ClientController">
    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
@@ -20,12 +17,12 @@
          </VBox.margin>
          <Image url="@../ocean.jpeg"/>
       </ImageView>
-      <TextArea fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="100" minWidth="-Infinity"
-                prefHeight="100.0">
-         <VBox.margin>
-            <Insets left="5.0" right="5.0" top="5.0"/>
-         </VBox.margin>
-      </TextArea>
+      <ConsoleView fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="100" minWidth="-Infinity"
+                   prefHeight="100.0">
+      <VBox.margin>
+         <Insets left="5.0" right="5.0" top="5.0"/>
+      </VBox.margin>
+      </ConsoleView>
       <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0">
          <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
