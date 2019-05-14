@@ -72,7 +72,7 @@ public class Prompt extends Thread {
     return cmd;
   }
 
-  public void run(SocketHandler s) {
+  public void run() {
     try {
       read();
     } catch (IOException e) {
