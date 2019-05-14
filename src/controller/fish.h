@@ -44,7 +44,9 @@ void fishs_unlock();
 
 
 void fishs_send(struct view *client_view, char *response);
-  
+
+char *fishes_get_info(struct view *client_view);
+
 //update fishs pthread
 void *updater(void *param);
 

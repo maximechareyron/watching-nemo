@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,7 +15,8 @@ int nb_view = 0;
 
 static pthread_mutex_t mutex_views;
 
-static pthread_mutexattr_t recursive;
+//static pthread_mutexattr_t recursive;
+
 
 void views_init()
 {
@@ -128,49 +130,52 @@ void print_view_deleted(int id)
 
 int view_set_available(char *name, const int available)
 {
+  pthread_mutex_lock(&mutex_views);
+  
   struct view *view = NULL;
   TAILQ_FOREACH(view, views, queue_entries) {
     if (strcmp(view->name, name) == 0) {
       if (view->is_available != available) {
 	view->is_available = available;
+	pthread_mutex_unlock(&mutex_views);
 	return 1;
       }
       break;
     }
   }
-  
+
+  pthread_mutex_unlock(&mutex_views);
   return 0;
 }
 
 
 char *view_find_available()
 {
+  pthread_mutex_lock(&mutex_views);
   struct view *view = NULL;
   TAILQ_FOREACH(view, views, queue_entries) {
     if (view->is_available) {
       view->is_available = 0;
+      pthread_mutex_unlock(&mutex_views);
       return view->name;
     }
   }
-  
+  pthread_mutex_unlock(&mutex_views);
+
   return NULL;  
 }
 
+
 struct view *view_find(char *name) {
   pthread_mutex_lock(&mutex_views);
-  struct view *v;
-  if (!TAILQ_EMPTY(views)) {
-    for (v = TAILQ_FIRST(views); v != TAILQ_LAST(views, view_queue); v = TAILQ_NEXT(v, queue_entries)) {
-      if (strcmp(v->name,name) == 0) {
-	pthread_mutex_unlock(&mutex_views);
-	return v;
-      }
-    }
-    if (strcmp(v->name,name) == 0) {
-      pthread_mutex_unlock(&mutex_views);
-      return v;
+
+  struct view *view = NULL;
+  TAILQ_FOREACH(view, views, queue_entries) {
+    if (strcmp(view->name, name) == 0) {
+      break;
     }
   }
+  
   pthread_mutex_unlock(&mutex_views);
-  return NULL;
+  return view;
 }

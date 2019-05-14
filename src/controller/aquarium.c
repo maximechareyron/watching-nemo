@@ -5,12 +5,15 @@
 #include <unistd.h>
 
 #include "aquarium.h"
+#include "log.h"
 #include "parser.h"
 #include "tools.h"
 #include "view.h"
 #include "fish.h"
 
+
 struct aquarium aquarium;
+int aquarium_loaded = 0;
 
 
 void aquarium_init(int width, int height)
@@ -21,11 +24,16 @@ void aquarium_init(int width, int height)
   views_init();
   fishs_init();
   mobility_init(&aquarium);
+  aquarium_loaded = 1;
 }
 
 
 int aquarium_load(char *aquarium_name)
 {
+  if (aquarium_loaded) {
+    aquarium_finalize();
+  }
+  
   char cwd[PATH_MAX];
   
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
@@ -35,15 +43,24 @@ int aquarium_load(char *aquarium_name)
   
   strncat(cwd, "/", sizeof(cwd) - 1);
   strncat(cwd, aquarium_name, sizeof(cwd) - 1);
-  //printf("Aquarium path : %s\n", cwd);
 
-  return parse_aquarium_file(cwd);
+  const int success = parse_aquarium_file(cwd);
+
+  log_write(1, success ? "%s loaded successfully" : "Failed to load %s",
+	    aquarium_name);
+  
+  return success;
 }
 
 
 // Save the aquarium in a log file
 int aquarium_save(char *aquarium_name)
 {
+  if (!aquarium_loaded) {
+    fputs("No aquarium loaded\n", stderr);
+    return 0;
+  }
+  
   char cwd[PATH_MAX];
 
   if (getcwd(cwd, sizeof(cwd)) == NULL) {
@@ -66,32 +83,44 @@ int aquarium_save(char *aquarium_name)
   views_save(f);
   aquarium_finalize();
   fclose(f);
+
+  log_write(1, "%s saved successfully", aquarium_name);
   
   return 1;
 }
 
 
+void aquarium_show()
+{
+  if (!aquarium_loaded) {
+    fputs("No aquarium loaded\n", stderr);
+    return;
+  }
+
+  printf("%dx%d\n", aquarium.size.width, aquarium.size.height);
+  views_print();
+}
+
+
 void aquarium_finalize()
 {
+  if (!aquarium_loaded) {
+    return;
+  }
+  
   mobility_finalize();
   fishs_finalize();
   views_finalize();
+  aquarium_loaded = 0;
 }
-
-
-void aquarium_print()
-{
-  printf("%dx%d\n", aquarium.size.width, aquarium.size.height);
-}
-
-
-void print_aquarium_saved(int nb_view)
-{
-  printf("\t Aquarium saved!( %d display view)\n", nb_view);
-}
-
 
 struct size aquarium_get_size()
 {
   return aquarium.size;
+}
+
+
+int aquarium_is_loaded()
+{
+  return aquarium_loaded;
 }
