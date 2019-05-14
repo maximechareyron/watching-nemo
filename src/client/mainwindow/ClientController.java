@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.*;
 
 public class ClientController implements Initializable {
     static final String CONFIG_FILE = "display.cfg";
@@ -22,11 +23,14 @@ public class ClientController implements Initializable {
 
     private Prompt p;
 
+    private int levelOfLog;
+
     @FXML public Circle ping_status;
     @FXML private ConsoleView console;
 
-    public ClientController() {
-        sh = new SocketHandler();
+    public ClientController(int log) {
+        levelOfLog = log;
+        sh = new SocketHandler(levelOfLog);
         try {
             loadProperties();
         } catch (IOException e) {
@@ -34,8 +38,9 @@ public class ClientController implements Initializable {
         }
     }
 
-    public ClientController(String id) {
-        sh = new SocketHandler();
+    public ClientController(int log, String id) {
+        levelOfLog = log;
+        sh = new SocketHandler(levelOfLog);
         try {
             loadProperties();
         } catch (IOException e) {
