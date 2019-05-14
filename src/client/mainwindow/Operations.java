@@ -3,18 +3,18 @@ package mainwindow;
 public class Operations {
 
   public void status() {
-    System.out.print("Status");
+    System.out.print("StatusOP\n");
   }
 
   public void addFish(String fishName, String coordinate, String size, String mobility) {
-    System.out.print("addfish");
+    System.out.print("addfishOP\n");
   }
 
   public void delFish(String fishName) {
-    System.out.print("delFish");
+    System.out.print("delFishOP\n");
   }
 
   public void startFish(String fishName) {
-    System.out.print("startFish");
+    System.out.print("startFishOP\n");
   }
 }

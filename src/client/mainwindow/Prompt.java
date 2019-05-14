@@ -10,6 +10,11 @@ public class Prompt {
   private BufferedReader in = new BufferedReader(reader);
 
   public Prompt(){
+    try {
+      read();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
   }
 
   public Command parse(String line){
@@ -21,7 +26,7 @@ public class Prompt {
     }
     else if (line.contains("startFish")) {
       if (lineParsed.length != 2) {
-        System.out.print("wrong usage : startFish [fishName]");
+        System.out.print("wrong usage : startFish [fishName]\n");
         return null;
       }
       c = new StartFish(lineParsed[1]);
@@ -29,7 +34,7 @@ public class Prompt {
     }
     else if (line.contains("delFish")) {
       if (lineParsed.length != 2) {
-        System.out.print("wrong usage : delFish [fishName]");
+        System.out.print("wrong usage : delFish [fishName]\n");
         return null;
       }
       c = new DelFish(lineParsed[1]);
@@ -37,7 +42,7 @@ public class Prompt {
     }
     else if (line.contains("addFish")) {
       if (lineParsed.length != 6) {
-        System.out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]");
+        System.out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]\n");
         return null;
       }
       c = new AddFish(lineParsed[1], lineParsed[3].substring(lineParsed[3].length() - 1), lineParsed[4].substring(lineParsed[4].length() - 1), lineParsed[5]);
@@ -56,7 +61,8 @@ public class Prompt {
       //exécuter la commande ici
       theCommands = parse(cmd);
       if (theCommands == null) {
-        System.out.print("Wrong command");
+        System.out.print("Wrong command\n");
+        return null;
       }
       theCommands.execute();
       System.out.print("$ ");

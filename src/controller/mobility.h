@@ -19,21 +19,15 @@ struct random_path_param {
 
 enum mobility_function {
 			RANDOM_WAY_POINT,
+			CHAOTIC,
 			NO_MOBILITY
 };
 
 void mobility_init(struct aquarium *);
 void mobility_finalize();
 
-void *random_path(struct fish*);
-void random_param_init(struct fish *fish);
-
-void *no_mobility(struct fish* fish);
-void *no_mobility_param_init(struct fish *fish);
-
-
 int mobility_from_name(char *name);
 void call_mobility_function(struct fish*);
-void setup_mobility(struct fish* fish, char *mobility);
+int setup_mobility(struct fish* fish, char *mobility);
 
 #endif

@@ -6,6 +6,7 @@ public class DelFish extends Command{
 
   public DelFish(String fn) {
     fishName = fn;
+    op = new Operations();
   }
 
   public void execute(){
