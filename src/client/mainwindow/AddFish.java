@@ -15,7 +15,7 @@ public class AddFish extends Command{
     op = new Operations();
   }
 
-  public void execute(){
-    op.addFish(fishName, size, coordinate, mobility);
+  public void execute(SocketHandler s){
+    op.addFish(fishName, size, coordinate, mobility, s);
   }
 }

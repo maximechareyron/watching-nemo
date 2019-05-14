@@ -33,11 +33,11 @@ public class MainTest {
         System.out.println(config.get("controller-port"));
         System.out.println(config.get("display-timeout-value"));
     }
-
+/*
     public static void testPrompt() throws IOException {
         Prompt p = new Prompt();
         p.read();
     }
-
+*/
 
 }

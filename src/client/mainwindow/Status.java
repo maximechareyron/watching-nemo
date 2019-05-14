@@ -6,7 +6,7 @@ public class Status extends Command{
     op = new Operations();
   }
 
-  public void execute(){
-    op.status();
+  public void execute(SocketHandler s){
+    op.status(s);
   }
 }
