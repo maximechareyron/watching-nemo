@@ -3,18 +3,20 @@ package mainwindow;
 import java.io.*;
 
 
-public class Prompt {
+public class Prompt extends Thread {
 
+  private SocketHandler s;
   public Command theCommands;
   private InputStreamReader reader = new InputStreamReader(System.in);
   private BufferedReader in = new BufferedReader(reader);
 
-  public Prompt(){
-    try {
-      read();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+  public Prompt(SocketHandler soc){
+    // try {
+    //   read();
+    // } catch (IOException e) {
+    //     e.printStackTrace();
+    // }
+    s = soc;
   }
 
   public Command parse(String line){
@@ -64,10 +66,18 @@ public class Prompt {
         System.out.print("Wrong command\n");
         return null;
       }
-      theCommands.execute();
+      theCommands.execute(s);
       System.out.print("$ ");
     }
     return cmd;
+  }
+
+  public void run() {
+    try {
+      read();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
   }
 
 }

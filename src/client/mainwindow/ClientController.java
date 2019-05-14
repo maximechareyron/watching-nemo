@@ -40,7 +40,8 @@ public class ClientController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // p = new Prompt();
+        p = new Prompt(s);
+        p.start();
     }
 
     public ClientController(String id) {

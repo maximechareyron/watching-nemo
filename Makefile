@@ -22,7 +22,7 @@ client: build_dir
 	cp src/client/mainwindow/*.fxml $(BUILD_DIR)/mainwindow
 
 exec_client:
-	java --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml -cp build mainwindow.Main 
+	java --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml -cp build mainwindow.Main
 
 
 clean:

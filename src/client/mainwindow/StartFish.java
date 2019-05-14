@@ -9,7 +9,7 @@ public class StartFish extends Command{
     op = new Operations();
   }
 
-  public void execute(){
-    op.startFish(fishName);
+  public void execute(SocketHandler s){
+    op.startFish(fishName, s);
   }
 }

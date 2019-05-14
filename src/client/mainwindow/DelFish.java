@@ -9,7 +9,7 @@ public class DelFish extends Command{
     op = new Operations();
   }
 
-  public void execute(){
-    op.delFish(fishName);
+  public void execute(SocketHandler s){
+    op.delFish(fishName, s);
   }
 }
