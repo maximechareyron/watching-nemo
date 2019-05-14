@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import static java.lang.Thread.currentThread;
+import static java.lang.Thread.sleep;
+
 public class ClientController implements Initializable {
     static final String CONFIG_FILE = "display.cfg";
 
@@ -72,9 +75,9 @@ public class ClientController implements Initializable {
 
     private int getControllerPort(){ return Integer.valueOf(config.get("controller-port").toString()); }
 
-    private void log() {
+    private boolean log() {
       if (!connect()) {
-        return;
+        return true;
       }
         s.sendMessage("hello");
         String[] rec = new String[0];
@@ -85,9 +88,10 @@ public class ClientController implements Initializable {
         }
         if (rec[0].equals("no")) {
         System.out.println("Not connected to the controller\n");
-        return;
+        return false;
       }
       System.out.println("Connected as " + rec[1]);
+      return true;
     }
 
     /*
@@ -115,12 +119,16 @@ public class ClientController implements Initializable {
     }
      */
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ping_status.setFill(Color.DARKGRAY);
-        log();
-        s.startPing(ping_status);
-        console.textProperty().bind(prompt_text);
+        if(log())
+            s.startPing(ping_status);
+        console.textProperty().bindBidirectional(prompt_text);
         prompt_text.setValue("$ ");
+
+        System.out.println((prompt_text.get()));
     }
 }
