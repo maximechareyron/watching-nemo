@@ -1,4 +1,4 @@
-package mainWindow;
+package mainwindow;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,13 +8,18 @@ import static java.lang.Thread.sleep;
 
 public class MainTest {
     public static void main(String[] args) throws Exception {
+        testPing();
     }
 
-    public static void testPing() throws IOException {
+    public static void testPing() throws IOException, InterruptedException {
         SocketHandler s = new SocketHandler();
+        s.startConnection("127.0.0.1", 12345);
+        s.sendMessage("hello");
+        s.receiveMessage();
+
 
         s.startPing();
-        System.out.println("bite");
+        sleep(10000);
         s.stopConnection();
     }
 
@@ -27,6 +32,11 @@ public class MainTest {
         System.out.println();
         System.out.println(config.get("controller-port"));
         System.out.println(config.get("display-timeout-value"));
+    }
+
+    public static void testPrompt() throws IOException {
+        Prompt p = new Prompt();
+        p.read();
     }
 
 

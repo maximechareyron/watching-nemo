@@ -1,4 +1,4 @@
-package mainWindow;
+package mainwindow;
 
 public class Position {
     private int x;

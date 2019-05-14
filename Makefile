@@ -3,6 +3,8 @@ export CFLAGS=-Wall -Wextra -std=gnu99 -g -O0
 PWD=$(shell pwd)
 export BUILD_DIR=$(PWD)/build
 
+export CLIENT_MODULES=javafx.controls,javafx.fxml
+
 
 all: controller
 
@@ -15,7 +17,14 @@ build_dir:
 	mkdir -p $(BUILD_DIR)
 
 
+client: build_dir
+	javac --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml src/client/mainwindow/*.java -d $(BUILD_DIR)
+	cp src/client/mainwindow/*.fxml $(BUILD_DIR)/mainwindow
+
+exec_client:
+	java --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml -cp build mainwindow.Main 
+
+
 clean:
 	@make clean -C src/controller
-
-
+	rm -dR build/*

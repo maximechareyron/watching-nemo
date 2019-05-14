@@ -122,6 +122,7 @@ void call_mobility_function(struct fish *fish) {
 
 void setup_mobility(struct fish* fish, char *mobility) {
   printf("Mobility : %s\n", mobility);
+  strcpy(fish->mobility_name, mobility);
   int f = mobility_from_name(mobility);
   printf("%d\n", f);
   if (f == NO_MOBILITY) {
