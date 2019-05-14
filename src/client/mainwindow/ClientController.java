@@ -1,16 +1,21 @@
 package mainwindow;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import static java.lang.Thread.sleep;
 
-public class ClientController {
+public class ClientController implements Initializable {
     static final String CONFIG_FILE = "display.cfg";
 
     private Properties config = new Properties();
@@ -18,20 +23,18 @@ public class ClientController {
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
-    @FXML
-    public Circle ping_status;
+    @FXML public Circle ping_status;
+
+    @FXML private TextArea console;
 
 
-    public ClientController(){
-        //ping_status.setFill(Color.GREEN);
+    public ClientController() {
         s = new SocketHandler();
         try {
             loadProperties();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(log());
-        //ping_status.setFill(Color.RED);
     }
 
     public ClientController(String id) {
@@ -62,13 +65,9 @@ public class ClientController {
         return true;
     }
 
-    private String getControllerAddress(){
-        return config.get("controller-address").toString();
-    }
+    private String getControllerAddress(){ return config.get("controller-address").toString(); }
 
-    private int getControllerPort(){
-        return Integer.valueOf(config.get("controller-port").toString());
-    }
+    private int getControllerPort(){ return Integer.valueOf(config.get("controller-port").toString()); }
 
     private String log() {
       if (!connect()) {
@@ -114,5 +113,12 @@ public class ClientController {
       }
       System.out.print("Connected as ");
       return rec[1];
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println(log());
+        ping_status.setFill(Color.RED);
+        console.setText("$ ");
     }
 }
