@@ -117,6 +117,7 @@ public class ClientController implements Initializable {
         ping_status.setFill(Color.DARKGRAY);
         if(log())
             sh.startPing(ping_status);
+            sh.sendMessage("ls");
 
         System.setOut(console.getOut());
         System.setIn(console.getIn());
