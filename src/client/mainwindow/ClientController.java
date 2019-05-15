@@ -21,6 +21,8 @@ public class ClientController implements Initializable {
     private SocketHandler sh;
     private Thread t;
 
+    private String id;
+
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
     private Prompt p;
@@ -36,16 +38,6 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    public ClientController(String id) {
-        sh = new SocketHandler();
-        try {
-            loadProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void loadProperties() throws IOException {
         FileInputStream in = new FileInputStream(CONFIG_FILE);
@@ -87,31 +79,6 @@ public class ClientController implements Initializable {
       System.out.println("Connected as " + rec[1]);
       return true;
     }
-
-    /*
-    public String log(String id) {
-      if (!connect()) {
-        return null;
-      }
-        try {
-            s.sendMessage("hello in as " + id);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String[] rec = new String[0];
-        try {
-            rec = s.receiveMessage().split(" ");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (rec[0].equals("no")) {
-        System.out.println("Not connected to the controller\n");
-        return null;
-      }
-      System.out.print("Connected as ");
-      return rec[1];
-    }
-     */
 
 
     @Override
