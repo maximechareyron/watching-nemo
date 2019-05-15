@@ -12,12 +12,12 @@ import java.util.logging.*;
 
 public class SocketHandler {
 
-        private Socket clientSocket;
-        private PrintWriter out;
-        private BufferedReader in;
-        private Timer tim;
-        private int levelOfLog = 2;
-        protected static Logger logger = Logger.getLogger("mainwindow.SocketHandler");
+    private Socket clientSocket;
+    private PrintWriter out;
+    private BufferedReader in;
+    private Timer tim;
+    private int levelOfLog = 2;
+    protected static Logger logger = Logger.getLogger("mainwindow.SocketHandler");
 
         public SocketHandler() {
             logs();
@@ -34,27 +34,44 @@ public class SocketHandler {
           logger.addHandler(fh);
         }
 
-        void startConnection(String ip, int port) throws IOException {
-            clientSocket = new Socket(ip, port);
-            clientSocket.setSoTimeout(5000);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            if (levelOfLog >= 1) {
-              logger.log(Level.INFO, "Connection to the server");
-            }
-        }
+    private boolean isConnected = false;
 
-        void sendMessage(String msg) {
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    void setConnected(boolean connected) {
+        isConnected = connected;
+    }
+
+
+    void startConnection(String ip, int port) throws IOException {
+        clientSocket = new Socket(ip, port);
+        clientSocket.setSoTimeout(5000);
+        out = new PrintWriter(clientSocket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        if (levelOfLog >= 1) {
+            logger.log(Level.INFO, "Connection to the server");
+        }
+    }
+
+    void sendMessage(String msg) throws Exception {
+        if(isConnected){
             out.println(msg);
             if (levelOfLog >= 2) {
               logger.log(Level.INFO, "Sent to the server in port " + clientSocket.getPort() + ".");
             }
         }
+        else
+            throw new Exception("Client is not connected to the server");
+    }
 
         String receiveMessage() throws IOException {
             String resp = in.readLine();
-            if(resp == null)
+            if(resp == null) {
+                isConnected = false;
                 throw new IOException("No response from server");
+            }
             if (levelOfLog >= 2 && !resp.startsWith("ping")) {
               logger.log(Level.INFO, "Reveived from the server in port " + clientSocket.getPort() + ".");
             } else if (levelOfLog >= 3) {
@@ -68,6 +85,7 @@ public class SocketHandler {
             out.close();
             clientSocket.close();
             tim.cancel();
+            isConnected = false;
             if (levelOfLog >= 1) {
               logger.log(Level.INFO, "Connection to the server");
             }

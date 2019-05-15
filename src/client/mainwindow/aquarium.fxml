@@ -17,7 +17,7 @@
          </VBox.margin>
          <Image url="@../ocean.jpeg"/>
       </ImageView>
-      <ConsoleView fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="100" minWidth="-Infinity"
+      <ConsoleView fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="150" minWidth="-Infinity"
                    prefHeight="100.0">
       <VBox.margin>
          <Insets left="5.0" right="5.0" top="5.0"/>

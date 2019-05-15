@@ -24,16 +24,20 @@ public class PingTask extends TimerTask {
             s.sendMessage("ping 12345");
         } catch (Exception e) {
             System.err.println("Could not ping remote host.");
+            s.setConnected(false);
             ping_status.setFill(Color.RED);
         }
         try {
             String resp = s.receiveMessage();
             System.out.println(new Date() + " " + resp);
-            if(resp.equals("pong 12345"))
+            if(resp.equals("pong 12345")) {
+                s.setConnected(true);
                 ping_status.setFill(Color.GREENYELLOW);
-            else
+            } else {
                 ping_status.setFill(Color.ORANGE);
+            }
         } catch (Exception e) {
+            s.setConnected(false);
             ping_status.setFill(Color.RED);
             System.err.println("No response from server.");
         }

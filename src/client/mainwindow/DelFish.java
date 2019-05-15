@@ -7,12 +7,12 @@ public class DelFish extends Command{
 
   private String fishName;
 
-  public DelFish(String fn) {
+  DelFish(String fn) {
     fishName = fn;
     op = new Operations();
   }
 
-  public void execute(SocketHandler s, PrintStream p){
+  public void execute(SocketHandler s, PrintStream p) throws Exception {
     op.delFish(fishName, s, p);
   }
 }

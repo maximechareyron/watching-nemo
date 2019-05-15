@@ -14,7 +14,11 @@ public class MainTest {
     private static void testPing() throws IOException, InterruptedException {
         SocketHandler s = new SocketHandler();
         s.startConnection("127.0.0.1", 12345);
-        s.sendMessage("hello");
+        try {
+            s.sendMessage("hello");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         s.receiveMessage();
 
 

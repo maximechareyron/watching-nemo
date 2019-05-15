@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.*;
 import java.util.Scanner;
 
-public class Operations {
+class Operations {
 
-  public void status(SocketHandler s, PrintStream out) {
+  void status(SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("getFishes");
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -32,10 +32,10 @@ public class Operations {
     }
   }
 
-  public void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s, PrintStream out) {
+  void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    String rec = new String();
+    outout.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -55,9 +55,9 @@ public class Operations {
     }
   }
 
-  public void delFish(String fishName, SocketHandler s, PrintStream out) {
+  void delFish(String fishName, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("delFish " + fishName);
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -76,9 +76,9 @@ public class Operations {
     }
   }
 
-  public void startFish(String fishName, SocketHandler s, PrintStream out) {
+  void startFish(String fishName, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("startFish " + fishName);
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
