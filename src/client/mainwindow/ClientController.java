@@ -12,12 +12,16 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.*;
+import java.util.Scanner;
 
 public class ClientController implements Initializable {
     static final String CONFIG_FILE = "display.cfg";
 
     private Properties config = new Properties();
     private SocketHandler sh;
+    private Thread t;
+
+    private String id;
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
@@ -36,15 +40,14 @@ public class ClientController implements Initializable {
         }
     }
 
-    public ClientController(String id) {
-        sh = new SocketHandler();
-        try {
-            loadProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
+    public String getId() {
+        return id;
+    }
 
     private void loadProperties() throws IOException {
         FileInputStream in = new FileInputStream(CONFIG_FILE);
@@ -87,43 +90,15 @@ public class ClientController implements Initializable {
       return true;
     }
 
-    /*
-    public String log(String id) {
-      if (!connect()) {
-        return null;
-      }
-        try {
-            s.sendMessage("hello in as " + id);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String[] rec = new String[0];
-        try {
-            rec = s.receiveMessage().split(" ");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (rec[0].equals("no")) {
-        System.out.println("Not connected to the controller\n");
-        return null;
-      }
-      System.out.print("Connected as ");
-      return rec[1];
-    }
-     */
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ping_status.setFill(Color.DARKGRAY);
-        if(log())
+        if(log()) {
             sh.startPing(ping_status);
             sh.sendMessage("ls");
-
-        System.setOut(console.getOut());
-        System.setIn(console.getIn());
-        System.setErr(console.getOut());
-
+        }
+        t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
+        t.start();
     }
 }
