@@ -47,7 +47,6 @@ public class SocketHandler {
 
     void startConnection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
-        isConnected = true;
         clientSocket.setSoTimeout(5000);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -60,7 +59,7 @@ public class SocketHandler {
         if(isConnected){
             out.println(msg);
             if (levelOfLog >= 2) {
-              logger.log(Level.INFO, "Sent message to server " + clientSocket.getInetAddress() + ":" + clientSocket.getPort() + ": " + msg);
+              logger.log(Level.INFO, "Sent to the server in port " + clientSocket.getPort() + ".");
             }
         }
         else
@@ -74,7 +73,9 @@ public class SocketHandler {
                 throw new IOException("No response from server");
             }
             if (levelOfLog >= 2 && !resp.startsWith("ping")) {
-              logger.log(Level.INFO, "Received message from server : " +resp);
+              logger.log(Level.INFO, "Reveived from the server in port " + clientSocket.getPort() + ".");
+            } else if (levelOfLog >= 3) {
+              logger.log(Level.INFO, "Reveived pong from the server in port " + clientSocket.getPort() + ".");
             }
             return resp;
         }
