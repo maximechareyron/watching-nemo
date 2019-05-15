@@ -68,16 +68,17 @@ public class Prompt implements Runnable {
             "startFish <name> : enables given fish to move");
   }
 
-  private void execute(Command c){
+  private void execute(Command c) {
     try {
       theCommand.execute(sh, out);
     } catch (Exception e) {
       out.println("Err: Client is not connected to the server.");
+      e.printStackTrace();
     }
   }
 
   public void run() {
-    while(true){
+    while (true){
       out.print("$ ");
       String input = in.nextLine();
       out.print("\t-> ");

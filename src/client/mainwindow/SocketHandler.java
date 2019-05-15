@@ -16,7 +16,7 @@ public class SocketHandler {
     private PrintWriter out;
     private BufferedReader in;
     private Timer tim;
-    private int levelOfLog = 2;
+    private int levelOfLog = 0;
     protected static Logger logger = Logger.getLogger("mainwindow.SocketHandler");
 
         public SocketHandler() {

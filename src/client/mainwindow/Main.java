@@ -17,7 +17,6 @@ import static java.lang.Thread.sleep;
 public class Main extends Application {
 
     //ClientController cc;
-    public DrawFishes mDrawFishes;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -27,13 +26,13 @@ public class Main extends Application {
         primaryStage.setMinHeight(675);
         primaryStage.setMinWidth(800);
         primaryStage.show();
-        mDrawFishes = new DrawFishes((Pane)root.lookup("#aquarium"));
+        DrawFishes.p = (Pane)root.lookup("#aquarium");
 
         Button b = (Button)root.lookup("#drawButton");
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent ev) {
                 try {
-                    mDrawFishes.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
+                    DrawFishes.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
                 } catch(Exception e) {
                     e.printStackTrace();
                 }

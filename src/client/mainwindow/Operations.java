@@ -23,7 +23,7 @@ class Operations {
     }
     else {
       out.println("OK : Connecté au contrôleur, " + (recSplit.length - 1) + " poissons trouvés\n");
-      //TODO call drawfish by Amelli
+      DrawFishes.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
       for (String fish : recSplit) {
         if (!fish.equals("list")) {
           out.println(fish.substring(0, fish.length() - 1) + "\n");
