@@ -16,30 +16,19 @@ import static java.lang.Thread.sleep;
 
 public class Main extends Application {
 
-    //ClientController cc;
-    public DrawFishes mDrawFishes;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("aquarium.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("aquarium.fxml"));
+
+        Parent root = loader.load();
         primaryStage.setTitle("Watching Nemo");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(675);
         primaryStage.setMinWidth(800);
         primaryStage.show();
-        mDrawFishes = new DrawFishes((Pane)root.lookup("#aquarium"));
 
-        Button b = (Button)root.lookup("#drawButton");
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent ev) {
-                try {
-                    mDrawFishes.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
+        ClientController cc = loader.getController();
+        cc.draw_fishes();
     }
 
     public static void main(String[] args) {

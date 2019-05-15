@@ -2,6 +2,10 @@ package mainwindow;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -11,7 +15,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.logging.*;
 import java.util.Scanner;
 
 public class ClientController implements Initializable {
@@ -26,10 +29,13 @@ public class ClientController implements Initializable {
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
     private Prompt p;
+    // private FishDisplayer mDrawFishes;
 
 
-    @FXML public Circle ping_status;
+    @FXML private Button drawButton;
+    @FXML private Circle ping_status;
     @FXML private ConsoleView console;
+    @FXML private Canvas aquarium;
 
     public ClientController() {
         sh = new SocketHandler();
@@ -112,5 +118,34 @@ public class ClientController implements Initializable {
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
+        //draw_fishes();
     }
+
+    public void draw_fishes(){
+        GraphicsContext gc = aquarium.getGraphicsContext2D();
+
+        String imagePath = "file:fishes/wes.png";
+
+        Image image = new Image(imagePath);
+        gc.setLineWidth(1.0);
+        gc.setFill(Color.ORANGE);
+
+        gc.fillText("BITE", 10, 100 );
+        gc.drawImage(image, 10, 10);
+
+    }
+
+    /*
+    public void draw_fishes() {
+        drawButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent ev) {
+                try {
+                    FishDisplayer.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+     */
 }
