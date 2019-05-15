@@ -6,8 +6,6 @@ import java.util.Scanner;
 
 public class Prompt implements Runnable {
 
-  public static final String ANSI_RESET = "\u001B[0m";
-  public static final String ANSI_RED = "\u001B[31m";
   private SocketHandler sh;
   private Command theCommand;
   private Scanner in;
@@ -70,11 +68,19 @@ public class Prompt implements Runnable {
             "startFish <name> : enables given fish to move");
   }
 
+  private void execute(Command c){
+    try {
+      theCommand.execute(sh, out);
+    } catch (Exception e) {
+      out.println("Err: Client is not connected to the server.");
+    }
+  }
+
   public void run() {
     while(true){
       out.print("$ ");
       String input = in.nextLine();
-      out.print("\t->");
+      out.print("\t-> ");
 
       if("q".equals(input)){
         out.println("Exit!");
