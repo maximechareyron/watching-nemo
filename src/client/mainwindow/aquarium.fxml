@@ -11,12 +11,14 @@
             fx:controller="mainwindow.ClientController">
    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
          AnchorPane.topAnchor="0.0">
+      <Pane  fx:id="aquarium">
       <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
          <VBox.margin>
             <Insets/>
          </VBox.margin>
          <Image url="@../ocean.jpeg"/>
       </ImageView>
+      </Pane>
       <ConsoleView fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="150" minWidth="-Infinity"
                    prefHeight="100.0">
       <VBox.margin>
@@ -40,6 +42,11 @@
          <Button mnemonicParsing="false" text="Add">
             <HBox.margin>
                <Insets left="10.0"/>
+            </HBox.margin>
+         </Button>
+         <Button fx:id="drawButton" mnemonicParsing="false" text="Draw">
+            <HBox.margin>
+               <Insets right="10.0" />
             </HBox.margin>
          </Button>
          <Circle fx:id="ping_status" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE"
