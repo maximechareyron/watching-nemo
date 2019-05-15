@@ -2,11 +2,11 @@ package mainwindow;
 
 public class Status extends Command{
 
-  public Status() {
+  Status() {
     op = new Operations();
   }
 
-  public void execute(SocketHandler s){
+  public void execute(SocketHandler s) throws Exception {
     op.status(s);
   }
 }

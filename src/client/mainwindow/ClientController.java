@@ -69,11 +69,19 @@ public class ClientController implements Initializable {
 
     private int getControllerPort(){ return Integer.valueOf(config.get("controller-port").toString()); }
 
+    private void sendMessage(String m){
+        try {
+            sh.sendMessage(m);
+        } catch (Exception e) {
+            console.getOut().println("Err : Client is not connected to the controller.");
+        }
+    }
+
     private boolean log() {
-      if (!connect()) {
-        return false;
-      }
-        sh.sendMessage("hello");
+        if (!connect()) {
+            return false;
+        }
+        sendMessage("hello");
         String[] rec = new String[0];
         try {
             rec = sh.receiveMessage().split(" ");
@@ -81,11 +89,11 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
         if (rec[0].equals("no")) {
-        System.out.println("Not connected to the controller\n");
-        return false;
-      }
-      System.out.println("Connected as " + rec[1]);
-      return true;
+            System.out.println("Not connected to the controller\n");
+            return false;
+        }
+        System.out.println("Connected as " + rec[1]);
+        return true;
     }
 
 
@@ -94,7 +102,7 @@ public class ClientController implements Initializable {
         ping_status.setFill(Color.DARKGRAY);
         if(log()) {
             sh.startPing(ping_status);
-            sh.sendMessage("ls");
+            sendMessage("ls");
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();

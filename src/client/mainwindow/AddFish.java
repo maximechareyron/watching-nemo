@@ -7,7 +7,7 @@ public class AddFish extends Command{
   private String size;
   private String mobility;
 
-  public AddFish(String fn, String cd, String s, String m) {
+  AddFish(String fn, String cd, String s, String m) {
     fishName = fn;
     coordinate = cd;
     size = s;
@@ -15,7 +15,7 @@ public class AddFish extends Command{
     op = new Operations();
   }
 
-  public void execute(SocketHandler s){
+  public void execute(SocketHandler s) throws Exception {
     op.addFish(fishName, size, coordinate, mobility, s);
   }
 }

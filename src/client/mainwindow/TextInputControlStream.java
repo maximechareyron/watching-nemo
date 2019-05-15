@@ -57,15 +57,15 @@ class TextInputControlStream {
         return this.out;
     }
 
-    void startProgramInput() {
+    private void startProgramInput() {
         // do nothing
     }
 
-    void endProgramInput() {
+    private void endProgramInput() {
         getIn().moveLineStartToEnd();
     }
 
-    Charset getCharset() {
+    private Charset getCharset() {
         return this.charset;
     }
 
@@ -76,7 +76,7 @@ class TextInputControlStream {
         private final PipedOutputStream inputTextTarget;
         private int lastLineBreakIndex = 0;
 
-        public TextInputControlInputStream(TextInputControl textInputControl) {
+        TextInputControlInputStream(TextInputControl textInputControl) {
             this.textInputControl = textInputControl;
             this.inputTextTarget = new PipedOutputStream();
             try {
@@ -125,7 +125,7 @@ class TextInputControlStream {
         }
 
         @Override
-        public int read() throws IOException {
+        public int read() {
             try {
                 return this.outputTextSource.read();
             } catch (IOException ex) {
@@ -134,7 +134,7 @@ class TextInputControlStream {
         }
 
         @Override
-        public int read(final byte[] b, final int off, final int len) throws IOException {
+        public int read(final byte[] b, final int off, final int len) {
             try {
                 return this.outputTextSource.read(b, off, len);
             } catch (IOException ex) {
@@ -143,7 +143,7 @@ class TextInputControlStream {
         }
 
         @Override
-        public int read(final byte[] b) throws IOException {
+        public int read(final byte[] b) {
             try {
                 return this.outputTextSource.read(b);
             } catch (IOException ex) {
@@ -174,7 +174,7 @@ class TextInputControlStream {
         }
 
         @Override
-        public synchronized void write(int b) throws IOException {
+        public synchronized void write(int b) {
             synchronized (this) {
                 if (this.buf == null) {
                     this.buf = new ByteArrayOutputStream();
@@ -184,7 +184,7 @@ class TextInputControlStream {
         }
 
         @Override
-        public void flush() throws IOException {
+        public void flush() {
             Platform.runLater(() -> {
                 try {
                     flushImpl();
@@ -217,7 +217,7 @@ class TextInputControlStream {
             flush();
         }
 
-        void clear() throws IOException {
+        void clear() {
             this.buf = null;
         }
 

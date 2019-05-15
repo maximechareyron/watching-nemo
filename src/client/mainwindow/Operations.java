@@ -2,11 +2,11 @@ package mainwindow;
 
 import java.io.IOException;
 
-public class Operations {
+class Operations {
 
-  public void status(SocketHandler s) {
+  void status(SocketHandler s) throws Exception {
     s.sendMessage("getFishes");
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -30,10 +30,10 @@ public class Operations {
     }
   }
 
-  public void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s) {
+  void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s) throws Exception {
     s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
     System.out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -53,9 +53,9 @@ public class Operations {
     }
   }
 
-  public void delFish(String fishName, SocketHandler s) {
+  void delFish(String fishName, SocketHandler s) throws Exception {
     s.sendMessage("delFish " + fishName);
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -74,9 +74,9 @@ public class Operations {
     }
   }
 
-  public void startFish(String fishName, SocketHandler s) {
+  void startFish(String fishName, SocketHandler s) throws Exception {
     s.sendMessage("startFish " + fishName);
-    String rec = new String();
+    String rec = "";
     try {
       do {
         rec = s.receiveMessage();
