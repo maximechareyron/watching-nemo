@@ -75,7 +75,11 @@ public class ClientController implements Initializable {
       if (!connect()) {
         return false;
       }
-        sh.sendMessage("hello");
+      try {
+          sh.sendMessage("hello");
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
         String[] rec = new String[0];
         try {
             rec = sh.receiveMessage().split(" ");
@@ -96,7 +100,11 @@ public class ClientController implements Initializable {
         ping_status.setFill(Color.DARKGRAY);
         if(log()) {
             sh.startPing(ping_status);
-            sh.sendMessage("ls");
+            try {
+                sh.sendMessage("ls");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
