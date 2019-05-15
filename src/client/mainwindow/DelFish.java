@@ -1,5 +1,8 @@
 package mainwindow;
 
+import java.io.*;
+import java.util.Scanner;
+
 public class DelFish extends Command{
 
   private String fishName;
@@ -9,7 +12,7 @@ public class DelFish extends Command{
     op = new Operations();
   }
 
-  public void execute(SocketHandler s){
-    op.delFish(fishName, s);
+  public void execute(SocketHandler s, PrintStream p){
+    op.delFish(fishName, s, p);
   }
 }

@@ -1,10 +1,12 @@
 package mainwindow;
 
 import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 public class Operations {
 
-  public void status(SocketHandler s) {
+  public void status(SocketHandler s, PrintStream out) {
     s.sendMessage("getFishes");
     String rec = new String();
     try {
@@ -16,23 +18,23 @@ public class Operations {
     }
     String[] recSplit = rec.split(" \\[");
     if (!recSplit[0].equals("list")) {
-      System.out.print(recSplit[0]);
-      System.out.println("No connected\n");
+      out.print(recSplit[0]);
+      out.println("No connected\n");
     }
     else {
-      System.out.println("OK : Connecté au contrôleur, " + (recSplit.length - 1) + " poissons trouvés\n");
+      out.println("OK : Connecté au contrôleur, " + (recSplit.length - 1) + " poissons trouvés\n");
       //TODO call drawfish by Amelli
       for (String fish : recSplit) {
         if (!fish.equals("list")) {
-          System.out.println(fish.substring(0, fish.length() - 1) + "\n");
+          out.println(fish.substring(0, fish.length() - 1) + "\n");
         }
       }
     }
   }
 
-  public void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s) {
+  public void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s, PrintStream out) {
     s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    System.out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
+    out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
     String rec = new String();
     try {
       do {
@@ -44,16 +46,16 @@ public class Operations {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    System.out.println(rec);
+    out.println(rec);
     if (rec.equals("OK")) {
-      System.out.println("OK\n");
+      out.println("OK\n");
     }
     else {
-      System.out.println(rec + " : modèle de mobilité non supporté\n");
+      out.println(rec + " : modèle de mobilité non supporté\n");
     }
   }
 
-  public void delFish(String fishName, SocketHandler s) {
+  public void delFish(String fishName, SocketHandler s, PrintStream out) {
     s.sendMessage("delFish " + fishName);
     String rec = new String();
     try {
@@ -67,14 +69,14 @@ public class Operations {
         e.printStackTrace();
     }
     if (rec.equals("OK")) {
-      System.out.println("OK\n");
+      out.println("OK\n");
     }
     else {
-      System.out.println(rec + " : Poisson inexistant\n");
+      out.println(rec + " : Poisson inexistant\n");
     }
   }
 
-  public void startFish(String fishName, SocketHandler s) {
+  public void startFish(String fishName, SocketHandler s, PrintStream out) {
     s.sendMessage("startFish " + fishName);
     String rec = new String();
     try {
@@ -88,10 +90,10 @@ public class Operations {
         e.printStackTrace();
     }
     if (rec.equals("OK")) {
-      System.out.println("OK\n");
+      out.println("OK\n");
     }
     else {
-      System.out.println(rec + " : Poisson inexistant\n");
+      out.println(rec + " : Poisson inexistant\n");
     }
   }
 }

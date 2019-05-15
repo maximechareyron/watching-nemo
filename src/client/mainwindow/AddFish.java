@@ -1,5 +1,8 @@
 package mainwindow;
 
+import java.io.*;
+import java.util.Scanner;
+
 public class AddFish extends Command{
 
   private String fishName;
@@ -15,7 +18,7 @@ public class AddFish extends Command{
     op = new Operations();
   }
 
-  public void execute(SocketHandler s){
-    op.addFish(fishName, size, coordinate, mobility, s);
+  public void execute(SocketHandler s, PrintStream p){
+    op.addFish(fishName, size, coordinate, mobility, s, p);
   }
 }
