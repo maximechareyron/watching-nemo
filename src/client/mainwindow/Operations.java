@@ -34,7 +34,7 @@ class Operations {
 
   void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    outout.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
+    out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
     String rec = "";
     try {
       do {

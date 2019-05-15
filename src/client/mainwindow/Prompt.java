@@ -70,7 +70,7 @@ public class Prompt implements Runnable {
 
   private void execute(Command c){
     try {
-      theCommand.execute(sh);
+      theCommand.execute(sh, out);
     } catch (Exception e) {
       out.println("Err: Client is not connected to the server.");
     }
@@ -89,11 +89,7 @@ public class Prompt implements Runnable {
 
       theCommand = parse(input);
       if(theCommand != null){
-<<<<<<< HEAD
-        theCommand.execute(sh, out);
-=======
         execute(theCommand);
->>>>>>> b5ab378a3afe83e256730fce6fc6fb2a7ee1d630
       }
     }
   }
