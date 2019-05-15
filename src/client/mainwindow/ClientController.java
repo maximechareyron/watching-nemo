@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.*;
 import java.util.Scanner;
 
 public class ClientController implements Initializable {
@@ -25,6 +26,7 @@ public class ClientController implements Initializable {
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
     private Prompt p;
+
 
     @FXML public Circle ping_status;
     @FXML private ConsoleView console;
