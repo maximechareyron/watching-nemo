@@ -89,7 +89,11 @@ public class Prompt implements Runnable {
 
       theCommand = parse(input);
       if(theCommand != null){
+<<<<<<< HEAD
+        theCommand.execute(sh, out);
+=======
         execute(theCommand);
+>>>>>>> b5ab378a3afe83e256730fce6fc6fb2a7ee1d630
       }
     }
   }
