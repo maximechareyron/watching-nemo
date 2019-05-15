@@ -5,18 +5,21 @@ import javafx.fxml.Initializable;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.io.Console;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class ClientController implements Initializable {
     static final String CONFIG_FILE = "display.cfg";
 
     private Properties config = new Properties();
     private SocketHandler sh;
+    private Thread t;
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
 
@@ -111,17 +114,14 @@ public class ClientController implements Initializable {
      */
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ping_status.setFill(Color.DARKGRAY);
-        if(log())
+        if(log()) {
             sh.startPing(ping_status);
             sh.sendMessage("ls");
-
-        System.setOut(console.getOut());
-        System.setIn(console.getIn());
-        System.setErr(console.getOut());
-
+        }
+        t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
+        t.start();
     }
 }

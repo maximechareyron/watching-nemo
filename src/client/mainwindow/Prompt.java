@@ -1,25 +1,25 @@
 package mainwindow;
 
 import java.io.*;
+import java.util.Scanner;
 
 
-public class Prompt extends Thread {
+public class Prompt implements Runnable {
 
-  private SocketHandler s;
+  public static final String ANSI_RESET = "\u001B[0m";
+  public static final String ANSI_RED = "\u001B[31m";
+  private SocketHandler sh;
   public Command theCommands;
-  private InputStreamReader reader = new InputStreamReader(System.in);
-  private BufferedReader in = new BufferedReader(reader);
+  private Scanner in;
+  private PrintStream out;
 
-  public Prompt(SocketHandler soc){
-    // try {
-    //   read();
-    // } catch (IOException e) {
-    //     e.printStackTrace();
-    // }
-    s = soc;
+  Prompt(SocketHandler soc, Scanner s, PrintStream p){
+    sh = soc;
+    in = s;
+    out = p;
   }
 
-  public Command parse(String line){
+  private Command parse(String line){
     Command c;
     String[] lineParsed = line.split(" ");
     if (line.contains("status")) {
@@ -28,7 +28,7 @@ public class Prompt extends Thread {
     }
     else if (line.contains("startFish")) {
       if (lineParsed.length != 2) {
-        System.out.print("wrong usage : startFish [fishName]\n");
+        out.println("wrong usage : startFish [fishName]");
         return null;
       }
       c = new StartFish(lineParsed[1]);
@@ -36,7 +36,7 @@ public class Prompt extends Thread {
     }
     else if (line.contains("delFish")) {
       if (lineParsed.length != 2) {
-        System.out.print("wrong usage : delFish [fishName]\n");
+        out.println("wrong usage : delFish [fishName]");
         return null;
       }
       c = new DelFish(lineParsed[1]);
@@ -44,20 +44,22 @@ public class Prompt extends Thread {
     }
     else if (line.contains("addFish")) {
       if (lineParsed.length != 6) {
-        System.out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]\n");
+        out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]\n");
         return null;
       }
       for (String s : lineParsed) {
-        System.out.println(s);
+        out.println(s);
       }
       c = new AddFish(lineParsed[1], lineParsed[3].substring(0, lineParsed[3].length() - 1), lineParsed[4].substring(0, lineParsed[4].length() - 1), lineParsed[5]);
       return c;
     }
     else {
+      out.println("Invalid command");
       return null;
     }
   }
 
+  /*
   public String read() throws IOException {
     System.out.print("$ ");
     String cmd;
@@ -75,12 +77,19 @@ public class Prompt extends Thread {
     }
     return cmd;
   }
+   */
 
   public void run() {
-    try {
-      read();
-    } catch (IOException e) {
-        e.printStackTrace();
+    while(true){
+      out.print("$ ");
+      String input = in.nextLine();
+
+      if("q".equals(input)){
+        out.println("Exit!");
+        System.exit(0);
+      }
+
+      parse(input);
     }
   }
 
