@@ -16,11 +16,10 @@ public class SocketHandler {
         private PrintWriter out;
         private BufferedReader in;
         private Timer tim;
-        private int levelOfLog;
+        private int levelOfLog = 2;
         protected static Logger logger = Logger.getLogger("mainwindow.SocketHandler");
 
-        public SocketHandler(int log) {
-            levelOfLog = log;
+        public SocketHandler() {
             logs();
         }
 
@@ -31,6 +30,7 @@ public class SocketHandler {
           } catch (IOException e) {
               e.printStackTrace();
           }
+          fh.setFormatter(new SimpleFormatter());
           logger.addHandler(fh);
         }
 
@@ -55,8 +55,10 @@ public class SocketHandler {
             String resp = in.readLine();
             if(resp == null)
                 throw new IOException("No response from server");
-            if (levelOfLog >= 2) {
+            if (levelOfLog >= 2 && !resp.startsWith("ping")) {
               logger.log(Level.INFO, "Reveived from the server in port " + clientSocket.getPort() + ".");
+            } else if (levelOfLog >= 3) {
+              logger.log(Level.INFO, "Reveived pong from the server in port " + clientSocket.getPort() + ".");
             }
             return resp;
         }
@@ -74,7 +76,7 @@ public class SocketHandler {
         void startPing(Circle ping_status){
             tim = new Timer();
             tim.schedule(new PingTask(this, ping_status), 1000, 5000);
-            if (levelOfLog >= 2) {
+            if (levelOfLog >= 3) {
               logger.log(Level.INFO, "Ping sent to the server in port " + clientSocket.getPort() + ".");
             }
         }

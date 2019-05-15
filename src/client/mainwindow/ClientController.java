@@ -23,14 +23,12 @@ public class ClientController implements Initializable {
 
     private Prompt p;
 
-    private int levelOfLog;
 
     @FXML public Circle ping_status;
     @FXML private ConsoleView console;
 
-    public ClientController(int log) {
-        levelOfLog = log;
-        sh = new SocketHandler(levelOfLog);
+    public ClientController() {
+        sh = new SocketHandler();
         try {
             loadProperties();
         } catch (IOException e) {
@@ -38,9 +36,8 @@ public class ClientController implements Initializable {
         }
     }
 
-    public ClientController(int log, String id) {
-        levelOfLog = log;
-        sh = new SocketHandler(levelOfLog);
+    public ClientController(String id) {
+        sh = new SocketHandler();
         try {
             loadProperties();
         } catch (IOException e) {
