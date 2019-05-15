@@ -26,10 +26,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(675);
         primaryStage.setMinWidth(800);
         primaryStage.show();
-
-        ClientController cc = loader.getController();
-        cc.draw_fishes();
-    }
+     }
 
     public static void main(String[] args) {
         launch(args);
