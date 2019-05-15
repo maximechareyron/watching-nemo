@@ -86,6 +86,10 @@ public class ClientController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (rec.length == 0) {
+          System.out.println("Not connected to the controller\n");
+          return false;
+        }
         if (rec[0].equals("no")) {
         System.out.println("Not connected to the controller\n");
         return false;

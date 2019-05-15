@@ -50,6 +50,7 @@ public class SocketHandler {
         clientSocket.setSoTimeout(5000);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        setConnected(true);
         if (levelOfLog >= 1) {
             logger.log(Level.INFO, "Connection to the server");
         }
