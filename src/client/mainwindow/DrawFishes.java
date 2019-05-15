@@ -48,9 +48,10 @@ public class DrawFishes {
                         double fishWidth = width * Integer.parseInt(matcher.group(3)) / 100;
                         double fishHeight = height * Integer.parseInt(matcher.group(4)) / 100;
 
-                        Rectangle rect = new Rectangle(fishX, fishY,
-                                fishX + fishWidth >= width ? 10 : fishWidth,
-                                fishY + fishHeight >= height ? 10 : fishHeight);
+                        Rectangle rect = new Rectangle(fishX,
+                                fishY,
+                                fishX + fishWidth >= width ? width - fishX : fishWidth,
+                                fishY + fishHeight >= height ? height - fishY : fishHeight);
                         rect.setFill(Color.BLACK);
                         p.getChildren().add(rect);
 
