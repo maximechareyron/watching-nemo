@@ -5,7 +5,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.io.Console;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +36,15 @@ public class ClientController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     private void loadProperties() throws IOException {
