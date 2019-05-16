@@ -16,11 +16,12 @@ public class SocketHandler {
     private PrintWriter out;
     private BufferedReader in;
     private Timer tim;
-    private int levelOfLog = 0;
+    private int levelOfLog;
     protected static Logger logger = Logger.getLogger("mainwindow.SocketHandler");
 
-        public SocketHandler() {
+        public SocketHandler(int log) {
             logs();
+            levelOfLog = log;
         }
 
         public void logs() {

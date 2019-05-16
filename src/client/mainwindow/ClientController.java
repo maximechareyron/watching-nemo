@@ -24,6 +24,8 @@ public class ClientController implements Initializable {
     private SocketHandler sh;
     private Thread t;
 
+    private int levelOfLog = 3;
+
     private String id;
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
@@ -38,7 +40,7 @@ public class ClientController implements Initializable {
     @FXML private Canvas aquarium;
 
     public ClientController() {
-        sh = new SocketHandler();
+        sh = new SocketHandler(levelOfLog);
         try {
             loadProperties();
         } catch (IOException e) {
@@ -53,6 +55,10 @@ public class ClientController implements Initializable {
 
     public String getId() {
         return id;
+    }
+
+    public void setLogs(int log) {
+      this.levelOfLog = log;
     }
 
     private void loadProperties() throws IOException {
@@ -82,7 +88,12 @@ public class ClientController implements Initializable {
         return false;
       }
       try {
+        if (getId() == null) {
           sh.sendMessage("hello");
+        }
+        else {
+          sh.sendMessage("hello in as " + getId());
+        }
       } catch (Exception e) {
           e.printStackTrace();
       }

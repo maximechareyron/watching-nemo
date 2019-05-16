@@ -19,8 +19,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("aquarium.fxml"));
-
         Parent root = loader.load();
+        ClientController cc = loader.getController();
+        cc.setId("N2");
+        cc.setLogs(2);
+        System.out.println(cc.getId());
         primaryStage.setTitle("Watching Nemo");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(675);
