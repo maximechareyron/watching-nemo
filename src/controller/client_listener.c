@@ -35,7 +35,6 @@ struct client
   char name[256];
   time_t time_of_last_action;
   int has_continuous_updates;
-  time_t time_of_last_fish_update;
   pthread_t thread;
   int connected;
   char *ip;
@@ -187,7 +186,6 @@ void parse_client_message(char *message, struct client *client)
     } else if (strcmp(message, "getFishesContinuously") == 0
 	       || strcmp(message, "ls") == 0) {
       get_fishes(client);
-      client->time_of_last_fish_update = time(NULL);
       client->has_continuous_updates = 1;
     } else if (strncmp(message, "addFish ", 8) == 0) {
       handle_add_fish(message, client);
