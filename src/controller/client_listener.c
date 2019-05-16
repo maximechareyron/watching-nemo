@@ -138,7 +138,7 @@ void handle_add_fish(char *message, struct client *client)
   char name[MAX_BUFFER_SIZE], moving_algorithm[MAX_BUFFER_SIZE];
   int x, y, width, height;
 
-  if (sscanf(message + 8, "%s at %dx%d,%dx%d, %s", name, &x, &y,
+  if (sscanf(message + 8, "%s at %dx%d, %dx%d, %s", name, &x, &y,
 	     &width, &height, moving_algorithm) == 6) {
     struct view *view = view_find(client->name);
 
