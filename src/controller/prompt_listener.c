@@ -86,7 +86,5 @@ void create_prompt_listener()
       printf("$ ");
     }
   }
-
-  printf("%d\n", terminate_program);
 }
 

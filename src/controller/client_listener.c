@@ -239,6 +239,10 @@ void *client_thread(void *a)
     if ((nb_bytes = recv(client->socket, buffer, MAX_BUFFER_SIZE, 0)) == -1) {
       if (errno != EAGAIN) {
 	perror("recv");
+	if (errno == ECONNRESET) {
+	  disconnect_client(client);
+	  break;
+	}
       }
 
       if (time(NULL) - client->time_of_last_action > c.display_timeout_value) {
