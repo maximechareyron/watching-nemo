@@ -1,5 +1,9 @@
 package mainwindow;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
 public class Fish {
     private String name;
     private int time;
@@ -12,6 +16,16 @@ public class Fish {
         this.time = time;
         this.start = start;
         this.destination = destination;
+    }
+
+    public void display(Canvas c, double x, double y){
+        GraphicsContext gc = c.getGraphicsContext2D();
+        gc.drawImage(getImageFromName(), x, y);
+    }
+
+    private Image getImageFromName(){
+        String imagePath = "file:fishes/" + name + ".png";
+        return new Image(imagePath);
     }
 
 

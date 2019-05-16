@@ -118,7 +118,7 @@ public class ClientController implements Initializable {
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
-        //draw_fishes();
+        draw_fishes();
     }
 
     public void draw_fishes(){
