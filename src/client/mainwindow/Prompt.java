@@ -45,9 +45,6 @@ public class Prompt implements Runnable {
         out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]\n");
         return null;
       }
-      for (String s : lineParsed) {
-        out.println(s);
-      }
       c = new AddFish(lineParsed[1], lineParsed[3].substring(0, lineParsed[3].length() - 1), lineParsed[4].substring(0, lineParsed[4].length() - 1), lineParsed[5]);
       return c;
     }

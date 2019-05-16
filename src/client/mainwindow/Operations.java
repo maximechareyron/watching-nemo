@@ -18,7 +18,6 @@ class Operations {
     }
     String[] recSplit = rec.split(" \\[");
     if (!recSplit[0].equals("list")) {
-      out.print(recSplit[0]);
       out.println("No connected\n");
     }
     else {
@@ -34,7 +33,6 @@ class Operations {
 
   void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    out.println("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
     String rec = "";
     try {
       do {
@@ -46,7 +44,6 @@ class Operations {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    out.println(rec);
     if (rec.equals("OK")) {
       out.println("OK\n");
     }
