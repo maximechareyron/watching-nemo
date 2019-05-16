@@ -22,7 +22,7 @@ class Operations {
     }
     else {
       out.println("OK : Connecté au contrôleur, " + (recSplit.length - 1) + " poissons trouvés\n");
-      DrawFishes.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
+      DrawFishes.draw(rec);
       for (String fish : recSplit) {
         if (!fish.equals("list")) {
           out.println(fish.substring(0, fish.length() - 1) + "\n");
@@ -38,7 +38,7 @@ class Operations {
       do {
         rec = s.receiveMessage();
         if (rec.startsWith("list")) {
-          //TODO call drawfish by Amelli
+          DrawFishes.draw(rec);
         }
       } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
@@ -59,7 +59,7 @@ class Operations {
       do {
         rec = s.receiveMessage();
         if (rec.startsWith("list")) {
-          //TODO call drawfish by Amelli
+          DrawFishes.draw(rec);
         }
       } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
@@ -80,7 +80,7 @@ class Operations {
       do {
         rec = s.receiveMessage();
         if (rec.startsWith("list")) {
-          //TODO call drawfish by Amelli
+          DrawFishes.draw(rec);
         }
       } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
