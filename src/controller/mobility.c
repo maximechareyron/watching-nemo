@@ -16,16 +16,26 @@
 #define MOBILITY_RUNNING 0
 #define MOBILITY_STOPPED 1
 
+
+struct random_path_param {
+  time_ms time_to_arrival;
+  struct coordinates end_point;
+};
+
+
 void *chaotic(struct fish *fish);
 void *random_path(struct fish* fish);
+void *horizontal_path(struct fish* fish);
 
 void random_param_init(struct fish *fish);
+void horizontal_param_init(struct fish *fish);
 void no_mobility_param_init(struct fish *fish);
 
-static void *mobility_functions[NO_MOBILITY] = {random_path, chaotic};
 
-static void *mobility_params[NO_MOBILITY] = {random_param_init, no_mobility_param_init};
-static char *mobility_names[NO_MOBILITY] = {"RandomWayPoint", "Chaotic"};
+static void *mobility_functions[NO_MOBILITY] = {random_path, horizontal_path, chaotic};
+
+static void *mobility_params[NO_MOBILITY] = {random_param_init, horizontal_param_init, no_mobility_param_init};
+static char *mobility_names[NO_MOBILITY] = {"RandomWayPoint", "HorizontalPathWay", "Chaotic"};
 
 pthread_t update_thread;
 
@@ -47,6 +57,7 @@ int mobility_from_name(char *name)
 
 void *updater(void *param)
 {
+  (void)param;
   //printf("Mobiliy started\n");
   while (mobility_status == MOBILITY_RUNNING) {
     fishs_update();
@@ -90,6 +101,7 @@ void random_point(struct coordinates *c)
 
 void *no_mobility(struct fish* fish)
 {
+  (void)fish;
   return NULL;
 }
 
@@ -125,6 +137,29 @@ void *random_path(struct fish* fish)
 }
 
 
+void *horizontal_path(struct fish* fish)
+{
+  struct random_path_param *p = fish->param;
+
+  //printf("time to arrival : %ld, pos : %dx%d\n", p->time_to_arrival,
+  //	 fish->coordinates.x, fish->coordinates.y);
+  if (p->time_to_arrival <= DT) {
+    p->time_to_arrival = RANDOM_TIME_MAX;
+    const int aquarium_width = aquarium_get_size().width;
+    p->end_point.x = fish->coordinates.x > aquarium_width / 2 ? 1
+      : aquarium_width - fish->size.width - 1;
+    
+    //printf("New dest : %dx%d\n", p->end_point.x, p->end_point.y);
+    return NULL;
+  }
+  
+  time_ms k =  p->time_to_arrival / DT;
+  fish->coordinates.x += (p->end_point.x - fish->coordinates.x) / k;
+  p->time_to_arrival -= DT;
+  return NULL;
+}
+
+
 void random_param_init(struct fish *fish)
 {
   struct random_path_param *p = malloc(sizeof(struct random_path_param));
@@ -133,8 +168,20 @@ void random_param_init(struct fish *fish)
 }
 
 
+void horizontal_param_init(struct fish *fish)
+{
+  struct random_path_param *p = malloc(sizeof(struct random_path_param));
+  p->time_to_arrival = DT;
+  const int aquarium_width = aquarium_get_size().width;
+  p->end_point.x = fish->coordinates.x > aquarium_width / 2 ? 1
+    : aquarium_width - fish->size.width - 1;
+  p->end_point.y = fish->coordinates.y;
+  fish->param = p;
+}
+
+
 void no_mobility_param_init(struct fish *fish)
-{ }
+{ (void)fish; }
 
 
 void call_mobility_function(struct fish *fish)
