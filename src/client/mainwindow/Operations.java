@@ -22,7 +22,7 @@ class Operations {
     }
     else {
       out.println("OK : Connecté au contrôleur, " + (recSplit.length - 1) + " poissons trouvés\n");
-      DrawFishes.draw(rec);
+      //DrawFishes.draw(rec);
       for (String fish : recSplit) {
         if (!fish.equals("list")) {
           out.println(fish.substring(0, fish.length() - 1) + "\n");
@@ -37,9 +37,9 @@ class Operations {
     try {
       do {
         rec = s.receiveMessage();
-        if (rec.startsWith("list")) {
-          DrawFishes.draw(rec);
-        }
+        // if (rec.startsWith("list")) {
+        //   DrawFishes.draw(rec);
+        // }
       } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
@@ -58,9 +58,9 @@ class Operations {
     try {
       do {
         rec = s.receiveMessage();
-        if (rec.startsWith("list")) {
-          DrawFishes.draw(rec);
-        }
+        // if (rec.startsWith("list")) {
+        //   DrawFishes.draw(rec);
+        // }
       } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
@@ -79,9 +79,9 @@ class Operations {
     try {
       do {
         rec = s.receiveMessage();
-        if (rec.startsWith("list")) {
-          DrawFishes.draw(rec);
-        }
+        // if (rec.startsWith("list")) {
+        //   DrawFishes.draw(rec);
+        // }
       } while (rec.startsWith("list") || rec.startsWith("pong"));
     } catch (IOException e) {
         e.printStackTrace();
