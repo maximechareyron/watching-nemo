@@ -31,7 +31,8 @@ void aquarium_init(int width, int height)
 int aquarium_load(char *aquarium_name)
 {
   if (aquarium_loaded) {
-    aquarium_finalize();
+    fprintf(stderr, "An aquarium is already loaded!\n");
+    return 0;
   }
   
   char cwd[PATH_MAX];
@@ -81,7 +82,7 @@ int aquarium_save(char *aquarium_name)
   
   fprintf(f, "%dx%d\n", size.width, size.height);
   views_save(f);
-  aquarium_finalize();
+  //aquarium_finalize();
   fclose(f);
 
   log_write(1, "%s saved successfully", aquarium_name);

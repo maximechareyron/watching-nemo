@@ -35,7 +35,6 @@ struct client
   char name[256];
   time_t time_of_last_action;
   int has_continuous_updates;
-  time_t time_of_last_fish_update;
   pthread_t thread;
   int connected;
   char *ip;
@@ -138,7 +137,7 @@ void handle_add_fish(char *message, struct client *client)
   char name[MAX_BUFFER_SIZE], moving_algorithm[MAX_BUFFER_SIZE];
   int x, y, width, height;
 
-  if (sscanf(message + 8, "%s at %dx%d,%dx%d, %s", name, &x, &y,
+  if (sscanf(message + 8, "%s at %dx%d, %dx%d, %s", name, &x, &y,
 	     &width, &height, moving_algorithm) == 6) {
     struct view *view = view_find(client->name);
 
@@ -187,7 +186,6 @@ void parse_client_message(char *message, struct client *client)
     } else if (strcmp(message, "getFishesContinuously") == 0
 	       || strcmp(message, "ls") == 0) {
       get_fishes(client);
-      client->time_of_last_fish_update = time(NULL);
       client->has_continuous_updates = 1;
     } else if (strncmp(message, "addFish ", 8) == 0) {
       handle_add_fish(message, client);

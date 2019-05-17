@@ -23,7 +23,7 @@ public class DrawFishes {
             public void run() {
                 double width = ((ImageView)p.getChildren().get(0)).getFitWidth();
                 double height = ((ImageView)p.getChildren().get(0)).getFitHeight();
-                System.out.println(width);
+                System.out.println("TAILLE" + width);
                 System.out.println(height);
                 if (p.getChildren().size() > 1) {
                     p.getChildren().remove(1, p.getChildren().size() - 1);

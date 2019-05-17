@@ -19,6 +19,6 @@ public class AddFish extends Command{
   }
 
   public void execute(SocketHandler s, PrintStream p) throws Exception {
-    op.addFish(fishName, size, coordinate, mobility, s, p);
+    op.addFish(fishName, coordinate, size, mobility, s, p);
   }
 }
