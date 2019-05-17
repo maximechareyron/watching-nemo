@@ -49,6 +49,11 @@
                <Insets left="10.0" right="10.0" />
             </HBox.margin>
          </Button>
+         <Button fx:id="clearButton" mnemonicParsing="false" text="Clear Console" onAction="#clearConsole">
+            <HBox.margin>
+               <Insets left="10.0" right="10.0" />
+            </HBox.margin>
+         </Button>
          <Circle fx:id="ping_status" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
          </Circle>
       </HBox>

@@ -52,6 +52,10 @@ public class ClientController implements Initializable {
         f2.updatePath(new Position(0, 80), new Position(60, 60), 5);
     }
 
+    @FXML private void clearConsole(){
+        console.clear();
+    }
+
     public ClientController() {
         sh = new SocketHandler(levelOfLog);
         try {

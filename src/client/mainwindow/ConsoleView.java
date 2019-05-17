@@ -79,4 +79,8 @@ public class ConsoleView extends BorderPane {
         region.setStyle("-fx-background-color: black;");
     }
 
+    public void clear(){
+        textArea.clear();
+        this.getOut().print("$ ");
+    }
 }
