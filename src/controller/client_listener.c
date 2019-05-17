@@ -110,6 +110,11 @@ void handle_hello(char *message, struct client *client)
   if (strncmp(message, "hello in as ", 12) == 0) {
     if (view_set_available(message + 12, 0)) {
       strcpy(client->name, message + 12);
+    } else {
+      const char *name = view_find_available();
+      if (name != NULL) {
+	strcpy(client->name, name);
+      }
     }
   } else if (strcmp(message, "hello") == 0) {
     const char *name = view_find_available();
