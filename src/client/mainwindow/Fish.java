@@ -49,10 +49,7 @@ public class Fish extends Thread {
         else
             i.setFitWidth(size.x);
         i.setPreserveRatio(true);
-
-
     }
-
 
     public void display(Canvas c, double x, double y){
         GraphicsContext gc = c.getGraphicsContext2D();
@@ -119,18 +116,6 @@ public class Fish extends Thread {
         return new Image(imagePath);
     }
 
-
-    public void move2(Position start, Position end, int time){
-        t.getKeyFrames().addAll(
-                new KeyFrame(Duration.ZERO, new KeyValue(i.translateXProperty(), 10)),
-                new KeyFrame(Duration.millis(4000), new KeyValue(i.translateXProperty(), 500)),
-                new KeyFrame(Duration.millis(4000), new KeyValue(i.translateYProperty(), 200)),
-                new KeyFrame(Duration.millis(6000), new KeyValue(i.translateXProperty(), 10))
-        );
-        started = true;
-        t.play();
-    }
-
     private static List<String> getAvailableFishNames() throws Exception {
         File folder = new File("fishes");
         File[] listOfFiles = folder.listFiles();
@@ -153,7 +138,6 @@ public class Fish extends Thread {
 
     public void hide(Pane p){
         p.getChildren().remove(i);
-
     }
 
     private Position calculateCoordinatesFromPercentages(Position pos){
@@ -175,5 +159,4 @@ public class Fish extends Thread {
     public String toString(){
         return "Fish " + name + " at " + start + "," + size + " " + getFishState();
     }
-
 }

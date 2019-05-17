@@ -158,16 +158,14 @@ public class ClientController implements Initializable {
         console.changeColors();
 
         try {
-          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 10), new Position(200, 10));
+          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(200, 10));
         } catch (Exception e) {
           e.printStackTrace();
         }
         t1 = new Thread(f2);
         t1.start();
         f2.display(aquariumPane);
-        // f2.move2(new Position(0,0), new Position(0, 0), 10);
         f2.updatePath(new Position(0, 0), new Position(60, 60), 5);
-        f2.run();
     }
 
     /*
