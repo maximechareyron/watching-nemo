@@ -79,7 +79,7 @@ public class SocketHandler {
             throw new IOException("No response from server");
         }
         if (levelOfLog >= 2 && !resp.startsWith("ping")) {
-            logger.log(Level.INFO, "Reveived from server in port " + clientSocket.getPort() + ": ");
+            logger.log(Level.INFO, "Received from server in port " + clientSocket.getPort() + ": ");
         }
         return resp;
     }
