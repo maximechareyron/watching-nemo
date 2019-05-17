@@ -25,9 +25,9 @@ public class ClientController implements Initializable {
     private Thread t;
     private Thread t1;
 
-    private int levelOfLog = 3;
+    static private int levelOfLog = 0;
 
-    private String id;
+    static private String id = "";
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
     Fish f2;
@@ -62,16 +62,16 @@ public class ClientController implements Initializable {
     }
 
 
-    public void setId(String id) {
-        this.id = id;
+    static public void setId(String clientId) {
+        id = clientId;
     }
 
-    public String getId() {
+    static public String getId() {
         return id;
     }
 
-    public void setLogs(int log) {
-      this.levelOfLog = log;
+    static public void setLogs(int log) {
+      levelOfLog = log;
     }
 
     private void loadProperties() throws IOException {
@@ -101,7 +101,7 @@ public class ClientController implements Initializable {
         return false;
       }
       try {
-        if (getId() == null) {
+        if (getId().isEmpty()) {
           sh.sendMessage("hello");
         }
         else {
@@ -135,6 +135,16 @@ public class ClientController implements Initializable {
         if(log()) {
             sh.startPing(ping_status);
             try {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            sh.listenContinuously();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 sh.sendMessage("ls");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -148,9 +158,9 @@ public class ClientController implements Initializable {
         console.changeColors();
 
         try {
-            f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(200, 10));
+          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 10), new Position(200, 10));
         } catch (Exception e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
         t1 = new Thread(f2);
         t1.start();
@@ -158,7 +168,6 @@ public class ClientController implements Initializable {
         // f2.move2(new Position(0,0), new Position(0, 0), 10);
         f2.updatePath(new Position(0, 0), new Position(60, 60), 5);
         f2.run();
-
     }
 
     /*

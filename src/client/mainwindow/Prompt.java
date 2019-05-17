@@ -20,11 +20,15 @@ public class Prompt implements Runnable {
   private Command parse(String line){
     Command c;
     String[] lineParsed = line.split(" ");
-    if (line.contains("status")) {
+    if (lineParsed[0].equals("status")) {
+      if (lineParsed.length != 1) {
+        out.println("wrong usage : startFish [fishName]");
+        return null;
+      }
       c = new Status();
       return c;
     }
-    else if (line.contains("startFish")) {
+    else if (lineParsed[0].equals("startFish")) {
       if (lineParsed.length != 2) {
         out.println("wrong usage : startFish [fishName]");
         return null;
@@ -32,7 +36,7 @@ public class Prompt implements Runnable {
       c = new StartFish(lineParsed[1]);
       return c;
     }
-    else if (line.contains("delFish")) {
+    else if (lineParsed[0].equals("delFish")) {
       if (lineParsed.length != 2) {
         out.println("wrong usage : delFish [fishName]");
         return null;
@@ -40,7 +44,7 @@ public class Prompt implements Runnable {
       c = new DelFish(lineParsed[1]);
       return c;
     }
-    else if (line.contains("addFish")) {
+    else if (lineParsed[0].equals("addFish")) {
       if (lineParsed.length != 6) {
         out.print("wrong usage : addFish [fishName] at [coordinate], [size], [mobility]\n");
         return null;

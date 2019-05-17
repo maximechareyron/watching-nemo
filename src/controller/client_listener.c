@@ -107,9 +107,14 @@ void get_fishes(struct client *client)
 
 void handle_hello(char *message, struct client *client)
 {
-  if (strncmp(message, "hello as in ", 12) == 0) {
+  if (strncmp(message, "hello in as ", 12) == 0) {
     if (view_set_available(message + 12, 0)) {
       strcpy(client->name, message + 12);
+    } else {
+      const char *name = view_find_available();
+      if (name != NULL) {
+	strcpy(client->name, name);
+      }
     }
   } else if (strcmp(message, "hello") == 0) {
     const char *name = view_find_available();
@@ -232,6 +237,11 @@ void *client_thread(void *a)
     if (client->has_continuous_updates) {
       get_fishes(client);
       msleep(c.fish_update_interval);
+    }    
+
+    if (time(NULL) - client->time_of_last_action > c.display_timeout_value) {
+      disconnect_client(client);
+      break;
     }
 
     if ((nb_bytes = recv(client->socket, buffer, MAX_BUFFER_SIZE, 0)) == -1) {
@@ -241,11 +251,6 @@ void *client_thread(void *a)
 	  disconnect_client(client);
 	  break;
 	}
-      }
-
-      if (time(NULL) - client->time_of_last_action > c.display_timeout_value) {
-	disconnect_client(client);
-	break;
       }
     } else {
       if (nb_bytes == 0) {
