@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import mainwindow.ConsoleView?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainwindow.ClientController">
+<AnchorPane xmlns="httgp://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainwindow.ClientController">
    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <StackPane>
          <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_LEFT">
