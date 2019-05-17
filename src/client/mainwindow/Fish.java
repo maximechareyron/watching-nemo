@@ -11,9 +11,9 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Fish {
 
@@ -26,7 +26,9 @@ public class Fish {
     private boolean started = false;
     private Position size;
     private Position start;
+    private Position dim = new Position(0,0);
 
+    private Queue<KeyFrame> queue = new ConcurrentLinkedQueue<>();
 
     public Fish(String name, Position size, Position start) {
         this.name = name;
@@ -34,6 +36,7 @@ public class Fish {
         this.start = start;
 
         t = new Timeline();
+        //t.setOnFinished(e -> loadWaitingKeyFrames());
 
         i = new ImageView(getImageFromName());
         if(size.x > size.y)
@@ -51,13 +54,32 @@ public class Fish {
         gc.drawImage(getImageFromName(), x, y);
     }
 
-    public void display(Pane p, Position pos){
+    public void display(Pane p){
+        dim.x = p.getWidth();
+        dim.y = p.getHeight();
         if(!displayed){
             displayed = true;
-            i.setTranslateX(pos.x);
-            i.setTranslateY(pos.y);
+            i.setTranslateX(start.x);
+            i.setTranslateY(start.y);
             p.getChildren().add(i);
         }
+    }
+
+    public void updatePath(Position dest, Position size, int time){
+        Position tmp = calculateCoordinatesFromPercentages(dest);
+        queue.add(new KeyFrame(Duration.seconds(time), new KeyValue(i.translateXProperty(), tmp.x)));
+        queue.add(new KeyFrame(Duration.seconds(time), new KeyValue(i.translateYProperty(), tmp.y)));
+    }
+
+    private void loadWaitingKeyFrames(){
+        t = new Timeline();
+        t.setOnFinished(e -> loadWaitingKeyFrames());
+        System.out.println(t.getKeyFrames());
+        System.out.println("coucou");
+        for (KeyFrame k : queue){
+            t.getKeyFrames().add(queue.poll());
+        }
+        t.play();
     }
 
     private Image getImageFromName() {
@@ -67,15 +89,14 @@ public class Fish {
 
 
     public void move(Position start, Position end, int time){
-        Timeline timeline = new Timeline();
-        timeline.getKeyFrames().addAll(
+        t.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, new KeyValue(i.translateXProperty(), 10)),
                 new KeyFrame(Duration.millis(4000), new KeyValue(i.translateXProperty(), 500)),
                 new KeyFrame(Duration.millis(4000), new KeyValue(i.translateYProperty(), 200)),
                 new KeyFrame(Duration.millis(6000), new KeyValue(i.translateXProperty(), 10))
         );
         started = true;
-        timeline.play();
+        t.play();
 
     }
 
@@ -105,7 +126,7 @@ public class Fish {
 
     }
 
-    private Position calculateCoordinatesFromPercentages(Position dim, Position pos){
+    private Position calculateCoordinatesFromPercentages(Position pos){
         return new Position( pos.x * dim.x / 100, pos.y * dim.y / 100 );
     }
 

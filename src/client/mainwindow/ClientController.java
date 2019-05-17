@@ -40,6 +40,10 @@ public class ClientController implements Initializable {
 
     @FXML private void drawButtonAction(){
         console.getOut().println("Appui sur Draw");
+        console.getOut().print("$ ");
+
+        f2.updatePath(new Position(80, 80), new Position(60, 60), 5);
+
     }
 
     public ClientController() {
@@ -132,18 +136,19 @@ public class ClientController implements Initializable {
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
-
-        try {
-            f2 = new Fish(Fish.getRandomFishName(), new Position(60, 10), new Position(200, 10));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        f2.display(aquariumPane, new Position(0,0));
-        f2.move(new Position(0,0), new Position(0, 0), 10);
     }
 
     public void postScene(){
         console.changeColors();
+
+        try {
+            f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(200, 10));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        f2.display(aquariumPane);
+        f2.move(new Position(0,0), new Position(0, 0), 10);
+
     }
 
     /*
