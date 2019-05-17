@@ -29,6 +29,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(675);
         primaryStage.setMinWidth(800);
         primaryStage.show();
+        cc.postScene();
      }
 
     public static void main(String[] args) {

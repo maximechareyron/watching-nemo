@@ -39,8 +39,7 @@ public class ClientController implements Initializable {
     @FXML private Pane aquariumPane;
 
     @FXML private void drawButtonAction(){
-        // console.getOut().println("Appui sur Draw");
-        console.changeColors();
+        console.getOut().println("Appui sur Draw");
     }
 
     public ClientController() {
@@ -141,6 +140,10 @@ public class ClientController implements Initializable {
         }
         f2.display(aquariumPane, new Position(0,0));
         f2.move(new Position(0,0), new Position(0, 0), 10);
+    }
+
+    public void postScene(){
+        console.changeColors();
     }
 
     /*
