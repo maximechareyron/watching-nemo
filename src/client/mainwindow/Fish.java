@@ -22,17 +22,24 @@ public class Fish {
     private String name;
     private Timeline t;
     private ImageView i;
+    private boolean displayed = false;
+    private boolean started = false;
+    private Position size;
+    private Position start;
 
 
-    public Fish(String name, double width, double height ) {
+    public Fish(String name, Position size, Position start) {
         this.name = name;
+        this.size = size;
+        this.start = start;
+
         t = new Timeline();
 
         i = new ImageView(getImageFromName());
-        if(width > height)
-            i.setFitHeight(height);
+        if(size.x > size.y)
+            i.setFitHeight(size.y);
         else
-            i.setFitWidth(width);
+            i.setFitWidth(size.x);
         i.setPreserveRatio(true);
 
 
@@ -44,9 +51,13 @@ public class Fish {
         gc.drawImage(getImageFromName(), x, y);
     }
 
-    public void display(Pane p, double x, double y){
-        i.setTranslateX(100);
-        p.getChildren().add(i);
+    public void display(Pane p, Position pos){
+        if(!displayed){
+            displayed = true;
+            i.setTranslateX(pos.x);
+            i.setTranslateY(pos.y);
+            p.getChildren().add(i);
+        }
     }
 
     private Image getImageFromName() {
@@ -63,14 +74,19 @@ public class Fish {
                 new KeyFrame(Duration.millis(4000), new KeyValue(i.translateYProperty(), 200)),
                 new KeyFrame(Duration.millis(6000), new KeyValue(i.translateXProperty(), 10))
         );
+        started = true;
         timeline.play();
 
     }
 
 
-    private static List<String> getAvailableFishNames(){
+    private static List<String> getAvailableFishNames() throws Exception {
         File folder = new File("fishes");
         File[] listOfFiles = folder.listFiles();
+        if(listOfFiles == null){
+            throw new Exception("Fishes not found");
+        }
+
         List<String> l = new ArrayList<String>();
         for(File f : listOfFiles){
             l.add(f.toString().split("/")[1].split(".png")[0]);
@@ -78,15 +94,31 @@ public class Fish {
         return l;
     }
 
-    public static String getRandomFishName(){
+    public static String getRandomFishName() throws Exception {
         Random r = new Random();
         List<String> l = getAvailableFishNames();
-        return getAvailableFishNames().get(r.nextInt(l.size()));
+        return l.get(r.nextInt(l.size()));
     }
 
     public void hide(Pane p){
         p.getChildren().remove(i);
 
+    }
+
+    private Position calculateCoordinatesFromPercentages(Position dim, Position pos){
+        return new Position( pos.x * dim.x / 100, pos.y * dim.y / 100 );
+    }
+
+    private String getState(){
+        if(started)
+            return "started";
+        else
+            return "notStarted";
+    }
+
+    @Override
+    public String toString(){
+        return "Fish " + name + " at " + start + "," + size + " " + getState();
     }
 
 }

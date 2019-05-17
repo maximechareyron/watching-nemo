@@ -133,8 +133,12 @@ public class ClientController implements Initializable {
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
 
-        f2 = new Fish(Fish.getRandomFishName(), 60, 200);
-        f2.display(aquariumPane, 0, 0);
+        try {
+            f2 = new Fish(Fish.getRandomFishName(), new Position(60, 10), new Position(200, 10));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        f2.display(aquariumPane, new Position(0,0));
         f2.move(new Position(0,0), new Position(0, 0), 10);
     }
 
