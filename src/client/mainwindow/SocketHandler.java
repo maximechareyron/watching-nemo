@@ -84,6 +84,24 @@ public class SocketHandler {
         return resp;
     }
 
+
+    void listenContinuously() throws IOException
+    {
+        while (true) {
+            String r = null;
+            while ((r = in.readLine()) == null);
+            if (r.startsWith("pong")) {
+                // Do sth about pong ?
+            } else if (r.startsWith("list")) {
+                // Updates fish pos
+            } else {
+            }
+
+            //out.println(r);
+
+        }
+    }
+
     void stopConnection() throws IOException {
         in.close();
         out.close();

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.TimerTask;
 
-public class PingTask extends TimerTask {
+public class  PingTask extends TimerTask {
 
     private SocketHandler s;
     private Circle ping_status;

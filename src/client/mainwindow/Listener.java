@@ -1,7 +1,10 @@
 package mainwindow;
 
 public class Listener {
+    static void listen(SocketHandler s)
+    {
 
+    }
 }
 
 
