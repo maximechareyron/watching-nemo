@@ -18,25 +18,17 @@ public class SocketHandler {
     private Timer tim;
     private int levelOfLog;
 
+    private Log log;
+
     private Listener l = new Listener();
 
-    protected static Logger logger = Logger.getLogger("mainwindow.SocketHandler");
 
-    public SocketHandler(int log) {
-        logs();
-        levelOfLog = log;
+
+    public SocketHandler(int logg) {
+        log = new Log(logg);
+        log.logs();
     }
 
-    public void logs() {
-        Handler fh = null;
-        try {
-            fh = new FileHandler("ClientLog.log", true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        fh.setFormatter(new SimpleFormatter());
-        logger.addHandler(fh);
-    }
 
     private boolean isConnected = false;
 
@@ -55,18 +47,14 @@ public class SocketHandler {
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         setConnected(true);
-        if (levelOfLog >= 1) {
-            logger.log(Level.INFO, "Connection to the server");
-        }
+        log.createLogs(Level.INFO, 1, "Connection to the server");
         clientSocket.setKeepAlive(true);
     }
 
     void sendMessage(String msg) throws Exception {
         if(isConnected){
             out.println(msg);
-            if (levelOfLog >= 2) {
-                logger.log(Level.INFO, "Sent to server " + clientSocket.getInetAddress() + ":" + clientSocket.getPort() + ": " + msg);
-            }
+            log.createLogs(Level.INFO, 2, "Sent to server " + clientSocket.getInetAddress() + ":" + clientSocket.getPort() + ": " + msg);
         }
         else
             throw new Exception("Client is not connected to the server");
@@ -78,8 +66,11 @@ public class SocketHandler {
             isConnected = false;
             throw new IOException("No response from server");
         }
-        if (levelOfLog >= 2 && !resp.startsWith("ping")) {
-            logger.log(Level.INFO, "Reveived from server in port " + clientSocket.getPort() + ": " + resp);
+        if (!resp.startsWith("ping")) {
+          log.createLogs(Level.INFO, 2, "Received from server in port " + clientSocket.getPort() + ": " + resp);
+        }
+        else {
+          log.createLogs(Level.INFO, 3,  "Received ping from server in port " + clientSocket.getPort() + ": " + resp);
         }
         return resp;
     }
@@ -108,16 +99,12 @@ public class SocketHandler {
         clientSocket.close();
         tim.cancel();
         isConnected = false;
-        if (levelOfLog >= 1) {
-            logger.log(Level.INFO, "Connection to the server");
-        }
+        log.createLogs(Level.INFO, 1, "disconnect from the server");
     }
 
     void startPing(Circle ping_status){
         tim = new Timer();
         tim.schedule(new PingTask(this, ping_status), 1000, 5000);
-        if (levelOfLog >= 3) {
-            logger.log(Level.INFO, "Ping sent to the server in port " + clientSocket.getPort() + ".");
-        }
+        log.createLogs(Level.INFO, 3, "Ping sent to the server in port " + clientSocket.getPort() + ".");
     }
 }
