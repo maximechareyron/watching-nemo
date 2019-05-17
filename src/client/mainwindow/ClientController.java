@@ -26,7 +26,7 @@ public class ClientController implements Initializable {
 
     static private int levelOfLog = 0;
 
-    static private String id;
+    static private String id = "";
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
     Fish f2;
@@ -125,6 +125,16 @@ public class ClientController implements Initializable {
         if(log()) {
             sh.startPing(ping_status);
             try {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            sh.listenContinuously();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 sh.sendMessage("ls");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -132,7 +142,6 @@ public class ClientController implements Initializable {
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
-
     }
 
     public void postScene(){
