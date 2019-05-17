@@ -21,9 +21,6 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("aquarium.fxml"));
         Parent root = loader.load();
         ClientController cc = loader.getController();
-        cc.setId("N2");
-        cc.setLogs(2);
-        System.out.println(cc.getId());
         primaryStage.setTitle("Watching Nemo");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(675);
@@ -33,6 +30,14 @@ public class Main extends Application {
      }
 
     public static void main(String[] args) {
+      for (int i = 0; i < args.length; i++) {
+        if (args[i].equals("-i")) {
+          ClientController.setId(args[i + 1]);
+        }
+        if (args[i].equals("-l")) {
+            ClientController.setLogs(Integer.parseInt(args[i + 1]));
+        }
+      }
         launch(args);
     }
 }

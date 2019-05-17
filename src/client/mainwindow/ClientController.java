@@ -24,9 +24,9 @@ public class ClientController implements Initializable {
     private SocketHandler sh;
     private Thread t;
 
-    private int levelOfLog = 3;
+    static private int levelOfLog = 0;
 
-    private String id;
+    static private String id;
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
     Fish f2;
@@ -40,10 +40,6 @@ public class ClientController implements Initializable {
 
     @FXML private void drawButtonAction(){
         console.getOut().println("Appui sur Draw");
-        console.getOut().print("$ ");
-
-        f2.updatePath(new Position(80, 80), new Position(60, 60), 5);
-
     }
 
     public ClientController() {
@@ -56,16 +52,16 @@ public class ClientController implements Initializable {
     }
 
 
-    public void setId(String id) {
-        this.id = id;
+    static public void setId(String clientId) {
+        id = clientId;
     }
 
-    public String getId() {
+    static public String getId() {
         return id;
     }
 
-    public void setLogs(int log) {
-      this.levelOfLog = log;
+    static public void setLogs(int log) {
+      levelOfLog = log;
     }
 
     private void loadProperties() throws IOException {
@@ -95,7 +91,7 @@ public class ClientController implements Initializable {
         return false;
       }
       try {
-        if (getId() == null) {
+        if (getId().isEmpty()) {
           sh.sendMessage("hello");
         }
         else {
@@ -136,19 +132,19 @@ public class ClientController implements Initializable {
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
+
     }
 
     public void postScene(){
         console.changeColors();
 
         try {
-            f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(200, 10));
+          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 10), new Position(200, 10));
         } catch (Exception e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
         f2.display(aquariumPane);
         f2.move(new Position(0,0), new Position(0, 0), 10);
-
     }
 
     /*
