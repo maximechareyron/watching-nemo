@@ -39,7 +39,8 @@ public class ClientController implements Initializable {
     @FXML private Pane aquariumPane;
 
     @FXML private void drawButtonAction(){
-        console.getOut().println("Appui sur Draw");
+        // console.getOut().println("Appui sur Draw");
+        console.changeColors();
     }
 
     public ClientController() {

@@ -2,10 +2,14 @@ package mainwindow;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +32,9 @@ public class ConsoleView extends BorderPane {
         getStyleClass().add("console");
         this.textArea = new TextArea();
         this.textArea.setWrapText(true);
+        this.textArea.setStyle("-fx-background-color:  #000000; -fx-text-fill: #00d600;");
+        //this.textArea.setFont(Font.font("Consolas", FontWeight.BOLD, 12));
+
         setCenter(this.textArea);
 
         final TextInputControlStream stream = new TextInputControlStream(this.textArea, Charset.defaultCharset());
@@ -65,6 +72,11 @@ public class ConsoleView extends BorderPane {
 
     public InputStream getIn() {
         return in;
+    }
+
+    public void changeColors(){
+        Region region = ( Region ) textArea.lookup( ".content" );
+        region.setStyle("-fx-background-color: black;");
     }
 
 }
