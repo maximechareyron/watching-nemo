@@ -1,11 +1,11 @@
 package mainwindow;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -27,15 +27,18 @@ public class ClientController implements Initializable {
     private String id;
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
+    Fish f2;
 
     private Prompt p;
-    // private FishDisplayer mDrawFishes;
 
-
-    @FXML private Button drawButton;
+    // @FXML private Button drawButton;
     @FXML private Circle ping_status;
     @FXML private ConsoleView console;
-    @FXML private Canvas aquarium;
+    @FXML private Pane aquariumPane;
+
+    @FXML private void drawButtonAction(){
+        console.getOut().println("Appui sur Draw");
+    }
 
     public ClientController() {
         sh = new SocketHandler();
@@ -118,21 +121,10 @@ public class ClientController implements Initializable {
         }
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
-        draw_fishes();
-    }
 
-    public void draw_fishes(){
-        GraphicsContext gc = aquarium.getGraphicsContext2D();
-
-        String imagePath = "file:fishes/wes.png";
-
-        Image image = new Image(imagePath);
-        gc.setLineWidth(1.0);
-        gc.setFill(Color.ORANGE);
-
-        gc.fillText("BITE", 10, 100 );
-        gc.drawImage(image, 10, 10);
-
+        f2 = new Fish(Fish.getRandomFishName(), 60, 200);
+        f2.display(aquariumPane, 0, 0);
+        f2.move(new Position(0,0), new Position(0, 0), 10);
     }
 
     /*
