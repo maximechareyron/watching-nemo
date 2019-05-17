@@ -11,11 +11,14 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Fish {
+
+public class Fish extends Thread {
 
     public final static String PATH_TO_FISHES = "file:fishes/";
 
@@ -28,6 +31,11 @@ public class Fish {
     private Position start;
     private Position dim = new Position(0,0);
 
+    private boolean isMoving = false;
+    private int lastAddedTime=0;
+
+    private Thread th;
+
     private Queue<KeyFrame> queue = new ConcurrentLinkedQueue<>();
 
     public Fish(String name, Position size, Position start) {
@@ -35,19 +43,13 @@ public class Fish {
         this.size = size;
         this.start = start;
 
-        t = new Timeline();
-        //t.setOnFinished(e -> loadWaitingKeyFrames());
-
         i = new ImageView(getImageFromName());
         if(size.x > size.y)
             i.setFitHeight(size.y);
         else
             i.setFitWidth(size.x);
         i.setPreserveRatio(true);
-
-
     }
-
 
     public void display(Canvas c, double x, double y){
         GraphicsContext gc = c.getGraphicsContext2D();
@@ -57,6 +59,7 @@ public class Fish {
     public void display(Pane p){
         dim.x = p.getWidth();
         dim.y = p.getHeight();
+        System.out.println("Pane size = " + dim.x + "x" + dim.y);
         if(!displayed){
             displayed = true;
             i.setTranslateX(start.x);
@@ -67,39 +70,51 @@ public class Fish {
 
     public void updatePath(Position dest, Position size, int time){
         Position tmp = calculateCoordinatesFromPercentages(dest);
-        queue.add(new KeyFrame(Duration.seconds(time), new KeyValue(i.translateXProperty(), tmp.x)));
-        queue.add(new KeyFrame(Duration.seconds(time), new KeyValue(i.translateYProperty(), tmp.y)));
+        System.out.println("new dest : " + tmp.x + "x" +  tmp.y);
+        queue.add(new KeyFrame(Duration.seconds(time+lastAddedTime), new KeyValue(i.translateXProperty(), tmp.x)));
+        queue.add(new KeyFrame(Duration.seconds(time+lastAddedTime), new KeyValue(i.translateYProperty(), tmp.y)));
+        lastAddedTime = time;
+        if(!isMoving){
+            run();
+        }
     }
 
     private void loadWaitingKeyFrames(){
-        t = new Timeline();
-        t.setOnFinished(e -> loadWaitingKeyFrames());
-        System.out.println(t.getKeyFrames());
-        System.out.println("coucou");
+        lastAddedTime = 0;
+        System.out.println("KFs : " + t.getKeyFrames());
+        System.out.println("New KFs : " + queue);
         for (KeyFrame k : queue){
             t.getKeyFrames().add(queue.poll());
         }
+    }
+
+    public void nextTimeline(){
+        t = null;
+        t = new Timeline();
+        t.setOnFinished(e -> run());
+        loadWaitingKeyFrames();
         t.play();
     }
+
+    public void run(){
+        t = null;
+        t = new Timeline();
+        if(queue.isEmpty()){
+            isMoving = false;
+            System.out.println("going to sleep");
+            return;
+        }
+        t.setOnFinished(e -> run());
+        loadWaitingKeyFrames();
+        isMoving = true;
+        t.play();
+    }
+
 
     private Image getImageFromName() {
         String imagePath = PATH_TO_FISHES + name + ".png";
         return new Image(imagePath);
     }
-
-
-    public void move(Position start, Position end, int time){
-        t.getKeyFrames().addAll(
-                new KeyFrame(Duration.ZERO, new KeyValue(i.translateXProperty(), 10)),
-                new KeyFrame(Duration.millis(4000), new KeyValue(i.translateXProperty(), 500)),
-                new KeyFrame(Duration.millis(4000), new KeyValue(i.translateYProperty(), 200)),
-                new KeyFrame(Duration.millis(6000), new KeyValue(i.translateXProperty(), 10))
-        );
-        started = true;
-        t.play();
-
-    }
-
 
     private static List<String> getAvailableFishNames() throws Exception {
         File folder = new File("fishes");
@@ -123,23 +138,25 @@ public class Fish {
 
     public void hide(Pane p){
         p.getChildren().remove(i);
-
     }
 
     private Position calculateCoordinatesFromPercentages(Position pos){
         return new Position( pos.x * dim.x / 100, pos.y * dim.y / 100 );
     }
 
-    private String getState(){
+    private String getFishState(){
         if(started)
             return "started";
         else
             return "notStarted";
     }
 
-    @Override
-    public String toString(){
-        return "Fish " + name + " at " + start + "," + size + " " + getState();
+    public String getFishName(){
+        return name;
     }
 
+    @Override
+    public String toString(){
+        return "Fish " + name + " at " + start + "," + size + " " + getFishState();
+    }
 }

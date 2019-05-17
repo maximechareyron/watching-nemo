@@ -23,6 +23,7 @@ public class ClientController implements Initializable {
     private Properties config = new Properties();
     private SocketHandler sh;
     private Thread t;
+    private Thread t1;
 
     static private int levelOfLog = 0;
 
@@ -33,13 +34,26 @@ public class ClientController implements Initializable {
 
     private Prompt p;
 
-    // @FXML private Button drawButton;
     @FXML private Circle ping_status;
     @FXML private ConsoleView console;
     @FXML private Pane aquariumPane;
 
     @FXML private void drawButtonAction(){
-        console.getOut().println("Appui sur Draw");
+        console.getOut().println(f2.getFishName() + " going to 100x100");
+        console.getOut().print("$ ");
+
+        f2.updatePath(new Position(80, 80), new Position(60, 60), 5);
+    }
+
+    @FXML private void addButtonAction(){
+        console.getOut().println(f2.getFishName() + " going to 0x100");
+        console.getOut().print("$ ");
+
+        f2.updatePath(new Position(0, 80), new Position(60, 60), 5);
+    }
+
+    @FXML private void clearConsole(){
+        console.clear();
     }
 
     public ClientController() {
@@ -148,12 +162,14 @@ public class ClientController implements Initializable {
         console.changeColors();
 
         try {
-          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 10), new Position(200, 10));
+          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(200, 10));
         } catch (Exception e) {
           e.printStackTrace();
         }
+        t1 = new Thread(f2);
+        t1.start();
         f2.display(aquariumPane);
-        f2.move(new Position(0,0), new Position(0, 0), 10);
+        f2.updatePath(new Position(0, 0), new Position(60, 60), 5);
     }
 
     /*
