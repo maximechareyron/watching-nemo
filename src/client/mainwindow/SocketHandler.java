@@ -16,13 +16,9 @@ public class SocketHandler {
     private PrintWriter out;
     private BufferedReader in;
     private Timer tim;
-    private int levelOfLog;
+    private PingTask pt;
 
     private Log log;
-
-    private Listener l = new Listener();
-
-
 
     public SocketHandler(int logg) {
         log = new Log(logg);
@@ -82,14 +78,13 @@ public class SocketHandler {
             String r = null;
             while ((r = in.readLine()) == null);
             if (r.startsWith("pong")) {
-                // Do sth about pong ?
+                System.out.println("received pong");
+                pt.notifyPongResponse();
             } else if (r.startsWith("list")) {
                 // Updates fish pos
             } else {
             }
-
             //out.println(r);
-
         }
     }
 
@@ -102,9 +97,10 @@ public class SocketHandler {
         log.createLogs(Level.INFO, 1, "disconnect from the server");
     }
 
-    void startPing(Circle ping_status){
+    void startPing(Circle c){
         tim = new Timer();
-        tim.schedule(new PingTask(this, ping_status), 1000, 5000);
+        pt = new PingTask(this, c);
+        tim.schedule(pt, 1000, 5000);
         log.createLogs(Level.INFO, 3, "Ping sent to the server in port " + clientSocket.getPort() + ".");
     }
 }

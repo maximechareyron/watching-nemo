@@ -22,3 +22,4 @@ public class AddFish extends Command{
     op.addFish(fishName, coordinate, size, mobility, s, p);
   }
 }
+  

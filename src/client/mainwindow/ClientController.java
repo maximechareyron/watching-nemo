@@ -19,8 +19,7 @@ public class ClientController implements Initializable {
 
     private Properties config = new Properties();
     private SocketHandler sh;
-    private Thread t;
-    private Thread t2, t3;
+    private Thread t, t2, t3;
 
     static private int levelOfLog = 0;
 
@@ -46,16 +45,12 @@ public class ClientController implements Initializable {
     }
 
     @FXML private void drawButtonAction(){
-        console.getOut().println(f2.getFishName() + " going to 100x100");
-        console.getOut().print("$ ");
-
+        console.getOut().println(f2.getFishName() + " going to 100x100\n$ ");
         f2.updatePath(new Position(100, 100), new Position(60, 60), 5);
     }
 
     @FXML private void addButtonAction(){
-        console.getOut().println(f2.getFishName() + " going to 0x100");
-        console.getOut().print("$ ");
-
+        console.getOut().println(f2.getFishName() + " going to 0x100\n$ ");
         f2.updatePath(new Position(0, 100), new Position(60, 60), 5);
     }
 
@@ -73,15 +68,15 @@ public class ClientController implements Initializable {
     }
 
 
-    static public void setId(String clientId) {
+    static void setId(String clientId) {
         id = clientId;
     }
 
-    static public String getId() {
+    static String getId() {
         return id;
     }
 
-    static public void setLogs(int log) {
+    static void setLogs(int log) {
       levelOfLog = log;
     }
 
@@ -176,7 +171,6 @@ public class ClientController implements Initializable {
         f2.display(aquariumPane);
         t2 = new Thread(f2);
         t2.start();
-        //f2.updatePath(new Position(0, 0), new Position(60, 60), 5);
 
         try {
             f3 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(0, 100));
