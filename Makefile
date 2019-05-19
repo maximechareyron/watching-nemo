@@ -28,3 +28,4 @@ exec_client:
 clean:
 	@make clean -C src/controller
 	rm -rf build/*
+	rm *.log*
