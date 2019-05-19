@@ -1,10 +1,7 @@
 package mainwindow;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,14 +20,14 @@ public class ClientController implements Initializable {
     private Properties config = new Properties();
     private SocketHandler sh;
     private Thread t;
-    private Thread t1;
+    private Thread t2, t3;
 
     static private int levelOfLog = 0;
 
     static private String id = "";
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
-    Fish f2;
+    private Fish f2, f3;
 
     private Prompt p;
 
@@ -38,18 +35,28 @@ public class ClientController implements Initializable {
     @FXML private ConsoleView console;
     @FXML private Pane aquariumPane;
 
+    @FXML private void connectButtonAction(){
+        console.getOut().println(f3.getFishName() + " going to 50x50\n$ ");
+        f3.updatePath(new Position(50, 50), new Position(60,60), 5);
+    }
+
+    @FXML private void listButtonAction(){
+        console.getOut().println(f3.getFishName() + " going to 100x0\n$ ");
+        f3.updatePath(new Position(100, 0), new Position(60,60), 5);
+    }
+
     @FXML private void drawButtonAction(){
         console.getOut().println(f2.getFishName() + " going to 100x100");
         console.getOut().print("$ ");
 
-        f2.updatePath(new Position(80, 80), new Position(60, 60), 5);
+        f2.updatePath(new Position(100, 100), new Position(60, 60), 5);
     }
 
     @FXML private void addButtonAction(){
         console.getOut().println(f2.getFishName() + " going to 0x100");
         console.getOut().print("$ ");
 
-        f2.updatePath(new Position(0, 80), new Position(60, 60), 5);
+        f2.updatePath(new Position(0, 100), new Position(60, 60), 5);
     }
 
     @FXML private void clearConsole(){
@@ -162,14 +169,23 @@ public class ClientController implements Initializable {
         console.changeColors();
 
         try {
-          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(200, 10));
+          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(100, 100));
         } catch (Exception e) {
           e.printStackTrace();
         }
-        t1 = new Thread(f2);
-        t1.start();
         f2.display(aquariumPane);
-        f2.updatePath(new Position(0, 0), new Position(60, 60), 5);
+        t2 = new Thread(f2);
+        t2.start();
+        //f2.updatePath(new Position(0, 0), new Position(60, 60), 5);
+
+        try {
+            f3 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(0, 100));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        f3.display(aquariumPane);
+        t3 = new Thread(f3);
+        t3.start();
     }
 
     /*

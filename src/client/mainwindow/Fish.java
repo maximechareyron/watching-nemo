@@ -34,31 +34,27 @@ public class Fish extends Thread {
     private boolean isMoving = false;
     private int lastAddedTime=0;
 
-    private Thread th;
-
     private Queue<KeyFrame> queue = new ConcurrentLinkedQueue<>();
 
     public Fish(String name, Position size, Position start) {
         this.name = name;
         this.size = size;
-        this.start = start;
+        this.start = calculateCoordinatesFromPercentages(start);
 
         i = new ImageView(getImageFromName());
         if(size.x > size.y)
             i.setFitHeight(size.y);
         else
             i.setFitWidth(size.x);
+
+        System.out.println("Size :" + size.x + "x" + size.y);
+
         i.setPreserveRatio(true);
     }
 
-    public void display(Canvas c, double x, double y){
-        GraphicsContext gc = c.getGraphicsContext2D();
-        gc.drawImage(getImageFromName(), x, y);
-    }
-
     public void display(Pane p){
-        dim.x = p.getWidth();
-        dim.y = p.getHeight();
+        dim.x = p.getWidth() - size.x;
+        dim.y = p.getHeight() - size.y;
         System.out.println("Pane size = " + dim.x + "x" + dim.y);
         if(!displayed){
             displayed = true;
@@ -70,7 +66,7 @@ public class Fish extends Thread {
 
     public void updatePath(Position dest, Position size, int time){
         Position tmp = calculateCoordinatesFromPercentages(dest);
-        System.out.println("new dest : " + tmp.x + "x" +  tmp.y);
+        System.out.println("next dest : " + tmp.x + "x" +  tmp.y);
         queue.add(new KeyFrame(Duration.seconds(time+lastAddedTime), new KeyValue(i.translateXProperty(), tmp.x)));
         queue.add(new KeyFrame(Duration.seconds(time+lastAddedTime), new KeyValue(i.translateYProperty(), tmp.y)));
         lastAddedTime = time;
@@ -81,8 +77,8 @@ public class Fish extends Thread {
 
     private void loadWaitingKeyFrames(){
         lastAddedTime = 0;
-        System.out.println("KFs : " + t.getKeyFrames());
-        System.out.println("New KFs : " + queue);
+        //System.out.println("KFs : " + t.getKeyFrames());
+        //System.out.println("New KFs : " + queue);
         for (KeyFrame k : queue){
             t.getKeyFrames().add(queue.poll());
         }
@@ -113,7 +109,10 @@ public class Fish extends Thread {
 
     private Image getImageFromName() {
         String imagePath = PATH_TO_FISHES + name + ".png";
-        return new Image(imagePath);
+        Image i = new Image(imagePath);
+        size.x = i.getWidth();
+        size.y = i.getHeight();
+        return i;
     }
 
     private static List<String> getAvailableFishNames() throws Exception {
@@ -141,7 +140,7 @@ public class Fish extends Thread {
     }
 
     private Position calculateCoordinatesFromPercentages(Position pos){
-        return new Position( pos.x * dim.x / 100, pos.y * dim.y / 100 );
+        return new Position(pos.x * dim.x / 100, pos.y * dim.y / 100);
     }
 
     private String getFishState(){
