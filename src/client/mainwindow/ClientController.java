@@ -20,6 +20,7 @@ public class ClientController implements Initializable {
     private Properties config = new Properties();
     private SocketHandler sh;
     private Thread t, t2, t3;
+    static public boolean quit = false;
 
     static private int levelOfLog = 0;
 
@@ -145,7 +146,7 @@ public class ClientController implements Initializable {
                     @Override
                     public void run() {
                         try {
-                            sh.listenContinuously();
+                            sh.listenContinuously(console.getOut(), aquariumPane);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -168,7 +169,7 @@ public class ClientController implements Initializable {
         } catch (Exception e) {
           e.printStackTrace();
         }
-        f2.display(aquariumPane);
+        //f2.display(aquariumPane);
         t2 = new Thread(f2);
         t2.start();
 
@@ -177,7 +178,7 @@ public class ClientController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        f3.display(aquariumPane);
+        //f3.display(aquariumPane);
         t3 = new Thread(f3);
         t3.start();
     }

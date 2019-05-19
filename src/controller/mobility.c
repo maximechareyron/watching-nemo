@@ -108,9 +108,24 @@ void *no_mobility(struct fish* fish)
 
 void *chaotic(struct fish *fish)
 {
-  int shift[] = {-5, 0, 5};
-  fish->coordinates.x += shift[rand() % 3];
-  fish->coordinates.y += shift[rand() % 3];
+  int shiftX[] = {-10, 0, 10};
+  int shiftY[] = {-10, 0, 10};
+  const struct size aquarium_size = aquarium_get_size();
+    
+  if (fish->coordinates.x <= 10) {
+    shiftX[0] = 10;
+  } else if (fish->coordinates.x >= aquarium_size.width - 10) {
+    shiftX[2] = -10;
+  }
+
+  if (fish->coordinates.y <= 10) {
+    shiftY[0] = 10;
+  } else if (fish->coordinates.y >= aquarium_size.height - 10) {
+    shiftY[2] = -10;
+  }
+  
+  fish->coordinates.x += shiftX[rand() % 3];  
+  fish->coordinates.y += shiftY[rand() % 3];
 
   return NULL;
 }

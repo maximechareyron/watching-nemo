@@ -27,6 +27,10 @@ public class Main extends Application {
         primaryStage.setMinWidth(800);
         primaryStage.setMaxHeight(675);
         primaryStage.setMaxWidth(800);
+
+        primaryStage.setOnCloseRequest(event -> {
+            System.exit(0);
+        });
         primaryStage.show();
         cc.postScene();
      }

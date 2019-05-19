@@ -1,14 +1,18 @@
 package mainwindow;
 
+import javafx.application.Platform;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.logging.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SocketHandler {
 
@@ -72,7 +76,7 @@ public class SocketHandler {
     }
 
 
-    void listenContinuously() throws IOException
+    void listenContinuously(PrintStream outStream, Pane aquariumPane) throws IOException
     {
         while (true) {
             String r = null;
@@ -81,10 +85,23 @@ public class SocketHandler {
                 System.out.println("received pong");
                 pt.notifyPongResponse();
             } else if (r.startsWith("list")) {
-                // Updates fish pos
+                if (Prompt.statusAsked) {
+                    String[] recSplit = r.split(" \\[");
+                    outStream.println("OK : Connecté au contrôleur, " + Integer.max(0, recSplit.length - 1)
+                            + " poissons trouvé(s)\n");
+
+                    for (String fish : recSplit) {
+                       if (!fish.equals("list")) {
+                           outStream.println("\t\t" + fish.substring(0, fish.length() - 1));
+                       }
+                    }
+                    outStream.print("$ ");
+                    Prompt.statusAsked = false;
+                }
+                DrawFishes.draw(r, aquariumPane);
             } else {
+                outStream.print(r + "\n$ ");
             }
-            //out.println(r);
         }
     }
 

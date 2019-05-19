@@ -8,7 +8,7 @@ class Operations {
 
   void status(SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("getFishes");
-    String rec = "";
+    /*String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -28,12 +28,12 @@ class Operations {
           out.println(fish.substring(0, fish.length() - 1) + "\n");
         }
       }
-    }
+    }*/
   }
 
   void addFish(String fishName, String coordinate, String size, String mobility, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("addFish " + fishName + " at " + coordinate + "," + size + ", " + mobility);
-    String rec = "";
+    /*String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -49,7 +49,7 @@ class Operations {
     }
     else {
       out.println(rec + " : modèle de mobilité non supporté\n");
-    }
+    }*/
   }
 
   void delFish(String fishName, SocketHandler s, PrintStream out) throws Exception {
@@ -75,7 +75,7 @@ class Operations {
 
   void startFish(String fishName, SocketHandler s, PrintStream out) throws Exception {
     s.sendMessage("startFish " + fishName);
-    String rec = "";
+    /*String rec = "";
     try {
       do {
         rec = s.receiveMessage();
@@ -91,6 +91,6 @@ class Operations {
     }
     else {
       out.println(rec + " : Poisson inexistant\n");
-    }
+    }*/
   }
 }

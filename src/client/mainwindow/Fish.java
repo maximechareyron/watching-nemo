@@ -39,23 +39,33 @@ public class Fish extends Thread {
     public Fish(String name, Position size, Position start) {
         this.name = name;
         this.size = size;
-        this.start = calculateCoordinatesFromPercentages(start);
+        this.start = start;//calculateCoordinatesFromPercentages(start);
 
         i = new ImageView(getImageFromName());
-        if(size.x > size.y)
+        /*if(size.x > size.y)
             i.setFitHeight(size.y);
         else
-            i.setFitWidth(size.x);
+            i.setFitWidth(size.x);*/
 
-        System.out.println("Size :" + size.x + "x" + size.y);
+        //System.out.println("Size :" + size.x + "x" + size.y);
 
         i.setPreserveRatio(true);
     }
 
-    public void display(Pane p){
+    public void display(Pane p) {
         dim.x = p.getWidth() - size.x;
         dim.y = p.getHeight() - size.y;
-        System.out.println("Pane size = " + dim.x + "x" + dim.y);
+
+        if(size.x > size.y) {
+            i.setFitHeight(p.getHeight() * size.y / 100);
+        } else {
+            i.setFitWidth(p.getWidth() * size.x / 100);
+        }
+
+        start.x = p.getWidth() * start.x / 100;
+        start.y = p.getHeight() * start.y / 100;
+
+        //System.out.println("Pane size = " + dim.x + "x" + dim.y);
         if(!displayed){
             displayed = true;
             i.setTranslateX(start.x);
@@ -108,10 +118,11 @@ public class Fish extends Thread {
 
 
     private Image getImageFromName() {
-        String imagePath = PATH_TO_FISHES + name + ".png";
+        String fishName = new File( PATH_TO_FISHES + name + ".png").exists() ? name : "nemo";
+        String imagePath = PATH_TO_FISHES + fishName + ".png";
         Image i = new Image(imagePath);
-        size.x = i.getWidth();
-        size.y = i.getHeight();
+        //size.x = i.getWidth();
+        //size.y = i.getHeight();
         return i;
     }
 

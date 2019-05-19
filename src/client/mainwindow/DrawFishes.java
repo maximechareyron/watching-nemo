@@ -14,47 +14,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DrawFishes {
-    static public Pane p;
-
-    static void draw(String info)
+    static void draw(String info, Pane p)
     {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                double width = ((ImageView)p.getChildren().get(0)).getFitWidth();
-                double height = ((ImageView)p.getChildren().get(0)).getFitHeight();
-                System.out.println("TAILLE" + width);
-                System.out.println(height);
-                if (p.getChildren().size() > 1) {
-                    p.getChildren().remove(1, p.getChildren().size() - 1);
-                }
-
+                p.getChildren().clear();
                 String infoList[] = info.split(" \\[");
 
                 for (String s : infoList) {
-                    Pattern pattern = Pattern.compile(".* at (\\d+)x(\\d+), (\\d+)x(\\d+), (\\d+)\\]");
+                    Pattern pattern = Pattern.compile("(\\w+) at (\\d+)x(\\d+), (\\d+)x(\\d+), (\\d+)\\]");
                     Matcher matcher = pattern.matcher(s);
 
                     if (matcher.find()) {
-                        if (matcher.groupCount() != 5) {
-                            // TODO: Display error message ?
-                            System.out.println("ish..");
+                        if (matcher.groupCount() != 6) {
                             continue;
                         }
-                        System.out.println(s);
 
-                        double fishX = width * Integer.parseInt(matcher.group(1)) / 100;
-                        double fishY = height * Integer.parseInt(matcher.group(2)) / 100;
-                        double fishWidth = width * Integer.parseInt(matcher.group(3)) / 100;
-                        double fishHeight = height * Integer.parseInt(matcher.group(4)) / 100;
+                        try {
+                            Fish f = new Fish(matcher.group(1),
+                                    new Position(Double.parseDouble(matcher.group(4)),
+                                            Double.parseDouble(matcher.group(5))),
+                                    new Position(Integer.parseInt(matcher.group(2)),
+                                            Integer.parseInt(matcher.group(3))));
 
-                        Rectangle rect = new Rectangle(fishX,
-                                fishY,
-                                fishX + fishWidth >= width ? width - fishX : fishWidth,
-                                fishY + fishHeight >= height ? height - fishY : fishHeight);
-                        rect.setFill(Color.BLACK);
-                        p.getChildren().add(rect);
-
+                            f.display(p);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

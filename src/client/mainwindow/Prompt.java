@@ -10,6 +10,7 @@ public class Prompt implements Runnable {
   private Command theCommand;
   private Scanner in;
   private PrintStream out;
+  static public boolean statusAsked = false;
 
   Prompt(SocketHandler soc, Scanner s, PrintStream p){
     sh = soc;
@@ -25,6 +26,7 @@ public class Prompt implements Runnable {
         out.println("wrong usage : startFish [fishName]");
         return null;
       }
+      statusAsked = true;
       c = new Status();
       return c;
     }
@@ -79,8 +81,8 @@ public class Prompt implements Runnable {
   }
 
   public void run() {
-    while (true){
-      out.print("$ ");
+    out.print("$ ");
+    while (true) {
       String input = in.nextLine();
       out.print("\t-> ");
 
@@ -92,6 +94,8 @@ public class Prompt implements Runnable {
       theCommand = parse(input);
       if(theCommand != null){
         execute(theCommand);
+      } else {
+        out.print("$ ");
       }
     }
   }
