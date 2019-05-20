@@ -21,9 +21,6 @@
          <Pane fx:id="aquariumPane" maxHeight="450" maxWidth="800" minHeight="450" minWidth="800" StackPane.alignment="TOP_LEFT" />
       </StackPane>
       <ConsoleView fx:id="console" maxHeight="100" maxWidth="1.7976931348623157E308" minHeight="150" minWidth="-Infinity" prefHeight="100.0">
-         <VBox.margin>
-            <Insets left="5.0" right="5.0" top="5.0" />
-         </VBox.margin>
       </ConsoleView>
       <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0">
          <VBox.margin>

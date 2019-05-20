@@ -6,7 +6,7 @@ export BUILD_DIR=$(PWD)/build
 export CLIENT_MODULES=javafx.controls,javafx.fxml
 
 
-all: controller
+all: controller client
 
 
 controller: build_dir
