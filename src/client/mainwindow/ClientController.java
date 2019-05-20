@@ -19,7 +19,7 @@ public class ClientController implements Initializable {
 
     private Properties config = new Properties();
     private SocketHandler sh;
-    private Thread t, t2, t3;
+    private Thread t;
     static public boolean quit = false;
 
     static private int levelOfLog = 0;
@@ -27,33 +27,12 @@ public class ClientController implements Initializable {
     static private String id = "";
 
     private ArrayList<Fish> fishArrayList = new ArrayList<>();
-    private Fish f2, f3;
 
     private Prompt p;
 
     @FXML private Circle ping_status;
     @FXML private ConsoleView console;
     @FXML private Pane aquariumPane;
-
-    @FXML private void connectButtonAction(){
-        console.getOut().println(f3.getFishName() + " going to 50x50\n$ ");
-        f3.updatePath(new Position(50, 50), new Position(60,60), 5);
-    }
-
-    @FXML private void listButtonAction(){
-        console.getOut().println(f3.getFishName() + " going to 100x0\n$ ");
-        f3.updatePath(new Position(100, 0), new Position(60,60), 5);
-    }
-
-    @FXML private void drawButtonAction(){
-        console.getOut().println(f2.getFishName() + " going to 100x100\n$ ");
-        f2.updatePath(new Position(100, 100), new Position(60, 60), 5);
-    }
-
-    @FXML private void addButtonAction(){
-        console.getOut().println(f2.getFishName() + " going to 0x100\n$ ");
-        f2.updatePath(new Position(0, 100), new Position(60, 60), 5);
-    }
 
     @FXML private void clearConsole(){
         console.clear();
@@ -78,7 +57,7 @@ public class ClientController implements Initializable {
     }
 
     static void setLogs(int log) {
-      levelOfLog = log;
+	levelOfLog = log;
     }
 
     private void loadProperties() throws IOException {
@@ -104,19 +83,19 @@ public class ClientController implements Initializable {
     private int getControllerPort(){ return Integer.valueOf(config.get("controller-port").toString()); }
 
     private boolean log() {
-      if (!connect()) {
-        return false;
-      }
-      try {
-        if (getId().isEmpty()) {
-          sh.sendMessage("hello");
-        }
-        else {
-          sh.sendMessage("hello in as " + getId());
-        }
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
+	if (!connect()) {
+	    return false;
+	}
+	try {
+	    if (getId().isEmpty()) {
+		sh.sendMessage("hello");
+	    }
+	    else {
+		sh.sendMessage("hello in as " + getId());
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
         String[] rec = new String[0];
         try {
             rec = sh.receiveMessage().split(" ");
@@ -124,15 +103,15 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
         if (rec.length == 0) {
-          System.out.println("Not connected to the controller\n");
-          return false;
+	    System.out.println("Not connected to the controller\n");
+	    return false;
         }
         if (rec[0].equals("no")) {
-        System.out.println("Not connected to the controller\n");
-        return false;
-      }
-      System.out.println("Connected as " + rec[1]);
-      return true;
+	    System.out.println("Not connected to the controller\n");
+	    return false;
+	}
+	System.out.println("Connected as " + rec[1]);
+	return true;
     }
 
 
@@ -143,15 +122,15 @@ public class ClientController implements Initializable {
             sh.startPing(ping_status);
             try {
                 new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            sh.listenContinuously(console.getOut(), aquariumPane);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+			@Override
+			public void run() {
+			    try {
+				sh.listenContinuously(console.getOut(), aquariumPane);
+			    } catch (Exception e) {
+				e.printStackTrace();
+			    }
+			}
+		    }).start();
                 sh.sendMessage("ls");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -160,40 +139,8 @@ public class ClientController implements Initializable {
         t = new Thread(new Prompt(sh, new Scanner(console.getIn()), console.getOut()));
         t.start();
     }
-
+    
     public void postScene(){
         console.changeColors();
-
-        try {
-          f2 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(100, 100));
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        //f2.display(aquariumPane);
-        t2 = new Thread(f2);
-        t2.start();
-
-        try {
-            f3 = new Fish(Fish.getRandomFishName(), new Position(60, 60), new Position(0, 100));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //f3.display(aquariumPane);
-        t3 = new Thread(f3);
-        t3.start();
     }
-
-    /*
-    public void draw_fishes() {
-        drawButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent ev) {
-                try {
-                    FishDisplayer.draw("list [Waf at 90x90, 10x2, 0] [Maximus at 50x50, 20x4, 0]");
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-     */
 }

@@ -47,13 +47,13 @@ public class ConsoleView extends BorderPane {
 
         final ContextMenu menu = new ContextMenu();
         menu.getItems().add(createItem("Clear console", e -> {
-            try {
-                stream.clear();
-                this.textArea.clear();
-            } catch (IOException e1) {
-                throw new RuntimeException(e1);
-            }
-        }));
+		    try {
+			stream.clear();
+			this.textArea.clear();
+		    } catch (IOException e1) {
+			throw new RuntimeException(e1);
+		    }
+		}));
         this.textArea.setContextMenu(menu);
 
         setPrefWidth(600);

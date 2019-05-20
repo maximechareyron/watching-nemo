@@ -5,14 +5,14 @@ import java.util.Scanner;
 
 public class DelFish extends Command{
 
-  private String fishName;
+    private String fishName;
 
-  DelFish(String fn) {
-    fishName = fn;
-    op = new Operations();
-  }
+    DelFish(String fn) {
+	fishName = fn;
+	op = new Operations();
+    }
 
-  public void execute(SocketHandler s, PrintStream p) throws Exception {
-    op.delFish(fishName, s, p);
-  }
+    public void execute(SocketHandler s, PrintStream p) throws Exception {
+	op.delFish(fishName, s, p);
+    }
 }

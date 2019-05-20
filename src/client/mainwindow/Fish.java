@@ -3,8 +3,6 @@ package mainwindow;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -39,16 +37,9 @@ public class Fish extends Thread {
     public Fish(String name, Position size, Position start) {
         this.name = name;
         this.size = size;
-        this.start = start;//calculateCoordinatesFromPercentages(start);
+        this.start = start; //calculateCoordinatesFromPercentages(start);
 
         i = new ImageView(getImageFromName());
-        /*if(size.x > size.y)
-            i.setFitHeight(size.y);
-        else
-            i.setFitWidth(size.x);*/
-
-        //System.out.println("Size :" + size.x + "x" + size.y);
-
         i.setPreserveRatio(true);
     }
 
@@ -65,7 +56,6 @@ public class Fish extends Thread {
         start.x = p.getWidth() * start.x / 100;
         start.y = p.getHeight() * start.y / 100;
 
-        //System.out.println("Pane size = " + dim.x + "x" + dim.y);
         if(!displayed){
             displayed = true;
             i.setTranslateX(start.x);
@@ -76,7 +66,6 @@ public class Fish extends Thread {
 
     public void updatePath(Position dest, Position size, int time){
         Position tmp = calculateCoordinatesFromPercentages(dest);
-        System.out.println("next dest : " + tmp.x + "x" +  tmp.y);
         queue.add(new KeyFrame(Duration.seconds(time+lastAddedTime), new KeyValue(i.translateXProperty(), tmp.x)));
         queue.add(new KeyFrame(Duration.seconds(time+lastAddedTime), new KeyValue(i.translateYProperty(), tmp.y)));
         lastAddedTime = time;
@@ -87,27 +76,17 @@ public class Fish extends Thread {
 
     private void loadWaitingKeyFrames(){
         lastAddedTime = 0;
-        //System.out.println("KFs : " + t.getKeyFrames());
-        //System.out.println("New KFs : " + queue);
         for (KeyFrame k : queue){
             t.getKeyFrames().add(queue.poll());
         }
     }
 
-    public void nextTimeline(){
-        t = null;
-        t = new Timeline();
-        t.setOnFinished(e -> run());
-        loadWaitingKeyFrames();
-        t.play();
-    }
 
     public void run(){
         t = null;
         t = new Timeline();
         if(queue.isEmpty()){
             isMoving = false;
-            System.out.println("going to sleep");
             return;
         }
         t.setOnFinished(e -> run());
@@ -121,8 +100,6 @@ public class Fish extends Thread {
         String fishName = new File( PATH_TO_FISHES + name + ".png").exists() ? name : "nemo";
         String imagePath = PATH_TO_FISHES + fishName + ".png";
         Image i = new Image(imagePath);
-        //size.x = i.getWidth();
-        //size.y = i.getHeight();
         return i;
     }
 

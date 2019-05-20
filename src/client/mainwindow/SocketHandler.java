@@ -67,10 +67,10 @@ public class SocketHandler {
             throw new IOException("No response from server");
         }
         if (!resp.startsWith("ping")) {
-          log.createLogs(Level.INFO, 2, "Received from server in port " + clientSocket.getPort() + ": " + resp);
+            log.createLogs(Level.INFO, 2, "Received from server in port " + clientSocket.getPort() + ": " + resp);
         }
         else {
-          log.createLogs(Level.INFO, 3,  "Received ping from server in port " + clientSocket.getPort() + ": " + resp);
+            log.createLogs(Level.INFO, 3,  "Received ping from server in port " + clientSocket.getPort() + ": " + resp);
         }
         return resp;
     }
@@ -88,12 +88,12 @@ public class SocketHandler {
                 if (Prompt.statusAsked) {
                     String[] recSplit = r.split(" \\[");
                     outStream.println("OK : Connecté au contrôleur, " + Integer.max(0, recSplit.length - 1)
-                            + " poissons trouvé(s)\n");
+				      + " poissons trouvé(s)\n");
 
                     for (String fish : recSplit) {
-                       if (!fish.equals("list")) {
-                           outStream.println("\t\t" + fish.substring(0, fish.length() - 1));
-                       }
+                        if (!fish.equals("list")) {
+                            outStream.println("\t\t" + fish.substring(0, fish.length() - 1));
+                        }
                     }
                     outStream.print("$ ");
                     Prompt.statusAsked = false;

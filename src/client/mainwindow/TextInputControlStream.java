@@ -28,20 +28,20 @@ class TextInputControlStream {
         this.out = new TextInputControlOutputStream(textInputControl);
 
         textInputControl.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                getIn().enterKeyPressed();
-                return;
-            }
+		if (e.getCode() == KeyCode.ENTER) {
+		    getIn().enterKeyPressed();
+		    return;
+		}
 
-            if (textInputControl.getCaretPosition() <= getIn().getLastLineBreakIndex()) {
-                e.consume();
-            }
-        });
+		if (textInputControl.getCaretPosition() <= getIn().getLastLineBreakIndex()) {
+		    e.consume();
+		}
+	    });
         textInputControl.addEventFilter(KeyEvent.KEY_TYPED, e -> {
-            if (textInputControl.getCaretPosition() < getIn().getLastLineBreakIndex()) {
-                e.consume();
-            }
-        });
+		if (textInputControl.getCaretPosition() < getIn().getLastLineBreakIndex()) {
+		    e.consume();
+		}
+	    });
     }
 
     void clear() throws IOException {
@@ -186,12 +186,12 @@ class TextInputControlStream {
         @Override
         public void flush() {
             Platform.runLater(() -> {
-                try {
-                    flushImpl();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+		    try {
+			flushImpl();
+		    } catch (IOException e) {
+			throw new RuntimeException(e);
+		    }
+		});
         }
 
         private void flushImpl() throws IOException {
@@ -220,7 +220,5 @@ class TextInputControlStream {
         void clear() {
             this.buf = null;
         }
-
     }
-
 }

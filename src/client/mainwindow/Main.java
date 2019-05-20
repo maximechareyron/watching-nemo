@@ -29,21 +29,21 @@ public class Main extends Application {
         primaryStage.setMaxWidth(800);
 
         primaryStage.setOnCloseRequest(event -> {
-            System.exit(0);
-        });
+		System.exit(0);
+	    });
         primaryStage.show();
         cc.postScene();
-     }
+    }
 
     public static void main(String[] args) {
-      for (int i = 0; i < args.length; i++) {
-        if (args[i].equals("-i")) {
-          ClientController.setId(args[i + 1]);
-        }
-        if (args[i].equals("-l")) {
-            ClientController.setLogs(Integer.parseInt(args[i + 1]));
-        }
-      }
+	for (int i = 0; i < args.length; i++) {
+	    if (args[i].equals("-i")) {
+		ClientController.setId(args[i + 1]);
+	    }
+	    if (args[i].equals("-l")) {
+		ClientController.setLogs(Integer.parseInt(args[i + 1]));
+	    }
+	}
         launch(args);
     }
 }

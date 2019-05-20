@@ -17,34 +17,34 @@ public class DrawFishes {
     static void draw(String info, Pane p)
     {
         Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                p.getChildren().clear();
-                String infoList[] = info.split(" \\[");
+		@Override
+		public void run() {
+		    p.getChildren().clear();
+		    String infoList[] = info.split(" \\[");
 
-                for (String s : infoList) {
-                    Pattern pattern = Pattern.compile("(\\w+) at (\\d+)x(\\d+), (\\d+)x(\\d+), (\\d+)\\]");
-                    Matcher matcher = pattern.matcher(s);
+		    for (String s : infoList) {
+			Pattern pattern = Pattern.compile("(\\w+) at (\\d+)x(\\d+), (\\d+)x(\\d+), (\\d+)\\]");
+			Matcher matcher = pattern.matcher(s);
 
-                    if (matcher.find()) {
-                        if (matcher.groupCount() != 6) {
-                            continue;
-                        }
+			if (matcher.find()) {
+			    if (matcher.groupCount() != 6) {
+				continue;
+			    }
 
-                        try {
-                            Fish f = new Fish(matcher.group(1),
-                                    new Position(Double.parseDouble(matcher.group(4)),
-                                            Double.parseDouble(matcher.group(5))),
-                                    new Position(Integer.parseInt(matcher.group(2)),
-                                            Integer.parseInt(matcher.group(3))));
+			    try {
+				Fish f = new Fish(matcher.group(1),
+						  new Position(Double.parseDouble(matcher.group(4)),
+							       Double.parseDouble(matcher.group(5))),
+						  new Position(Integer.parseInt(matcher.group(2)),
+							       Integer.parseInt(matcher.group(3))));
 
-                            f.display(p);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        });
+				f.display(p);
+			    } catch (Exception e) {
+				e.printStackTrace();
+			    }
+			}
+		    }
+		}
+	    });
     }
 }
