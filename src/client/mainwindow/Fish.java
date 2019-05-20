@@ -97,7 +97,7 @@ public class Fish extends Thread {
 
 
     private Image getImageFromName() {
-        String fishName = new File( "fishes/" + name + ".png").exists() ? name : "nemo";
+        String fishName = new File( "fishes/" + name.split("_")[0] + ".png").exists() ? name : "nemo";
         String imagePath = PATH_TO_FISHES + fishName + ".png";
         Image i = new Image(imagePath);
         return i;
