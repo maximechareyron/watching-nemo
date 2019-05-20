@@ -118,7 +118,7 @@ public class Fish extends Thread {
 
 
     private Image getImageFromName() {
-        String fishName = new File( PATH_TO_FISHES + name + ".png").exists() ? name : "nemo";
+        String fishName = new File( PATH_TO_FISHES + name + ".png").exists() ? "nemo" : name;
         String imagePath = PATH_TO_FISHES + fishName + ".png";
         Image i = new Image(imagePath);
         //size.x = i.getWidth();
